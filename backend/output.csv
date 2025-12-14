@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:60b6d5cf7bd413116d6a111fdb2aa2019e3cf8fadb553b48b450a9efa81b3d08
-size 826
+dish_name,views,likes,comments_count,popularity_score
+Pav Bhaji,8905106,308854,1926,65.16
+Pav Bhaji,5404784,145115,100,65.05
+Egg Curry,9036400,158010,884,63.37
+Pav Bhaji,33640988,932128,2308,59.61
+Veg Burger,8965339,249862,2875,57.17
+Veg Spring Roll,405377,7134,11,56.49
+Egg Curry,2857625,40920,2646,56.22
+Vegetable Pakoda,280357,5511,18,55.93
+Dahi Vada,629106,9969,17,55.0
+Paneer Butter Masala,23375351,483065,410,54.96
+Paneer Tikka,1876032,35580,164,54.92
+Chicken Curry Mumbai Style,17463472,393548,162,54.77
+Papdi Chaat,1107947,14397,23,52.41
+Tandoori Chicken,6604964,155973,264,50.61
+Kachori,13309426,149152,425,50.0
+Chicken Curry Mumbai Style,2157030,47842,70,47.34
+Masala Dosa,29535446,406684,1278,43.47
+Veg Hakka Noodles,7341044,143303,230,41.48
+Chicken Curry Mumbai Style,12087555,236660,541,41.06

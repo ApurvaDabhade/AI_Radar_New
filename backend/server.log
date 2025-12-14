@@ -1,0 +1,5 @@
+[dotenv@17.2.3] injecting env (2) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+Loaded 30 dishes from CSV.
+Found 7 unique ingredients.
+Loaded 7 transactions.
+Server is running on port 5001

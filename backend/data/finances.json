@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "type": "sale",
+    "amount": 500,
+    "category": "cash",
+    "note": "Morning Start",
+    "timestamp": "2025-12-13T07:25:38.530Z"
+  },
+  {
+    "id": "2",
+    "type": "expense",
+    "amount": 200,
+    "category": "vegetables",
+    "note": "Bought Onions",
+    "timestamp": "2025-12-13T08:25:38.530Z"
+  },
+  {
+    "id": "3",
+    "type": "sale",
+    "amount": 1500,
+    "category": "upi",
+    "note": "Lunch Rush",
+    "timestamp": "2025-12-14T06:18:58.530Z"
+  },
+  {
+    "id": "4",
+    "type": "expense",
+    "amount": 50,
+    "category": "transport",
+    "note": "Auto rickshaw",
+    "timestamp": "2025-12-14T06:35:38.530Z"
+  },
+  {
+    "id": "1765697160142",
+    "type": "sale",
+    "amount": 100,
+    "category": "upi",
+    "note": "",
+    "timestamp": "2025-12-14T07:26:00.142Z"
+  },
+  {
+    "id": "1765697170325",
+    "type": "expense",
+    "amount": 200,
+    "category": "vegetables",
+    "note": "",
+    "timestamp": "2025-12-14T07:26:10.325Z"
+  },
+  {
+    "id": "1765697185904",
+    "type": "sale",
+    "amount": 10000,
+    "category": "cash",
+    "note": "",
+    "timestamp": "2025-12-14T07:26:25.904Z"
+  }
+]

@@ -1,153 +1,200 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ArrowLeft, MapPin } from 'lucide-react';
-
-interface TouristSpot {
-  "Name Place": string;
-  Rating: number | string;
-  Rank_in_City: number | string;
-}
-
-interface TourismData {
-  City: string;
-  State: string;
-  Date: string;
-  Festival_Day: boolean;
-  Nearby_Festival_Day: boolean;
-  Season: string;
-  Holiday: boolean;
-  "Temp(°C)": number | string;
-  Conditions: string;
-  Top_Tourist_Spots: TouristSpot[];
-  AI_Insights: string;
-}
+import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, MapPin, Calendar, Users, TrendingUp, Bell, ChefHat } from 'lucide-react';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar, MobileSidebarTrigger } from '@/components/AppSidebar';
 
 const Tourism = () => {
   const navigate = useNavigate();
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [date, setDate] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [tourismData, setTourismData] = useState<TourismData | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchTourismData = async () => {
-    if (!city || !state || !date) {
-      setError('Please enter all fields');
-      return;
-    }
+  const touristHotspots = [
+    { name: 'Gateway of India', distance: '2.5 km', footfall: 'Very High', trend: '+35%' },
+    { name: 'Marine Drive', distance: '3.1 km', footfall: 'Very High', trend: '+42%' },
+    { name: 'Colaba Market', distance: '1.8 km', footfall: 'Medium', trend: '+18%' },
+  ];
 
-    setLoading(true);
-    setError(null);
+  const upcomingEvents = [
+    { name: 'Ganesh Chaturthi', date: 'Sep 7-17', impact: 'Very High', preparation: '15 days' },
+    { name: 'Navratri', date: 'Oct 3-12', impact: 'High', preparation: '20 days' },
+    { name: 'Diwali', date: 'Nov 1', impact: 'Very High', preparation: '25 days' },
+  ];
 
-    try {
-      const formattedDate = new Date(date).toISOString().split('T')[0];
-
-      const response = await fetch('http://127.0.0.1:8000/api/tourism', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ city, state, date: formattedDate }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Server error occurred');
-      }
-
-      const data: TourismData = await response.json();
-      setTourismData(data);
-    } catch (err: unknown) {
-      if (err instanceof Error) setError(err.message);
-      else setError('An unknown error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const trendingItems = [
+    { item: 'Vada Pav', demand: '↑ 45%', reason: 'Tourist favorite' },
+    { item: 'Masala Chai', demand: '↑ 38%', reason: 'Cold weather coming' },
+    { item: 'Pav Bhaji', demand: '↑ 32%', reason: 'Evening demand' },
+    { item: 'Coconut Water', demand: '↑ 28%', reason: 'Tourist preference' },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 p-6">
-      <header className="flex items-center gap-4 mb-8">
-        <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')}>
-          <ArrowLeft className="h-5 w-5 text-blue-400" />
-        </Button>
-        <h1 className="text-3xl font-bold text-blue-300">🗺️ Tourism Insights</h1>
-      </header>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background text-foreground">
+        <AppSidebar />
 
-      <Card className="p-6 mb-6 bg-gray-900 border border-blue-700 shadow-lg rounded-2xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <Label className="text-gray-300">City</Label>
-            <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="Mumbai" />
-          </div>
-          <div>
-            <Label className="text-gray-300">State</Label>
-            <Input value={state} onChange={(e) => setState(e.target.value)} placeholder="Maharashtra" />
-          </div>
-          <div>
-            <Label className="text-gray-300">Date</Label>
-            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-          </div>
-        </div>
-        <Button
-          className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-          onClick={fetchTourismData}
-          disabled={loading}
-        >
-          {loading ? 'Fetching...' : 'Get Insights'}
-        </Button>
-        {error && <p className="mt-3 text-red-400 font-medium">{error}</p>}
-      </Card>
+        <main className="flex-1 overflow-y-auto">
+          <MobileSidebarTrigger />
 
-      {tourismData && (
-        <div className="space-y-6">
-          {/* General Info */}
-          <Card className="p-6 bg-gray-900 border border-blue-700 shadow-lg rounded-2xl">
-            <h2 className="text-xl font-semibold text-blue-300 mb-2">
-              {tourismData.City}, {tourismData.State} – {tourismData.Date}
-            </h2>
-            <p className="text-gray-200 mb-1">
-              🌟 <strong>Festival Day:</strong> {tourismData.Festival_Day ? 'Yes' : 'No'} | 
-              <strong> Nearby Festival:</strong> {tourismData.Nearby_Festival_Day ? 'Yes' : 'No'} | 
-              <strong> Season:</strong> {tourismData.Season} | 
-              <strong> Holiday:</strong> {tourismData.Holiday ? 'Yes' : 'No'}
-            </p>
-            <p className="text-gray-200">
-              🌤 <strong>Weather:</strong> {tourismData["Temp(°C)"]}°C, {tourismData.Conditions}
-            </p>
-          </Card>
-
-          {/* Top Tourist Spots */}
-          <Card className="p-6 bg-gray-900 border border-blue-700 shadow-lg rounded-2xl">
-            <h3 className="text-lg font-semibold text-blue-300 mb-3">🏛 Top Tourist Spots</h3>
-            <div className="space-y-2">
-              {tourismData.Top_Tourist_Spots.map((spot, idx) => (
-                <div
-                  key={idx}
-                  className="flex justify-between bg-gray-800/70 rounded-xl px-3 py-2 hover:bg-gray-700/80 transition"
+          {/* Header */}
+          <header className="sticky top-0 z-40 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
+            <div className="container mx-auto px-4 py-4 flex items-center justify-between pt-10 md:pt-0">
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate('/dashboard')}
+                  className="text-foreground hover:bg-primary/10"
                 >
-                  <span className="text-gray-100">
-                    {spot["Name Place"]} — <span className="text-yellow-400">⭐ {spot.Rating}</span> (Rank {spot.Rank_in_City})
-                  </span>
-                  <MapPin className="h-4 w-4 text-blue-400" />
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div>
+                  <h1 className="text-2xl font-bold text-primary">🗺️ Tourism Insights</h1>
+                  <p className="text-sm text-muted-foreground">Visitor traffic and opportunities</p>
                 </div>
-              ))}
+              </div>
             </div>
-          </Card>
+          </header>
 
-          {/* AI Insights */}
-          <Card className="p-6 bg-gray-900 border border-blue-700 shadow-lg rounded-2xl">
-            <h3 className="text-lg font-semibold text-blue-300 mb-3">📊Insights</h3>
-            <div className="bg-gray-800/80 rounded-xl p-4 text-gray-100 leading-relaxed whitespace-pre-wrap">
-              {tourismData.AI_Insights}
-            </div>
-          </Card>
-        </div>
-      )}
-    </div>
+          <div className="container mx-auto px-4 py-8 space-y-8">
+            {/* Visitor Traffic Forecast */}
+            <section className="animate-fade-in-up">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-foreground">
+                <Users className="h-6 w-6 text-primary" />
+                Visitor Traffic
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {touristHotspots.map((spot, index) => (
+                  <Card
+                    key={index}
+                    className="bg-card border-border p-6 card-hover shadow-lg hover:shadow-primary/10"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-lg font-bold text-foreground">{spot.name}</h3>
+                        <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                          <MapPin className="h-3 w-3" />
+                          {spot.distance}
+                        </p>
+                      </div>
+                      <Badge className={
+                        spot.footfall === 'Very High' ? 'bg-accent' :
+                          spot.footfall === 'High' ? 'bg-primary' :
+                            'bg-secondary'
+                      }>
+                        {spot.footfall}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4 text-accent" />
+                      <span className="text-accent font-bold">{spot.trend}</span>
+                      <span className="text-muted-foreground text-sm">from last week</span>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </section>
+
+            {/* Upcoming Events */}
+            <section className="animate-fade-in-up">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-foreground">
+                <Calendar className="h-6 w-6 text-secondary" />
+                Upcoming Festivals
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {upcomingEvents.map((event, index) => (
+                  <Card
+                    key={index}
+                    className="bg-card border-border p-6 card-hover shadow-lg hover:shadow-secondary/10"
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <Bell className="h-5 w-5 text-secondary" />
+                      <h3 className="text-lg font-bold text-foreground">{event.name}</h3>
+                    </div>
+                    <p className="text-muted-foreground mb-2">📅 {event.date}</p>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-sm text-muted-foreground">Business Impact:</span>
+                      <Badge className={
+                        event.impact === 'Very High' ? 'bg-destructive' :
+                          'bg-secondary'
+                      }>
+                        {event.impact}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-primary">⏱️ Prepare in {event.preparation}</p>
+                    <Button
+                      className="w-full mt-4 bg-secondary hover:bg-secondary/90"
+                    >
+                      <ChefHat className="h-4 w-4 mr-2" />
+                      Prepare Menu
+                    </Button>
+                  </Card>
+                ))}
+              </div>
+            </section>
+
+            {/* Trending Items */}
+            <section className="animate-fade-in-up">
+              <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-foreground">
+                <TrendingUp className="h-6 w-6 text-accent" />
+                What Tourists Want
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {trendingItems.map((item, index) => (
+                  <Card
+                    key={index}
+                    className="bg-card border-border p-6 card-hover shadow-lg hover:shadow-accent/10"
+                  >
+                    <h3 className="text-lg font-bold text-foreground mb-2">{item.item}</h3>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-2xl font-bold text-accent">{item.demand}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">{item.reason}</p>
+                    <Button
+                      size="sm"
+                      className="w-full bg-accent hover:bg-accent/90"
+                    >
+                      Add to Menu
+                    </Button>
+                  </Card>
+                ))}
+              </div>
+            </section>
+
+            {/* Smart Recommendations */}
+            <section className="animate-fade-in-up">
+              <Card className="bg-card border-primary/30 p-8 shadow-lg">
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary p-3 rounded-lg">
+                    <TrendingUp className="h-6 w-6 text-primary-foreground" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2 text-foreground">Smart Suggestions</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Based on tourist preferences and upcoming Ganesh Chaturthi, you should prepare:
+                      <strong className="text-primary"> Modak, Coconut Barfi, and Festival Thali</strong>
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      <Badge className="bg-primary">+60% demand expected</Badge>
+                      <Badge className="bg-secondary">Peak: Sep 7-10</Badge>
+                      <Badge className="bg-accent">High profit</Badge>
+                    </div>
+                    <div className="flex gap-3">
+                      <Button className="bg-primary hover:bg-primary/90">
+                        Apply Suggestion
+                      </Button>
+                      <Button variant="outline" className="border-border text-foreground hover:bg-primary/10">
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </section>
+          </div>
+        </main>
+      </div>
+    </SidebarProvider>
   );
 };
 

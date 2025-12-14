@@ -1,3 +1,1366 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d41f4a30270c66ea4975bba6d7d1b10ee64776ce8e78cad02ce8939a4fbda40a
-size 97309
+Name Place,Rating,Reviews,City,Country,State,Weighted_Score,Weighted_Average,Rank_in_City
+Heritage Park,4.2,4492,Agartala,India,Tripura,18866.4,4.19,1
+Ujjayanta Palace Museum,4.5,3312,Agartala,India,Tripura,14904,4.5,2
+Dimsagar Lake Park,4.1,2989,Agartala,India,Tripura,12254.9,4.19,3
+Jagannath Bari,4.5,2147,Agartala,India,Tripura,9661.5,4.47,4
+Rabindra Kanan,4.1,1324,Agartala,India,Tripura,5428.4,4.19,5
+ISKCON Agartala,4.4,1164,Agartala,India,Tripura,5121.6,4.47,6
+Fourteen Gods' and Goddesses' Temple,4.5,1061,Agartala,India,Tripura,4774.5,4.47,7
+Tripura State Museum,4.5,1022,Agartala,India,Tripura,4599,4.5,8
+State's Highest National Flag,4.7,720,Agartala,India,Tripura,3384,4.19,9
+Taj Mahal,4.6,225222,Agra,India,Uttar Pradesh,1036021.2,4.5,1
+Agra Fort,4.5,132097,Agra,India,Uttar Pradesh,594436.5,4.5,2
+Gurudwara Guru Ka Taal,4.7,12675,Agra,India,Delhi,59572.5,4.69,3
+Tomb of Akbar,4.4,5608,Agra,India,Uttar Pradesh,24675.2,4.5,4
+Sikandra Fort,4.4,2472,Agra,India,Uttar Pradesh,10876.8,4.5,5
+Taj Nature Walk,4.3,2313,Agra,India,Uttar Pradesh,9945.9,4.29,6
+Amar Singh Gate,4.5,1173,Agra,India,Uttar Pradesh,5278.5,4.5,7
+Taj Museum,4.4,580,Agra,India,Uttar Pradesh,2552,4.5,8
+Diwan-I-Am,4.6,261,Agra,India,Uttar Pradesh,1200.6,4.5,9
+The Red Taj,4.2,121,Agra,India,Uttar Pradesh,508.2,4.5,10
+Shah Jahani Mahal,4.6,52,Agra,India,Uttar Pradesh,239.2,4.5,11
+Law Garden,4.4,59359,Ahmedabad,India,Maharashtra,261179.6,4.35,1
+Riverfront Flower Park,4.5,38630,Ahmedabad,India,Gujarat,173835,4.4,2
+Teen Darwaza,4.3,35630,Ahmedabad,India,Gujarat,153209,4.35,3
+Auto World Vintage Car Museum,4.4,9924,Ahmedabad,India,Gujarat,43665.6,4.35,4
+Sidi Saiyyed Mosque,4.5,7727,Ahmedabad,India,Gujarat,34771.5,4.6,5
+Rani no Hajiro,4.2,3618,Ahmedabad,India,Gujarat,15195.6,4.35,6
+Balvatika & N. H. Museum,4.2,2980,Ahmedabad,India,Gujarat,12516,4.35,7
+The Calico Museum of Textiles,4.3,1073,Ahmedabad,India,Gujarat,4613.9,4.35,8
+Lalbhai Dalpatbhai Museum,4.5,776,Ahmedabad,India,Gujarat,3492,4.35,9
+Kaligam Fort,4.1,428,Ahmedabad,India,Gujarat,1754.8,4.35,10
+Ellora Caves,4.7,47368,Ajanta,India,Maharashtra,222629.6,4.49,1
+Ajanta Caves Waterfall,4.5,309,Ajanta,India,Maharashtra,1390.5,4.35,2
+Upper View Point Ajanta Caves,4.6,295,Ajanta,India,Maharashtra,1357,4.35,3
+Ajanta Cave,4.7,252,Ajanta,India,Maharashtra,1184.4,4.49,4
+Middle View Point ( Ajanta Caves ),4.6,108,Ajanta,India,Maharashtra,496.8,4.35,5
+Ajanta Ellora Cave 27,4.8,70,Ajanta,India,Maharashtra,336,4.49,6
+Maharana Pratap Smarak - Ajmer,4.5,6363,Ajmer,India,Rajasthan,28633.5,4.51,1
+Taragarh Fort - Ajmer,4.3,4000,Ajmer,India,Rajasthan,17200,4.51,2
+Soni Ji Ki Nasiya Jain Temple,4.5,3526,Ajmer,India,Rajasthan,15867,4.67,3
+Ajmer Fort,4.3,3237,Ajmer,India,Rajasthan,13919.1,4.51,4
+New Choupati Anasagar Pathway,4.5,831,Ajmer,India,Rajasthan,3739.5,4.38,5
+Shree Ram Baradari,4.3,607,Ajmer,India,Rajasthan,2610.1,4.51,6
+Rangji Temple,4.6,328,Ajmer,India,Rajasthan,1508.8,4.67,7
+Government Museum,4.4,285,Ajmer,India,Rajasthan,1254,4.51,8
+Varsoli Beach,4.3,8070,Alibaug,India,Maharashtra,34701,4.35,1
+Kulaba Fort,4.2,5175,Alibaug,India,Maharashtra,21735,4.49,2
+"Sree Krishna Swamy Temple, Ambalapuzha",4.8,12138,Alleppey,India,Kerala,58262.4,4.72,1
+Alappuzha Beach,4.5,11073,Alleppey,India,Kerala,49828.5,4.43,2
+Mullakkal Rajarajeswari Temple,4.6,3154,Alleppey,India,Kerala,14508.4,4.72,3
+INTERNATIONAL COIR MUSEUM,4.3,2500,Alleppey,India,Kerala,10750,4.42,4
+Revi Karunakaran Memorial Museum,4.2,1654,Alleppey,India,Kerala,6946.8,4.42,5
+Mount Carmel Roman Catholic Latin Cathedral,4.6,1280,Alleppey,India,Kerala,5888,4.72,6
+Kidangamparambu Sree Bhuvaneswari Temple,4.5,887,Alleppey,India,Kerala,3991.5,4.72,7
+The Great Backwaters,4.5,525,Alleppey,India,Kerala,2362.5,4.43,8
+Swetamber Jain Temple,4.3,384,Alleppey,India,Gujarat,1651.2,4.6,9
+Chitai Golu Devta Temple,4.8,6210,Almora,India,Uttarakhand,29808,4.64,1
+Kasar Devi Temple Almora,4.8,4034,Almora,India,Uttarakhand,19363.2,4.64,2
+Katarmal Sun Temple,4.7,1163,Almora,India,Uttarakhand,5466.1,4.64,3
+Syahi Devi Temple,4.6,207,Almora,India,Uttarakhand,952.2,4.64,4
+Khagmara Temple,4.2,95,Almora,India,Uttarakhand,399,4.64,5
+Shri Amarnath Cave Temple,4.5,10424,Amarnath,India,Jammu And Kashmir,46908,4.68,1
+Sri Harmandir Sahib,4.9,194743,Ambarsar,India,Punjab,954240.7,4.9,1
+"The Partition Museum - Amritsar District, Punjab, India",4.6,17119,Ambarsar,India,Punjab,78747.4,4.51,2
+Gobindgarh Fort,4.3,14572,Ambarsar,India,Punjab,62659.6,4.51,3
+"Shri Durgiana Temple, Amritsar",4.7,5974,Ambarsar,India,Goa,28077.8,4.54,4
+Gurudwara Chheharta Sahib,4.9,4000,Ambarsar,India,Punjab,19600,4.9,5
+Iskcon Temple,4.6,419,Ambarsar,India,Punjab,1927.4,4.9,6
+Central Sikh Museum,4.7,403,Ambarsar,India,Punjab,1894.1,4.51,7
+"Saragarhi Memorial Gurudwara - Amritsar, Punjab, India",4.7,296,Ambarsar,India,Punjab,1391.2,4.9,8
+Shri Dukh Bhanjani Beri Sahib,4.8,250,Ambarsar,India,Punjab,1200,4.9,9
+Mahamaya Temple,4.6,1402,Ambikapur,India,Chhattisgarh,6449.2,4.49,1
+Oxygen Park,4.1,756,Ambikapur,India,Chhattisgarh,3099.6,4.21,2
+Sanitary Park,4.2,433,Ambikapur,India,Chhattisgarh,1818.6,4.21,3
+Sri Harmandir Sahib,4.9,194276,Amritsar,India,Punjab,951952.4,4.9,1
+"The Partition Museum - Amritsar District, Punjab, India",4.6,16605,Amritsar,India,Punjab,76383,4.51,2
+Gobindgarh Fort,4.3,14460,Amritsar,India,Punjab,62178,4.51,3
+"Shri Durgiana Temple, Amritsar",4.7,5771,Amritsar,India,Goa,27123.7,4.54,4
+Gurudwara Chheharta Sahib,4.9,3937,Amritsar,India,Punjab,19291.3,4.9,5
+Rose Garden,4.3,3594,Amritsar,India,Punjab,15454.2,4.36,6
+Mata Lal Devi Mandir,4.7,2642,Amritsar,India,Punjab,12417.4,4.9,7
+Akal Takht Sahib,4.8,1233,Amritsar,India,Punjab,5918.4,4.9,8
+Jallianwala Bagh Museum,4.6,524,Amritsar,India,Punjab,2410.4,4.51,9
+Maharaja Ranjit Singh Garden,4.5,480,Amritsar,India,Punjab,2160,4.36,10
+Iskcon Temple,4.6,411,Amritsar,India,Punjab,1890.6,4.9,11
+Central Sikh Museum,4.7,397,Amritsar,India,Punjab,1865.9,4.51,12
+Jalianwala Bag Centenary Memorial,4.7,317,Amritsar,India,Punjab,1489.9,4.36,13
+Shri Dukh Bhanjani Beri Sahib,4.8,247,Amritsar,India,Punjab,1185.6,4.9,14
+Varenium Park,4.2,214,Amritsar,India,Punjab,898.8,4.36,15
+Sita Ram Mandir,4.5,128,Amritsar,India,Punjab,576,4.9,16
+Chatiwind canal,4.5,105,Amritsar,India,Punjab,472.5,4.36,17
+Virasat-e-Khalsa,4.7,16691,Anandpur,India,Punjab,78447.7,4.51,1
+Takhat Sri Kesgarh Sahib,4.9,10525,Anandpur,India,Punjab,51572.5,4.9,2
+Sri Guru Teg Bahadur Sikh Museum,4.7,156,Anandpur,India,Punjab,733.2,4.51,3
+Corbyn's Cove Beach,4.2,11051,Andaman,India,Andaman And Nicobar Islands,46414.2,4.27,1
+Marina Park,4.4,7403,Andaman,India,Andaman And Nicobar Islands,32573.2,4.27,2
+Naval Marine Museum Samudrika,4.3,4158,Andaman,India,Andaman And Nicobar Islands,17879.4,4.29,3
+Gandhi Park,4.1,2012,Andaman,India,Andaman And Nicobar Islands,8249.2,4.27,4
+Mount Manipur National Park,4.5,1062,Andaman,India,Manipur,4779,4.5,5
+Mahatma Gandhi Marine National Park,4.5,691,Andaman,India,Andaman And Nicobar Islands,3109.5,4.27,6
+Forest Museum,4.2,419,Andaman,India,Andaman And Nicobar Islands,1759.8,4.29,7
+"Sri Vetrimalai Murugan Temple, rii verrrrimlai muruknnn tirukkoovil",4.6,230,Andaman,India,Andaman And Nicobar Islands,1058,4.6,8
+Veer Savarkar Park,4.5,151,Andaman,India,Andaman And Nicobar Islands,679.5,4.27,9
+View Point for North Bay,4.7,81,Andaman,India,Andaman And Nicobar Islands,380.7,4.27,10
+Valley of Flowers National Park,4.7,3460,Auli,India,Uttarakhand,16262,4.34,1
+"Shri Narsingh Temple, Joshimath",4.8,2068,Auli,India,Uttarakhand,9926.4,4.64,2
+Bibi Ka Maqbara,4.2,38007,Aurangabad,India,Maharashtra,159629.4,4.49,1
+Himayatbagh Biodiversity Heritage site,4.3,4728,Aurangabad,India,Maharashtra,20330.4,4.35,2
+Delhi Gate,4.4,3662,Aurangabad,India,Delhi,16112.8,4.51,3
+Makai Gate,4.1,3748,Aurangabad,India,Maharashtra,15366.8,4.49,4
+Soneri Mahal,4.2,2521,Aurangabad,India,Maharashtra,10588.2,4.49,5
+Shri Khandoba Temple,4.6,1962,Aurangabad,India,Maharashtra,9025.2,4.69,6
+"Chhatrapati Shivaji Maharaj Museum, Aurangabad.",4.2,2055,Aurangabad,India,Maharashtra,8631,4.49,7
+Encore Creative Events,4.4,528,Aurangabad,India,Maharashtra,2323.2,4.69,8
+ISKCON temple Bangalore,4.6,115304,Bangalore,India,Karnataka,530398.4,4.62,1
+Bengaluru Palace,4.2,89839,Bangalore,India,Karnataka,377323.8,4.41,2
+HAL Heritage Centre and Aerospace Museum,4.4,31057,Bangalore,India,Karnataka,136650.8,4.41,3
+Bugle Rock Park,4.4,24360,Bangalore,India,Karnataka,107184,4.43,4
+M.N. Krishna Rao Park,4.5,12999,Bangalore,India,Karnataka,58495.5,4.43,5
+Bannerughatta Biological Park,4.4,4987,Bangalore,India,Karnataka,21942.8,4.43,6
+Ashoka Pillar Monument,4.5,4816,Bangalore,India,Karnataka,21672,4.41,7
+Mahatma Gandhi Park,4.2,253,Bangalore,India,Karnataka,1062.6,4.43,8
+Rock City View,4.3,154,Bangalore,India,Karnataka,662.2,4.43,9
+Nehru Nagar Park Bhelwa Talab,4.1,2835,Bhilai,India,Chhattisgarh,11623.5,4.21,1
+Shaheed Udyaan,4.5,2286,Bhilai,India,Chhattisgarh,10287,4.21,2
+Chandi Mandir,4.5,1062,Bhilai,India,Chhattisgarh,4779,4.49,3
+Jama Masjid,4.4,867,Bhilai,India,Chhattisgarh,3814.8,4.49,4
+Jagannath Temple,4.5,723,Bhilai,India,Chhattisgarh,3253.5,4.49,5
+"Shree Shirdi Saibaba Mandir - Bhilai City, Chhattisgarh, India",4.7,658,Bhilai,India,Chhattisgarh,3092.6,4.49,6
+Akkum's Talab Park,4.3,342,Bhilai,India,Chhattisgarh,1470.6,4.21,7
+Panchratan Vatika,4.1,154,Bhilai,India,Chhattisgarh,631.4,4.21,8
+ARJUN RATH PARK,4.1,113,Bhilai,India,Chhattisgarh,463.3,4.21,9
+Udayagiri and Khandagiri Caves,4.4,25439,Bhubaneswar,India,Odisha,111931.6,4.46,1
+Dhauli Shanti Stupa,4.5,21786,Bhubaneswar,India,Odisha,98037,4.46,2
+Biju Patnaik Park,4.5,16807,Bhubaneswar,India,Odisha,75631.5,4.49,3
+Sri Ram Temple,4.7,12784,Bhubaneswar,India,Odisha,60084.8,4.69,4
+"Shree Mukteswara Temple, Bhubaneswar",4.7,5379,Bhubaneswar,India,Odisha,25281.3,4.69,5
+State Tribal Museum,4.6,3171,Bhubaneswar,India,Odisha,14586.6,4.46,6
+Bhaskareswara Temple,4.7,2018,Bhubaneswar,India,Odisha,9484.6,4.69,7
+Shree Bramheswara Temple,4.6,1329,Bhubaneswar,India,Odisha,6113.4,4.69,8
+Parsurameswara Temple,4.6,603,Bhubaneswar,India,Odisha,2773.8,4.69,9
+Rani Gumpha,4.5,595,Bhubaneswar,India,Odisha,2677.5,4.46,10
+Khanduali Temple,4.6,347,Bhubaneswar,India,Odisha,1596.2,4.69,11
+Devi Padahara Pond (debii paadhraa pusskrinnii),4.3,108,Bhubaneswar,India,Odisha,464.4,4.46,12
+Bijbehara The town of Chinars,4.5,99,Bijbehara,India,Jammu And Kashmir,445.5,4.5,1
+Baba Naseeb Din Park,4.2,75,Bijbehara,India,Jammu And Kashmir,315,4.41,2
+Vaishno Dham Temple,4.6,3583,Bikaner,India,Rajasthan,16481.8,4.67,1
+Science Park,4.2,2805,Bikaner,India,Rajasthan,11781,4.38,2
+Bhraman Path,4.5,2100,Bikaner,India,Rajasthan,9450,4.38,3
+Seth Bhandasar Jain Temple,4.6,1937,Bikaner,India,Rajasthan,8910.2,4.67,4
+Nagar Seth Shree Laxminath Ji mandir,4.7,1517,Bikaner,India,Rajasthan,7129.9,4.67,5
+Prachina Museum,4.3,1261,Bikaner,India,Rajasthan,5422.3,4.51,6
+Museum park,4.4,693,Bikaner,India,Rajasthan,3049.2,4.38,7
+Shri Laxminath Temple,4.7,557,Bikaner,India,Rajasthan,2617.9,4.67,8
+Bikaji Ki Tekri,4.2,559,Bikaner,India,Rajasthan,2347.8,4.51,9
+Junagarh Palace And Museum Bikaner,4.6,363,Bikaner,India,Rajasthan,1669.8,4.51,10
+Jawahar Park,4.2,182,Bikaner,India,Rajasthan,764.4,4.38,11
+Kodamdesar Bhairav Temple,4.5,163,Bikaner,India,Rajasthan,733.5,4.67,12
+Sri Sadul Museum,4.1,147,Bikaner,India,Rajasthan,602.7,4.51,13
+"Shri Shiv Bari Temple - Bikaner District, Rajasthan, India",4.6,70,Bikaner,India,Rajasthan,322,4.67,14
+RAO BIKAJI PARK,4.2,75,Bikaner,India,Rajasthan,315,4.38,15
+Marunayak Ji Ka Temple,4.2,65,Bikaner,India,Rajasthan,273,4.67,16
+Nehru Park,4.2,64,Bikaner,India,Rajasthan,268.8,4.38,17
+Radha Park,4.1,62,Bikaner,India,Rajasthan,254.2,4.38,18
+Mahabodhi Temple,4.7,20004,Bodh,India,Bihar,94018.8,4.65,1
+The Great Buddha Statue,4.6,7679,Bodh,India,Bihar,35323.4,4.65,2
+Bodhgaya Bodhi Tree,4.7,3189,Bodh,India,Bihar,14988.3,4.65,3
+Watthai Buddhagaya Temple,4.6,1822,Bodh,India,Bihar,8381.2,4.65,4
+Dungeshwari,4.5,1295,Bodh,India,Bihar,5827.5,4.65,5
+The Royal Bhutanese Monastery,4.6,515,Bodh,India,Bihar,2369,4.65,6
+Tergar Monastery,4.6,407,Bodh,India,Bihar,1872.2,4.65,7
+Archaeological Museum Bodhgaya,4.2,430,Bodh,India,Bihar,1806,4.19,8
+Daijokyo Buddhist Temple,4.4,287,Bodh,India,Bihar,1262.8,4.65,9
+Karma Temple,4.6,236,Bodh,India,Bihar,1085.6,4.65,10
+Wat Thai Magadh,4.4,162,Bodh,India,Bihar,712.8,4.65,11
+Indosan Nipponji,4.5,146,Bodh,India,Bihar,657,4.65,12
+Tibetan Temple gaden phelgayling namgyal datsang,4.4,96,Bodh,India,Bihar,422.4,4.65,13
+Gayajipurohit,4.4,81,Bodh,India,Bihar,356.4,4.65,14
+Palyul Namdroling Temple,4.8,64,Bodh,India,Bihar,307.2,4.65,15
+Jagannath Mandir Bokaro,4.6,3040,Bokaro,India,Jharkhand,13984,4.63,1
+Gayatri Mandir,4.5,711,Bokaro,India,Jharkhand,3199.5,4.63,2
+"Shree Ayyappa Temple - Sector 5, Bokaro SteelCity, Jharkhand, India",4.6,469,Bokaro,India,Jharkhand,2157.4,4.63,3
+"Jama Masjid, Sector-4",4.5,171,Bokaro,India,Jharkhand,769.5,4.63,4
+RADIO Tower Chowk,4.1,130,Bokaro,India,Jharkhand,533,4.28,5
+Park,4.3,101,Bokaro,India,Jharkhand,434.3,4.28,6
+Bhawanipur Maa Kali Mandir Park,4.4,52,Bokaro,India,Jharkhand,228.8,4.28,7
+Gateway Of India Mumbai,4.6,367625,Bombay,India,Maharashtra,1691075,4.49,1
+Band Stand,4.4,61447,Bombay,India,Maharashtra,270366.8,4.35,2
+Sanjay Gandhi National Park,4.3,61981,Bombay,India,Maharashtra,266518.3,4.35,3
+ISKCON Mandir - Juhu,4.7,43307,Bombay,India,Maharashtra,203542.9,4.69,4
+Chatrapati Shivaji Maharaj Park,4.5,39136,Bombay,India,Maharashtra,176112,4.35,5
+Chhatrapati Shivaji Maharaj Vastu Sangrahalaya,4.6,34964,Bombay,India,Maharashtra,160834.4,4.49,6
+Hanging Gardens,4.2,35504,Bombay,India,Maharashtra,149116.8,4.35,7
+Bandra Fort,4.4,27475,Bombay,India,Maharashtra,120890,4.49,8
+Priyadarshini Park,4.5,17061,Bombay,India,Maharashtra,76774.5,4.35,9
+Haji Ali Dargah,4.4,16700,Bombay,India,Maharashtra,73480,4.69,10
+Chhatrapati Shivaji Maharaj Statue,4.5,15220,Bombay,India,Maharashtra,68490,4.49,11
+Vasai Fort,4.3,13733,Bombay,India,Maharashtra,59051.9,4.49,12
+Horniman Circle Garden,4.4,12485,Bombay,India,Maharashtra,54934,4.35,13
+Cross Maidan Garden,4.2,13053,Bombay,India,Maharashtra,54822.6,4.35,14
+ISKCON Chowpatty (Sri Sri Radha Gopinath Mandir),4.8,6777,Bombay,India,Maharashtra,32529.6,4.69,15
+BMC Nirvana Park,4.3,6368,Bombay,India,Maharashtra,27382.4,4.35,16
+Amarsons Garden,4.3,6055,Bombay,India,Maharashtra,26036.5,4.35,17
+Dr. Bhau Daji Lad Museum,4.4,5115,Bombay,India,Maharashtra,22506,4.49,18
+Gol Deval Temple,4.3,4575,Bombay,India,Maharashtra,19672.5,4.69,19
+Veer Baji Prabhu Udyan,4.4,4361,Bombay,India,Maharashtra,19188.4,4.35,20
+Thiruchembur Murugan Temple,4.7,3361,Bombay,India,Maharashtra,15796.7,4.69,21
+Shiv Fort,4.2,3716,Bombay,India,Maharashtra,15607.2,4.49,22
+Worli Fort,4.2,3649,Bombay,India,Maharashtra,15325.8,4.49,23
+Shree Ghanteshwar Hanuman Mandir,4.7,2798,Bombay,India,Maharashtra,13150.6,4.69,24
+Juhu Garden,4.1,2327,Bombay,India,Maharashtra,9540.7,4.35,25
+Babu Amichand Panalal Adishwarji Jain Temple,4.8,1641,Bombay,India,Maharashtra,7876.8,4.69,26
+National Museum of Indian Cinema,4.6,1670,Bombay,India,Maharashtra,7682,4.49,27
+Madh Fort,4.1,1784,Bombay,India,Maharashtra,7314.4,4.49,28
+Sagar Upvan Garden,4.2,1561,Bombay,India,Maharashtra,6556.2,4.35,29
+Mani Bhavan Gandhi Sangrahalaya,4.6,1090,Bombay,India,Maharashtra,5014,4.49,30
+Cathedral of the Holy Name,4.7,1053,Bombay,India,Maharashtra,4949.1,4.69,31
+Film City View,4.3,1079,Bombay,India,Maharashtra,4639.7,4.35,32
+Fort George,4.5,157,Bombay,India,Maharashtra,706.5,4.49,33
+Hutatma Memorial Statue,4.4,137,Bombay,India,Maharashtra,602.8,4.49,34
+Bomanjee Hormarjee Wadia Clock Tower,4.4,78,Bombay,India,Maharashtra,343.2,4.49,35
+"Bomdila Buddhist Monastery - Bomdila, West Kameng District, Arunachal Pradesh, India",4.6,1311,Bomdila,India,Arunachal Pradesh,6030.6,4.59,1
+Buddha Park,4.1,389,Bomdila,India,Arunachal Pradesh,1594.9,4.1,2
+Mandala Associates,4.3,244,Bomdila,India,Arunachal Pradesh,1049.2,4.59,3
+Garden of Silence,4.5,6202,Chandigarh,India,Chandigarh,27909,4.37,1
+Garden of Fragrance,4.6,5928,Chandigarh,India,Chandigarh,27268.8,4.37,2
+Leisure Valley,4.4,4443,Chandigarh,India,Chandigarh,19549.2,4.37,3
+Government Museum and Art Gallery,4.4,2992,Chandigarh,India,Chandigarh,13164.8,4.41,4
+Bougainvillea Park,4.4,1845,Chandigarh,India,Chandigarh,8118,4.37,5
+Topiary Park,4.2,1598,Chandigarh,India,Chandigarh,6711.6,4.37,6
+Butterfly Park,4.1,1594,Chandigarh,India,Chandigarh,6535.4,4.37,7
+Shanti Kunj Park,4.4,1440,Chandigarh,India,Chandigarh,6336,4.37,8
+Le Corbusier Centre,4.4,1334,Chandigarh,India,Chandigarh,5869.6,4.41,9
+Open Hand Monument,4.5,779,Chandigarh,India,Chandigarh,3505.5,4.41,10
+Hibiscus Garden,4.4,382,Chandigarh,India,Chandigarh,1680.8,4.37,11
+"Rag Doll museum, Rock garden",4.5,144,Chandigarh,India,Chandigarh,648,4.41,12
+Tank Monument,4.3,76,Chandigarh,India,Chandigarh,326.8,4.41,13
+Arulmigu Sri Parthasarathy Perumal Temple Tiruvallikeni,4.7,24410,Chennai,India,Tamil Nadu,114727,4.69,1
+Government Museum Chennai,4.3,15828,Chennai,India,Tamil Nadu,68060.4,4.37,2
+Vivekananda House,4.5,8403,Chennai,India,Tamil Nadu,37813.5,4.37,3
+Fort St.George Museum,4.2,4602,Chennai,India,Tamil Nadu,19328.4,4.37,4
+Kannagi Statue,4.4,4229,Chennai,India,Tamil Nadu,18607.6,4.37,5
+"Secretariat Park, Chennai",4.4,1461,Chennai,India,Tamil Nadu,6428.4,4.41,6
+Mawkdok Dympep Valley View Point,4.5,6715,Cherrapunji,India,Meghalaya,30217.5,4.4,1
+Mawsmai Nongthymmai Eco Park,4.3,4137,Cherrapunji,India,Meghalaya,17789.1,4.4,2
+Eco Park,4.3,1578,Cherrapunji,India,Meghalaya,6785.4,4.4,3
+Thangkharang Park,4.3,1166,Cherrapunji,India,Meghalaya,5013.8,4.4,4
+View Point Of Cherrapunjee,4.5,138,Cherrapunji,India,Meghalaya,621,4.4,5
+Bangladesh Plains View Point,4.4,130,Cherrapunji,India,Meghalaya,572,4.4,6
+Mot I pun / Palong Park,4.6,122,Cherrapunji,India,Meghalaya,561.2,4.4,7
+Chittorgarh Fort,4.6,44079,Chittorgarh,India,Rajasthan,202763.4,4.51,1
+Kalika Mata Temple,4.7,2601,Chittorgarh,India,Rajasthan,12224.7,4.67,2
+Maharani Padmini Palace,4.5,1714,Chittorgarh,India,Rajasthan,7713,4.51,3
+Shri Baan Mata Temple,4.7,1058,Chittorgarh,India,Rajasthan,4972.6,4.67,4
+Meera Temple,4.6,1074,Chittorgarh,India,Rajasthan,4940.4,4.67,5
+Rana Kumbha Palace,4.5,987,Chittorgarh,India,Rajasthan,4441.5,4.51,6
+Fateh Prakash Palace - Government Museum,4.5,658,Chittorgarh,India,Rajasthan,2961,4.51,7
+Rana Ratan Singh Palace,4.5,541,Chittorgarh,India,Rajasthan,2434.5,4.51,8
+Suraj Pole,4.6,263,Chittorgarh,India,Rajasthan,1209.8,4.51,9
+Ram Pole,4.4,90,Chittorgarh,India,Rajasthan,396,4.51,10
+Kumbhshyam Temple,4.7,52,Chittorgarh,India,Rajasthan,244.4,4.67,11
+Sri Arulmigu Subramaniya Swamy Temple Marudhamalai,4.7,30022,Coimbatore,India,Tamil Nadu,141103.4,4.69,1
+Gedee Car Museum,4.6,9183,Coimbatore,India,Tamil Nadu,42241.8,4.37,2
+Ramar Temple,4.7,2175,Coimbatore,India,Tamil Nadu,10222.5,4.69,3
+Sri Masaniamman Temple,4.5,1151,Coimbatore,India,Tamil Nadu,5179.5,4.69,4
+Gass Forest Museum,4.4,976,Coimbatore,India,Tamil Nadu,4294.4,4.37,5
+Raja's Seat View point,4.4,845,Coorg,India,Karnataka,3718,4.43,1
+Kattalekadu Viewpoint,4.5,537,Coorg,India,Karnataka,2416.5,4.43,2
+Elephants' Statue,4.2,128,Coorg,India,Karnataka,537.6,4.41,3
+Raja's seat park,4.5,96,Coorg,India,Karnataka,432,4.43,4
+Karwale Bhagavathi Temple,4.5,53,Coorg,India,Karnataka,238.5,4.62,5
+Beeji's Park,4.5,2592,Dalhousie,India,Himachal Pradesh,11664,4.49,1
+St. John's Church,4.2,2329,Dalhousie,India,Himachal Pradesh,9781.8,4.59,2
+Bhuri Singh Museum,4.3,1786,Dalhousie,India,Himachal Pradesh,7679.8,4.55,3
+Kalatop Forest,4.4,1055,Dalhousie,India,Himachal Pradesh,4642,4.49,4
+Dalhousie Cantonment Forest,4.5,781,Dalhousie,India,Himachal Pradesh,3514.5,4.49,5
+Chamera Lake view point,4.4,473,Dalhousie,India,Himachal Pradesh,2081.2,4.49,6
+St. Francis Church,4.5,355,Dalhousie,India,Himachal Pradesh,1597.5,4.59,7
+Nomadic Dalhousie,4.6,154,Dalhousie,India,Himachal Pradesh,708.4,4.49,8
+Church Park,4.1,58,Dalhousie,India,Himachal Pradesh,237.8,4.49,9
+Shyama Mai Temple,4.7,3486,Darbhanga,India,Bihar,16384.2,4.65,1
+Chandradhari Museum,4.1,1696,Darbhanga,India,Bihar,6953.6,4.19,2
+Manokamna Mandir,4.6,1301,Darbhanga,India,Bihar,5984.6,4.65,3
+Darbhanga Fort,4.3,1105,Darbhanga,India,Bihar,4751.5,4.19,4
+Kali Mandir,4.5,766,Darbhanga,India,Bihar,3447,4.65,5
+Maharaja Madhav Singh Park,4.2,626,Darbhanga,India,Bihar,2629.2,4.19,6
+Shyama Maa Kali Temple,4.5,469,Darbhanga,India,Bihar,2110.5,4.65,7
+Anandbag Botanical Garden,4.3,286,Darbhanga,India,Bihar,1229.8,4.19,8
+Rambag Palace,4.2,91,Darbhanga,India,Bihar,382.2,4.19,9
+"Peace Pagoda, Darjeeling",4.6,7573,Darjeeling,India,West Bengal,34835.8,4.55,1
+Ghoom Monastery (Samten Choeling),4.3,7907,Darjeeling,India,West Bengal,34000.1,4.55,2
+Tea Garden View,4.3,6735,Darjeeling,India,West Bengal,28960.5,4.43,3
+Batasia Eco Garden,4.5,6163,Darjeeling,India,West Bengal,27733.5,4.43,4
+"Japanese Buddhist Temple, Darjeeling",4.5,4823,Darjeeling,India,West Bengal,21703.5,4.55,5
+Darjeeling Clock Tower,4.3,3895,Darjeeling,India,West Bengal,16748.5,4.54,6
+Mahakal Temple,4.7,2822,Darjeeling,India,West Bengal,13263.4,4.55,7
+Happy Valley Tea Estate,4.4,2302,Darjeeling,India,West Bengal,10128.8,4.43,8
+Shrubbery Nightingale Park,4.3,1355,Darjeeling,India,West Bengal,5826.5,4.43,9
+Yiga Choeling Monastery,4.5,529,Darjeeling,India,West Bengal,2380.5,4.55,10
+Himalayan Tibet Museum,4.5,406,Darjeeling,India,West Bengal,1827,4.54,11
+HMI MUSEUM,4.6,285,Darjeeling,India,West Bengal,1311,4.54,12
+St. Andrews Church,4.4,240,Darjeeling,India,West Bengal,1056,4.55,13
+"DHR Ghum Railway Museum - Darjeeling District, West Bengal, India",4.3,238,Darjeeling,India,West Bengal,1023.4,4.54,14
+Guiders,4.5,225,Darjeeling,India,West Bengal,1012.5,4.55,15
+India Gate,4.6,265451,Dehli,India,Delhi,1221074.6,4.51,1
+Red Fort,4.5,153536,Dehli,India,Delhi,690912,4.51,2
+Qutub Minar,4.5,138428,Dehli,India,Delhi,622926,4.51,3
+Gurudwara Sis Ganj Sahib,4.8,69002,Dehli,India,Delhi,331209.6,4.69,4
+Shri Kalka Ji Temple,4.6,37094,Dehli,India,Delhi,170632.4,4.69,5
+Jantar Mantar,4.2,31229,Dehli,India,Delhi,131161.8,4.29,6
+Purana Quila,4.2,31058,Dehli,India,Delhi,130443.6,4.51,7
+The Garden of Five Senses,4.1,22852,Dehli,India,Delhi,93693.2,4.29,8
+Nehru Park,4.5,18516,Dehli,India,Delhi,83322,4.29,9
+Shri Laxmi Narayan Temple (Birla Mandir),4.6,14085,Dehli,India,Delhi,64791,4.69,10
+"Indira Gandhi Memorial Museum, Delhi",4.5,14367,Dehli,India,Delhi,64651.5,4.51,11
+"Safdarjung Tomb, Delhi",4.4,14180,Dehli,India,Delhi,62392,4.51,12
+Tughlakabad Fort Delhi,4.1,12811,Dehli,India,Delhi,52525.1,4.51,13
+Dargah Nizamuddin Aulia,4.6,10409,Dehli,India,Delhi,47881.4,4.69,14
+Bharat Darshan Park,4.3,8115,Dehli,India,Punjab,34894.5,4.36,15
+Sulabh International Museum Of Toilets,4.3,8008,Dehli,India,Delhi,34434.4,4.51,16
+Millennium Park,4.2,8075,Dehli,India,Delhi,33915,4.29,17
+Indraprastha Park,4.2,7894,Dehli,India,Delhi,33154.8,4.29,18
+Deer Park,4.4,5805,Dehli,India,Delhi,25542,4.29,19
+Shankar's International Dolls Museum,4.2,5956,Dehli,India,Delhi,25015.2,4.51,20
+Hauz Khas Fort,4.4,3374,Dehli,India,Delhi,14845.6,4.51,21
+"Isa Khan's Tomb, Delhi",4.4,2920,Dehli,India,Delhi,12848,4.51,22
+Mehrauli Archaeological Park,4.3,2628,Dehli,India,Delhi,11300.4,4.51,23
+"Iron Pillar, Delhi",4.6,2153,Dehli,India,Delhi,9903.8,4.51,24
+India Africa Friendship Rose Garden,4.4,1854,Dehli,India,Delhi,8157.6,4.29,25
+Charkha Museum,4.2,1646,Dehli,India,Delhi,6913.2,4.51,26
+Qudsia Bagh,4.3,1097,Dehli,India,Delhi,4717.1,4.29,27
+Darya Khan's Tomb,4.3,804,Dehli,India,Delhi,3457.2,4.51,28
+"Satpula, Delhi",4.1,839,Dehli,India,Delhi,3439.9,4.51,29
+Rajon Ki Baoli,4.1,554,Dehli,India,Delhi,2271.4,4.51,30
+Indian War Memorial Museum,4.4,475,Dehli,India,Delhi,2090,4.51,31
+Mumtaz Mahal,4.3,468,Dehli,India,Delhi,2012.4,4.51,32
+Tomb of Iltutmish,4.5,312,Dehli,India,Delhi,1404,4.51,33
+Ram Yantra,4.7,289,Dehli,India,Delhi,1358.3,4.51,34
+Tapkeshwar Mahadev Mandir,4.7,21020,Dehradun,India,Uttarakhand,98794,4.64,1
+Malsi Deer Park,4.1,11341,Dehradun,India,Uttarakhand,46498.1,4.34,2
+Jheel Clement Town,4.3,1759,Dehradun,India,Uttarakhand,7563.7,4.34,3
+Khalanga War Memorial,4.5,1245,Dehradun,India,Uttarakhand,5602.5,4.49,4
+Chandrabani Temple,4.4,776,Dehradun,India,Uttarakhand,3414.4,4.64,5
+Subir Raha Oil Museum,4.5,399,Dehradun,India,Uttarakhand,1795.5,4.49,6
+Tapovan Temple,4.3,407,Dehradun,India,Uttarakhand,1750.1,4.64,7
+Zonal Anthropological Museum,4.1,123,Dehradun,India,Uttarakhand,504.3,4.49,8
+India Gate,4.6,265451,Delhi,India,Delhi,1221074.6,4.51,1
+Red Fort,4.5,153536,Delhi,India,Delhi,690912,4.51,2
+Lodhi Garden,4.5,47959,Delhi,India,Delhi,215815.5,4.29,3
+Humayun's Tomb,4.5,40464,Delhi,India,Delhi,182088,4.51,4
+Jantar Mantar,4.2,31230,Delhi,India,Delhi,131166,4.29,5
+Purana Quila,4.2,31058,Delhi,India,Delhi,130443.6,4.51,6
+The Garden of Five Senses,4.1,22852,Delhi,India,Delhi,93693.2,4.29,7
+Shri Laxmi Narayan Temple (Birla Mandir),4.6,14085,Delhi,India,Delhi,64791,4.69,8
+"Safdarjung Tomb, Delhi",4.4,14180,Delhi,India,Delhi,62392,4.51,9
+Tughlakabad Fort Delhi,4.1,12811,Delhi,India,Delhi,52525.1,4.51,10
+Hauz Khas Fort,4.4,3374,Delhi,India,Delhi,14845.6,4.51,11
+Mehrauli Archaeological Park,4.3,2628,Delhi,India,Delhi,11300.4,4.51,12
+Shanti Stupa New Delhi,4.4,1645,Delhi,India,Delhi,7238,4.69,13
+Darya Khan's Tomb,4.3,804,Delhi,India,Delhi,3457.2,4.51,14
+Mumtaz Mahal,4.3,468,Delhi,India,Delhi,2012.4,4.51,15
+"Zafar Mahal, Delhi",4.4,140,Delhi,India,Delhi,616,4.51,16
+Shakti Mandir,4.7,4915,Dhanbad,India,Jharkhand,23100.5,4.63,1
+Rajendra Sarovar Park,4.2,913,Dhanbad,India,Jharkhand,3834.6,4.28,2
+Bekarbandh Park,4.2,786,Dhanbad,India,Jharkhand,3301.2,4.28,3
+Vaishnavi & Vaibhavi Wellbeing Hub,4.1,612,Dhanbad,India,Jharkhand,2509.2,4.28,4
+Katras Palace,4.1,412,Dhanbad,India,Jharkhand,1689.2,4.23,5
+Hirapur Durga Mandir hiiraapur durgaa mndir,4.3,322,Dhanbad,India,Jharkhand,1384.6,4.63,6
+Sai Baba Mandir,4.6,231,Dhanbad,India,Jharkhand,1062.6,4.63,7
+"Govardhan Eco Restoration Park, Bera",4.4,69,Dhanbad,India,Jharkhand,303.6,4.28,8
+Naddi Hill Point Mcleod Ganj,4.5,2975,Dharamshala,India,Himachal Pradesh,13387.5,4.49,1
+Naddi View Point,4.5,2666,Dharamshala,India,Himachal Pradesh,11997,4.49,2
+Tsuglagkhang Complex Dalai Lama Temple,4.6,2510,Dharamshala,India,Himachal Pradesh,11546,4.59,3
+Namgyal Monastery,4.6,1417,Dharamshala,India,Himachal Pradesh,6518.2,4.59,4
+Kalachakra temple,4.5,871,Dharamshala,India,Himachal Pradesh,3919.5,4.59,5
+Dip Tse Chok Ling,4.4,145,Dharamshala,India,Himachal Pradesh,638,4.59,6
+Shiva Temple,4.5,81,Dharamshala,India,Himachal Pradesh,364.5,4.59,7
+DHEU SAGAR,4.3,4893,Digha,India,West Bengal,21039.9,4.43,1
+Boating point at Amarabati Park,4.2,98,Digha,India,West Bengal,411.6,4.43,2
+Life Spring Corner,4.1,181,Dimapur,India,Assam,742.1,4.49,1
+Tau Devilal Town Park Faridabad (Haryana),4.3,12216,Faridabad,India,Haryana,52528.8,4.27,1
+Shri Maharani Vaishno Devi Mandir,4.6,3642,Faridabad,India,Haryana,16753.2,4.82,2
+ISKCON Faridabad,4.6,2108,Faridabad,India,Haryana,9696.8,4.82,3
+City Park,4.1,1893,Faridabad,India,Haryana,7761.3,4.27,4
+Z Park,4.2,1629,Faridabad,India,Haryana,6841.8,4.27,5
+Shirdi Sai Baba Temple,4.8,1403,Faridabad,India,Haryana,6734.4,4.82,6
+Leisure Valley park,4.1,1130,Faridabad,India,Haryana,4633,4.27,7
+Rose Garden Faridabad,4.1,951,Faridabad,India,Haryana,3899.1,4.27,8
+"Parson Temple, Faridabad",4.5,702,Faridabad,India,Haryana,3159,4.82,9
+Kalibari Temple,4.7,252,Faridabad,India,Haryana,1184.4,4.82,10
+Laxmi Narayan Mandir,4.6,154,Faridabad,India,Haryana,708.4,4.82,11
+Shiv Mandir,4.4,74,Faridabad,India,Haryana,325.6,4.82,12
+Sheetla Mata Mandir,4.4,72,Faridabad,India,Haryana,316.8,4.82,13
+Mata Vaishno Devi Mandir Faridabad,4.5,66,Faridabad,India,Haryana,297,4.82,14
+Satkunda Mandir,4.5,63,Faridabad,India,Haryana,283.5,4.82,15
+Juta sewa,4.4,55,Faridabad,India,Haryana,242,4.82,16
+Gonjang Monastery,4.5,6502,Gangtok,India,Sikkim,29259,4.52,1
+Hanuman Tok,4.7,4328,Gangtok,India,Sikkim,20341.6,4.52,2
+Do Drul Chorten,4.4,4522,Gangtok,India,Sikkim,19896.8,4.52,3
+Ganesh Tok,4.5,3292,Gangtok,India,Sikkim,14814,4.52,4
+Enchey Monastery,4.5,2323,Gangtok,India,Sikkim,10453.5,4.52,5
+Namgyal Institute of Tibetology,4.3,1988,Gangtok,India,Sikkim,8548.4,4.3,6
+Kanchendzonga national park,4.5,442,Gangtok,India,Sikkim,1989,4.5,7
+Thakurbari Temple,4.5,373,Gangtok,India,Sikkim,1678.5,4.52,8
+Gir National Park,4.5,8246,Gir,India,Gujarat,37107,4.4,1
+"Khandoli Park, Giridih",4.1,3936,Giridih,India,Jharkhand,16137.6,4.28,1
+Kabir Gyan Mandir,4.6,477,Giridih,India,Jharkhand,2194.2,4.63,2
+Aguada Fort,4.2,96887,Goa,India,Goa,406925.4,4.25,1
+Dudhsagar Falls,4.6,27991,Goa,India,Goa,128758.6,4.44,2
+Sinquerim Fort,4.5,15553,Goa,India,Goa,69988.5,4.25,3
+Cabo de Rama Fort,4.4,12522,Goa,India,Goa,55096.8,4.25,4
+Big Foot Goa,4.1,7491,Goa,India,Goa,30713.1,4.25,5
+Indian Naval Aviation Museum,4.5,6425,Goa,India,Goa,28912.5,4.25,6
+Se Cathedral,4.5,5961,Goa,India,Goa,26824.5,4.54,7
+"Colva Beach, Goa",4.3,4866,Goa,India,Goa,20923.8,4.44,8
+Kadamba Shri Mahadeva Temple (Tambdisurla),4.8,4201,Goa,India,Goa,20164.8,4.54,9
+Church of St. Francis of Assisi,4.5,4357,Goa,India,Goa,19606.5,4.54,10
+Goa Beaches,4.5,3256,Goa,India,Goa,14652,4.44,11
+St. Augustine Tower,4.5,3222,Goa,India,Goa,14499,4.25,12
+Mollem National Park & Bhagwan Mahavir Wildlife Sanctuary,4.4,3269,Goa,India,Goa,14383.6,4.44,13
+Houses of Goa Museum,4.2,3215,Goa,India,Goa,13503,4.25,14
+"Sernabatim Beach, Colva",4.5,2052,Goa,India,Goa,9234,4.44,15
+Campal Gardens,4.2,2142,Goa,India,Goa,8996.4,4.44,16
+Chorla Ghat,4.4,1717,Goa,India,Goa,7554.8,4.44,17
+Azad Maidan,4.2,1759,Goa,India,Goa,7387.8,4.25,18
+Arambol Mountain,4.6,968,Goa,India,Goa,4452.8,4.44,19
+Palacio do Deao,4.6,817,Goa,India,Goa,3758.2,4.25,20
+Archaeological Museum of Goa,4.3,851,Goa,India,Goa,3659.3,4.25,21
+"St. Cajetan Church, Goa",4.6,745,Goa,India,Goa,3427,4.54,22
+Cotigao Wildlife Sanctuary,4.2,678,Goa,India,Goa,2847.6,4.44,23
+Tambdi Surla Waterfalls,4.6,394,Goa,India,Goa,1812.4,4.44,24
+Museum Of Christian Art,4.4,356,Goa,India,Goa,1566.4,4.25,25
+Juve Fort,4.4,314,Goa,India,Goa,1381.6,4.25,26
+Gulmarg Wildlife Sanctuary,4.5,6306,Gulmarg,India,Jammu And Kashmir,28377,4.41,1
+Gwalior Fort,4.5,39698,Gwalior,India,Madhya Pradesh,178641,4.43,1
+Surya Mandir Gwalior,4.5,4925,Gwalior,India,Madhya Pradesh,22162.5,4.74,2
+HH Maharaja Sir Jiwajirao Scindia Museum,4.3,4292,Gwalior,India,Madhya Pradesh,18455.6,4.43,3
+Saas Bahu twin temples,4.5,1993,Gwalior,India,Madhya Pradesh,8968.5,4.74,4
+Italian Garden,4.2,2095,Gwalior,India,Madhya Pradesh,8799,4.34,5
+Jai Vilas Palace,4.3,1219,Gwalior,India,Madhya Pradesh,5241.7,4.43,6
+Gujari Mahal,4.4,1020,Gwalior,India,Madhya Pradesh,4488,4.43,7
+Assi Khamba Ki Bawadis,4.3,148,Gwalior,India,Madhya Pradesh,636.4,4.43,8
+Chaturbhuj Temple,4.5,103,Gwalior,India,Madhya Pradesh,463.5,4.74,9
+Karn Mahal,4.2,59,Gwalior,India,Madhya Pradesh,247.8,4.43,10
+Vikram Mahal,4.2,51,Gwalior,India,Madhya Pradesh,214.2,4.43,11
+Shree Vijaya Vitthala Temple,4.8,12597,Hampi,India,Karnataka,60465.6,4.62,1
+"Virupaksha Temple, Hampi",4.7,10505,Hampi,India,Karnataka,49373.5,4.62,2
+Stone Chariot - Hampi,4.8,9693,Hampi,India,Karnataka,46526.4,4.41,3
+Lotus Mahal,4.6,8079,Hampi,India,Karnataka,37163.4,4.41,4
+Queen's Bathhouse,4.3,5480,Hampi,India,Karnataka,23564,4.41,5
+Group of Monuments at Hampi,4.7,3291,Hampi,India,Karnataka,15467.7,4.41,6
+Shri Lakshmi Narasimha Temple,4.7,2272,Hampi,India,Karnataka,10678.4,4.62,7
+Elephant Stables,4.6,2102,Hampi,India,Karnataka,9669.2,4.41,8
+Underground Shiva Temple,4.5,1912,Hampi,India,Karnataka,8604,4.62,9
+Hazara Raama Temple,4.7,1571,Hampi,India,Karnataka,7383.7,4.62,10
+Saasivekaalu Ganesha,4.6,1587,Hampi,India,Karnataka,7300.2,4.41,11
+Mathanga Hill,4.8,1176,Hampi,India,Karnataka,5644.8,4.41,12
+Hampi Shri Krishna Swamy Temple,4.6,1059,Hampi,India,Karnataka,4871.4,4.62,13
+Shree Badavilinga Gudi,4.7,949,Hampi,India,Karnataka,4460.3,4.62,14
+Hampi,4.7,814,Hampi,India,Karnataka,3825.8,4.62,15
+Shri Malyavanta Raghunatha Temple,4.7,786,Hampi,India,Karnataka,3694.2,4.62,16
+Hampi Bazaar,4.5,792,Hampi,India,Karnataka,3564,4.41,17
+Kadalekalu Ganesha,4.6,761,Hampi,India,Karnataka,3500.6,4.62,18
+Shri Achyutaraaya Swamy Temple,4.7,734,Hampi,India,Karnataka,3449.8,4.62,19
+Sunrise Sunset Point - Matanga Betta,4.8,605,Hampi,India,Karnataka,2904,4.43,20
+Nandi,4.5,489,Hampi,India,Karnataka,2200.5,4.62,21
+Octagonal Bath,4.5,416,Hampi,India,Karnataka,1872,4.41,22
+"Yantrodharaka Hanuman Temple, Hampi",4.8,315,Hampi,India,Karnataka,1512,4.62,23
+Talwar Gatta,4.4,257,Hampi,India,Karnataka,1130.8,4.41,24
+Zanana Enclosure,4.4,154,Hampi,India,Karnataka,677.6,4.41,25
+Temples on Hemakuta Hill,4.6,137,Hampi,India,Karnataka,630.2,4.62,26
+Tungabhadraa Ghats,4.4,118,Hampi,India,Karnataka,519.2,4.41,27
+Hampi Shri Varahaswami Gudi,4.3,66,Hampi,India,Karnataka,283.8,4.62,28
+Shiva Temple,4.6,54,Hampi,India,Karnataka,248.4,4.62,29
+Shri Ranganatha Swami Gudi,4.3,53,Hampi,India,Karnataka,227.9,4.62,30
+Shri Ranganatha Swamy Temple,4.2,52,Hampi,India,Karnataka,218.4,4.62,31
+"Maa Mansa Devi Mandir, Haridwar",4.6,43303,Haridwar,India,Uttarakhand,199193.8,4.64,1
+"Shri Maa Chandi Devi Temple, Haridwar",4.7,15432,Haridwar,India,Uttarakhand,72530.4,4.64,2
+"Bharat Mata Temple, Haridwar",4.5,7005,Haridwar,India,Uttarakhand,31522.5,4.64,3
+Ganga Ghat,4.5,2340,Haridwar,India,Uttarakhand,10530,4.64,4
+"Saptrishi Ashram, Haridwar",4.5,1891,Haridwar,India,Uttarakhand,8509.5,4.64,5
+Maya Devi Temple,4.6,1497,Haridwar,India,Uttarakhand,6886.2,4.64,6
+"Amrapur Ghat, Haridwar",4.7,1080,Haridwar,India,Uttarakhand,5076,4.64,7
+Vaishno Devi,4.4,736,Haridwar,India,Uttarakhand,3238.4,4.64,8
+Bhuma Niketan,4.4,584,Haridwar,India,Uttarakhand,2569.6,4.64,9
+Ganga Mata Temple,4.7,235,Haridwar,India,Uttarakhand,1104.5,4.64,10
+"Gurudwara 10th Paatshahi Sri Nada Sahib, Panchkula",4.9,25364,Haryana,India,Haryana,124283.6,4.82,1
+"Yadavindra Gardens, Pinjore",4.3,23823,Haryana,India,Haryana,102438.9,4.27,2
+Tau Devilal Town Park Faridabad (Haryana),4.3,12317,Haryana,India,Haryana,52963.1,4.27,3
+Mansarovar Park,4.4,9098,Haryana,India,Delhi,40031.2,4.29,4
+Srikrishna Museum,4.5,7427,Haryana,India,Haryana,33421.5,4.44,5
+Sultanpur National Park,4.2,7559,Haryana,India,Haryana,31747.8,4.27,6
+Tau Devi Lal Park,4.3,6179,Haryana,India,Haryana,26569.7,4.27,7
+Barsi Gate,4.4,4206,Haryana,India,Haryana,18506.4,4.44,8
+O P Jindal Gyan Kendra,4.4,2340,Haryana,India,Haryana,10296,4.44,9
+City Park,4.1,1961,Haryana,India,Haryana,8040.1,4.27,10
+Sardar Patel Park,4.1,1732,Haryana,India,Haryana,7101.2,4.27,11
+Panchwati Mandir,4.7,1328,Haryana,India,Haryana,6241.6,4.82,12
+Tosham Lake,4.3,1239,Haryana,India,Haryana,5327.7,4.27,13
+Khwaja Khizr Tomb,4.2,966,Haryana,India,Haryana,4057.2,4.44,14
+Karna Lake Karnal,4.3,775,Haryana,India,Haryana,3332.5,4.27,15
+Bhindawas Bird Sanctuary - RAMSAR Wetland,4.3,722,Haryana,India,Haryana,3104.6,4.27,16
+Kala Amb Park,4.2,552,Haryana,India,Haryana,2318.4,4.27,17
+Bhondsi Nature Park,4.6,475,Haryana,India,Haryana,2185,4.27,18
+Harsh Ka Tila,4.4,493,Haryana,India,Haryana,2169.2,4.44,19
+Deer Park,4.2,417,Haryana,India,Haryana,1751.4,4.27,20
+Charminar,4.5,214978,Hyderabad,India,Telangana,967401,4.45,1
+Golconda Fort,4.4,122498,Hyderabad,India,Telangana,538991.2,4.45,2
+Salar Jung Museum,4.4,69172,Hyderabad,India,Telangana,304356.8,4.45,3
+Lumbini Park,4.1,73529,Hyderabad,India,Telangana,301468.9,4.16,4
+Chowmahalla Palace,4.4,45172,Hyderabad,India,Telangana,198756.8,4.45,5
+Birla Mandir,4.7,41822,Hyderabad,India,Telangana,196563.4,4.7,6
+Kasu Brahmanandha Reddy National Park (KBR),4.4,19006,Hyderabad,India,Telangana,83626.4,4.16,7
+The Nizam's Museum,4.2,4235,Hyderabad,India,Telangana,17787,4.45,8
+Purani Haveli,4.4,540,Hyderabad,India,Telangana,2376,4.45,9
+Tahniyat Mahal,4.6,239,Hyderabad,India,Telangana,1099.4,4.45,10
+Kachnar City Shiva Temple,4.6,8180,Jabalpur,India,Madhya Pradesh,37628,4.74,1
+Ghanta Ghar,4.1,4075,Jabalpur,India,Madhya Pradesh,16707.5,4.43,2
+Dumna Nature Reserve Park,4.1,3061,Jabalpur,India,Madhya Pradesh,12550.1,4.34,3
+Paat Baba Mandir,4.6,2069,Jabalpur,India,Madhya Pradesh,9517.4,4.74,4
+Pisanhari ki Madiya,4.6,1969,Jabalpur,India,Madhya Pradesh,9057.4,4.74,5
+Rani Durgavati Fort & Museum,4.2,1958,Jabalpur,India,Madhya Pradesh,8223.6,4.43,6
+Rani Durgawati Fort,4.2,1822,Jabalpur,India,Madhya Pradesh,7652.4,4.43,7
+Swayambu Sidhpeeth Sri Gupteshwar Mahadev Mandir,4.7,927,Jabalpur,India,Madhya Pradesh,4356.9,4.74,8
+Sri Kalimath,4.3,609,Jabalpur,India,Madhya Pradesh,2618.7,4.74,9
+Gayatri Mandir,4.6,484,Jabalpur,India,Madhya Pradesh,2226.4,4.74,10
+Sangram Sagar Lake and Garden,4.2,497,Jabalpur,India,Madhya Pradesh,2087.4,4.34,11
+Prem Mandir Jabalpur,4.4,338,Jabalpur,India,Madhya Pradesh,1487.2,4.74,12
+Shaheed Smarak,4.3,298,Jabalpur,India,Madhya Pradesh,1281.4,4.43,13
+Holy Trinity Church,4.5,219,Jabalpur,India,Madhya Pradesh,985.5,4.74,14
+Uma Ghat,4.4,223,Jabalpur,India,Madhya Pradesh,981.2,4.74,15
+Shree Maa Narmada Temple,4.7,192,Jabalpur,India,Madhya Pradesh,902.4,4.74,16
+Katanga Tv Tower,4.3,172,Jabalpur,India,Madhya Pradesh,739.6,4.43,17
+Sharda Mandir,4.6,156,Jabalpur,India,Madhya Pradesh,717.6,4.74,18
+Siddh Ghat,4.6,90,Jabalpur,India,Madhya Pradesh,414,4.43,19
+Balaji Temple - Jagdalpur,4.6,964,Jagdalpur,India,Chhattisgarh,4434.4,4.49,1
+Kanger Valley National Park,4.1,337,Jagdalpur,India,Chhattisgarh,1381.7,4.21,2
+Amber Palace,4.6,155610,Jaipur,India,Rajasthan,715806,4.51,1
+Hawa Mahal,4.5,134902,Jaipur,India,Rajasthan,607059,4.51,2
+Nahargarh Fort,4.5,67140,Jaipur,India,Rajasthan,302130,4.51,3
+Albert Hall Museum,4.5,63412,Jaipur,India,Rajasthan,285354,4.51,4
+Jantar Mantar - Jaipur,4.5,37671,Jaipur,India,Rajasthan,169519.5,4.38,5
+Moti Dungri Ganesh Ji Temple,4.8,33431,Jaipur,India,Rajasthan,160468.8,4.67,6
+Jal Mahal,4.2,32677,Jaipur,India,Rajasthan,137243.4,4.51,7
+Jaigarh Fort,4.5,28519,Jaipur,India,Rajasthan,128335.5,4.51,8
+Jai Niwas Garden,4.4,25665,Jaipur,India,Rajasthan,112926,4.38,9
+Shree Akshardham Temple,4.7,14648,Jaipur,India,Rajasthan,68845.6,4.67,10
+Smriti Van,4.4,6667,Jaipur,India,Rajasthan,29334.8,4.38,11
+Isarlat Sargasooli,4.5,6155,Jaipur,India,Rajasthan,27697.5,4.51,12
+Tripolia Gate,4.4,6256,Jaipur,India,Rajasthan,27526.4,4.51,13
+Jaldhara,4.1,6309,Jaipur,India,Rajasthan,25866.9,4.38,14
+Ramniwas Bagh,4.4,5637,Jaipur,India,Rajasthan,24802.8,4.38,15
+Sisodia Rani ka Bagh,4.3,5083,Jaipur,India,Rajasthan,21856.9,4.38,16
+Kanak Vrindavan Park,4.2,3788,Jaipur,India,Rajasthan,15909.6,4.38,17
+SHRI GARH GANESH Ji TEMPLE,4.8,2744,Jaipur,India,Rajasthan,13171.2,4.67,18
+Jaipur Wax Museum Nahargarh Fort,4.4,2901,Jaipur,India,Rajasthan,12764.4,4.51,19
+Deer Park,4.4,990,Jaipur,India,Rajasthan,4356,4.38,20
+Vidyadhar Bagh,4.3,975,Jaipur,India,Rajasthan,4192.5,4.38,21
+Moti Doongri Fort,4.6,884,Jaipur,India,Rajasthan,4066.4,4.51,22
+Jaipur Park,4.4,815,Jaipur,India,Rajasthan,3586,4.38,23
+Sun Temple,4.6,724,Jaipur,India,Rajasthan,3330.4,4.67,24
+Amer Stepwell,4.4,738,Jaipur,India,Rajasthan,3247.2,4.51,25
+Shri Jagat Shiromani ji Temple,4.8,578,Jaipur,India,Rajasthan,2774.4,4.67,26
+Dolls Museum,4.3,528,Jaipur,India,Rajasthan,2270.4,4.51,27
+Galta Gate,4.3,515,Jaipur,India,Rajasthan,2214.5,4.67,28
+Amber fort,4.6,390,Jaipur,India,Rajasthan,1794,4.51,29
+Amrapali Museum,4.4,287,Jaipur,India,Rajasthan,1262.8,4.51,30
+Maharaja Sawai Man Singh II Museum,4.5,278,Jaipur,India,Rajasthan,1251,4.51,31
+Arjuna Statue,4.7,169,Jaipur,India,Rajasthan,794.3,4.51,32
+Amber Fort View,4.7,159,Jaipur,India,Rajasthan,747.3,4.51,33
+Sawai Man Singh Statue,4.7,143,Jaipur,India,Rajasthan,672.1,4.51,34
+Chandra Mahal,4.4,115,Jaipur,India,Rajasthan,506,4.51,35
+Watch Tower,4.7,56,Jaipur,India,Rajasthan,263.2,4.51,36
+Jaisalmer Fort,4.4,56012,Jaisalmer,India,Rajasthan,246452.8,4.51,1
+Kothari's Patwon Ki Haveli / Patwa Haveli,4.3,13936,Jaisalmer,India,Rajasthan,59924.8,4.51,2
+Jaisalmer War Museum,4.7,12599,Jaisalmer,India,Rajasthan,59215.3,4.51,3
+The Thar Heritage Museum,4.6,445,Jaisalmer,India,Rajasthan,2047,4.51,4
+Government Museum,4.1,258,Jaisalmer,India,Rajasthan,1057.8,4.51,5
+Baa ri haveli,4.3,141,Jaisalmer,India,Rajasthan,606.3,4.51,6
+Akhnoor Fort,4.2,3592,Jammu,India,Jammu And Kashmir,15086.4,4.5,1
+Maharaja Hari Singh Ji Park,4.2,2174,Jammu,India,Jammu And Kashmir,9130.8,4.41,2
+Bagh-E-Bahu,4.4,1221,Jammu,India,Jammu And Kashmir,5372.4,4.41,3
+Amar Mahal Museum and Library,4.2,1099,Jammu,India,Jammu And Kashmir,4615.8,4.5,4
+Mubarak Mandi Park,4.2,739,Jammu,India,Jammu And Kashmir,3103.8,4.41,5
+Maha Maya Temple,4.8,583,Jammu,India,Jammu And Kashmir,2798.4,4.68,6
+Bahu Fort Park,4.3,332,Jammu,India,Jammu And Kashmir,1427.6,4.41,7
+Dogra Art Museum,4.2,257,Jammu,India,Jammu And Kashmir,1079.4,4.5,8
+Dalma Wildlife Sanctuary,4.2,14070,Jamshedpur,India,Jharkhand,59094,4.28,1
+Sir Dorabji Tata Park,4.6,6712,Jamshedpur,India,Jharkhand,30875.2,4.28,2
+Bhatia Park,4.1,4912,Jamshedpur,India,Jharkhand,20139.2,4.28,3
+Millennium Park,4.3,3890,Jamshedpur,India,Jharkhand,16727,4.28,4
+Jubilee Park,4.6,2193,Jamshedpur,India,Jharkhand,10087.8,4.28,5
+Tata Zoo Lake,4.4,751,Jamshedpur,India,Jharkhand,3304.4,4.28,6
+Eco- Park,4.1,576,Jamshedpur,India,Jharkhand,2361.6,4.28,7
+Moolgaokar Park,4.3,456,Jamshedpur,India,Jharkhand,1960.8,4.28,8
+Jamshedpur Coin Museum,4.2,270,Jamshedpur,India,Jharkhand,1134,4.23,9
+Dimna Lake,4.6,89,Jamshedpur,India,Jharkhand,409.4,4.28,10
+Bat Island,4.2,60,Jamshedpur,India,Jharkhand,252,4.28,11
+Jim Corbett National Park,4.4,29924,Jim,India,Uttarakhand,131665.6,4.34,1
+Mehrangarh Fort,4.6,64043,Jodhpur,India,Rajasthan,294597.8,4.51,1
+Jaswant Thada,4.4,13038,Jodhpur,India,Rajasthan,57367.2,4.51,2
+Toorji Ka Jhalra Bavdi,4.3,6643,Jodhpur,India,Rajasthan,28564.9,4.51,3
+Rao Jodha Desert Rock Park,4.2,2595,Jodhpur,India,Rajasthan,10899,4.38,4
+Ummed Garden,4.2,1328,Jodhpur,India,Rajasthan,5577.6,4.38,5
+"Sardar Government Museum, Jodhpur",4.3,277,Jodhpur,India,Rajasthan,1191.1,4.51,6
+Sheesh Palace,4.7,160,Jodhpur,India,Rajasthan,752,4.51,7
+Jai Pol,4.4,108,Jodhpur,India,Rajasthan,475.2,4.51,8
+Jog Falls View Point,4.5,21903,Jog,India,Karnataka,98563.5,4.43,1
+Delo Park,4.5,9338,Kalimpong,India,West Bengal,42021,4.43,1
+Durpin Monastery,4.5,1909,Kalimpong,India,West Bengal,8590.5,4.55,2
+Mangal Dham Temple,4.5,1587,Kalimpong,India,West Bengal,7141.5,4.55,3
+Geden Tharpa Choling Monastery,4.7,314,Kalimpong,India,West Bengal,1475.8,4.55,4
+Lepcha Museum,4.4,121,Kalimpong,India,West Bengal,532.4,4.54,5
+Kanha Tiger Reserve,4.5,9196,Kanha,India,Madhya Pradesh,41382,4.34,1
+Kanyakumari Sunrise View,4.6,37688,Kanniyakumari,India,Tamil Nadu,173364.8,4.41,1
+Padmanabhapuram Palace,4.4,19052,Kanniyakumari,India,Tamil Nadu,83828.8,4.37,2
+Vattakottai Fort,4.3,7785,Kanniyakumari,India,Tamil Nadu,33475.5,4.37,3
+Kanyakumari Beach,4.5,6694,Kanniyakumari,India,Tamil Nadu,30123,4.41,4
+Mayapuri Wonder Wax,4.1,6793,Kanniyakumari,India,Tamil Nadu,27851.3,4.37,5
+KanniyaKumari Amman Temple,4.5,5957,Kanniyakumari,India,Tamil Nadu,26806.5,4.69,6
+Our Lady of Ransom Shrine,4.6,1855,Kanniyakumari,India,Tamil Nadu,8533,4.69,7
+Periyakadu beach,4.5,1297,Kanniyakumari,India,Tamil Nadu,5836.5,4.41,8
+Southern most point of India,4.6,469,Kanniyakumari,India,Tamil Nadu,2157.4,4.37,9
+"Shri Mahaveerswami Jain Mandir Dadawadi, Kanyakumari",4.5,390,Kanniyakumari,India,Tamil Nadu,1755,4.69,10
+Beach Promenade,4.3,312,Kanniyakumari,India,Tamil Nadu,1341.6,4.41,11
+Pozhikarai Beach Park,4.4,251,Kanniyakumari,India,Tamil Nadu,1104.4,4.41,12
+"Vivekananda Kendra Beach, Vivekanandapuram",4.5,190,Kanniyakumari,India,Tamil Nadu,855,4.41,13
+Kanyakumari,4.5,128,Kanniyakumari,India,Tamil Nadu,576,4.37,14
+Kanyakumari Tourist View Point Gandhi Mandapam,4.5,109,Kanniyakumari,India,Tamil Nadu,490.5,4.41,15
+Kanyakumari Sunrise View,4.6,37114,Kanyakumari,India,Tamil Nadu,170724.4,4.41,1
+Vattakottai Fort,4.3,7726,Kanyakumari,India,Tamil Nadu,33221.8,4.37,2
+Kanyakumari Bhagavathy Amman Temple,4.5,5657,Kanyakumari,India,Tamil Nadu,25456.5,4.69,3
+Kanyakumari,4.6,122,Kanyakumari,India,Tamil Nadu,561.2,4.37,4
+Kanyakumari Tourist View Point Gandhi Mandapam,4.5,103,Kanyakumari,India,Tamil Nadu,463.5,4.41,5
+SUN RISE SNACKS TEA MAGGI POINT,4.5,1986,Kasauli,India,Himachal Pradesh,8937,4.49,1
+"Christ Church, Kasauli",4.5,1800,Kasauli,India,Himachal Pradesh,8100,4.59,2
+Gilbert Nature Trail,4.5,1385,Kasauli,India,Himachal Pradesh,6232.5,4.49,3
+"Manki Point, Sanjeevni Hanuman Temple, Kasauli",4.6,1013,Kasauli,India,Himachal Pradesh,4659.8,4.59,4
+Timber Trail Kasauli,4.3,202,Kasauli,India,Himachal Pradesh,868.6,4.49,5
+Shirdi Sai Baba Mandir,4.6,137,Kasauli,India,Himachal Pradesh,630.2,4.59,6
+Chalal Trek Trail,4.5,4374,Kasol,India,Himachal Pradesh,19683,4.49,1
+Parvati Valley,4.7,690,Kasol,India,Himachal Pradesh,3243,4.49,2
+Nature Park Kasol,4.5,278,Kasol,India,Himachal Pradesh,1251,4.49,3
+"Shree Durga Temple,Katihar",4.6,2299,Katihar,India,Bihar,10575.4,4.65,1
+mnihaarii ghaatt (gNgaa),4.2,171,Katihar,India,Bihar,718.2,4.65,2
+BARGANDI GARDEN (HIDDEN GARDEN),4.2,130,Katihar,India,Bihar,546,4.19,3
+Swarna Jayanti Park,4.1,58,Katihar,India,Bihar,237.8,4.19,4
+Kaziranga National Park,4.5,6840,Kaziranga,India,Assam,30780,4.49,1
+Sunset cafe lonavala Khandala rajmachi point 0702,4.4,2263,Khandala,India,Maharashtra,9957.2,4.35,1
+Subhash Bose Park,4.5,25411,Kochi,India,Kerala,114349.5,4.43,1
+Mattancherry Palace,4.2,15108,Kochi,India,Kerala,63453.6,4.42,2
+Queen's Walkway,4.6,9954,Kochi,India,Kerala,45788.4,4.43,3
+Indian Naval Maritime Museum,4.6,4126,Kochi,India,Kerala,18979.6,4.42,4
+Njarackal Arattuvazhi Beach,4.2,451,Kochi,India,Kerala,1894.2,4.43,5
+International Tourism Police Station And Police Museum,4.3,135,Kochi,India,Kerala,580.5,4.42,6
+Bryant Park,4.2,24440,Kodaikanal,India,Tamil Nadu,102648,4.41,1
+Kodaikanal Hill Station,4.6,19120,Kodaikanal,India,Tamil Nadu,87952,4.41,2
+Kodaikanal Lake,4.5,6950,Kodaikanal,India,Tamil Nadu,31275,4.41,3
+Kurinji Andavar Temple,4.7,5862,Kodaikanal,India,Tamil Nadu,27551.4,4.69,4
+Chettiar Park,4.1,3435,Kodaikanal,India,Tamil Nadu,14083.5,4.41,5
+Kodaikanal Solar Observatory Museum,4.3,3132,Kodaikanal,India,Tamil Nadu,13467.6,4.41,6
+punnnit iruty klluuri arungkaattciykm,4.3,3059,Kodaikanal,India,Tamil Nadu,13153.7,4.37,7
+Natural History Museum,4.4,2009,Kodaikanal,India,Tamil Nadu,8839.6,4.37,8
+Sarts gallery,4.3,1744,Kodaikanal,India,Tamil Nadu,7499.2,4.41,9
+"Government Rose Garden , Kodaikanal",4.2,1004,Kodaikanal,India,Tamil Nadu,4216.8,4.41,10
+Poondi,4.6,275,Kodaikanal,India,Tamil Nadu,1265,4.41,11
+CSI Christ the King Church Kodaikanal,4.6,150,Kodaikanal,India,Tamil Nadu,690,4.69,12
+CommonWealth World War II Cemetry,4.3,1391,Kohima,India,Nagaland,5981.3,4.3,1
+Kohima Cathedral Church,4.5,382,Kohima,India,Nagaland,1719,4.5,2
+Dzuleke,4.5,178,Kohima,India,Nagaland,801,4.38,3
+Kuozhu View Point,4.1,109,Kohima,India,Nagaland,446.9,4.38,4
+Dzukou Point,4.3,65,Kohima,India,Nagaland,279.5,4.38,5
+Kapamodzu Peak,4.6,58,Kohima,India,Nagaland,266.8,4.38,6
+Eco Park,4.5,169298,Kolkata,India,West Bengal,761841,4.43,1
+Victoria Memorial,4.6,73760,Kolkata,India,West Bengal,339296,4.54,2
+Indian Museum,4.5,49504,Kolkata,India,West Bengal,222768,4.54,3
+Rabindra Sarobar Lake,4.5,42952,Kolkata,India,West Bengal,193284,4.43,4
+James Prinsep Monument,4.5,38130,Kolkata,India,West Bengal,171585,4.54,5
+"Millennium Park, Kolkata",4.1,27672,Kolkata,India,West Bengal,113455.2,4.43,6
+St. Paul Cathedral Church,4.6,15632,Kolkata,India,West Bengal,71907.2,4.55,7
+Birla Mandir,4.6,14702,Kolkata,India,West Bengal,67629.2,4.55,8
+Elliot Park,4.3,14700,Kolkata,India,West Bengal,63210,4.43,9
+"Fort William, India",4.6,13361,Kolkata,India,West Bengal,61460.6,4.54,10
+Jorasanko Thakurbari,4.6,12239,Kolkata,India,West Bengal,56299.4,4.54,11
+"Central Park, Salt Lake, Kolkata",4.3,9393,Kolkata,India,West Bengal,40389.9,4.43,12
+Nakhoda Masjid,4.6,6487,Kolkata,India,West Bengal,29840.2,4.55,13
+Tala Jheel Park Kolkata,4.3,5835,Kolkata,India,West Bengal,25090.5,4.43,14
+Lions Safari Park,4.6,3586,Kolkata,India,West Bengal,16495.6,4.43,15
+Mohar Kunja,4.4,3426,Kolkata,India,West Bengal,15074.4,4.43,16
+Sri Jagannath Temple - Khidirpur,4.7,2971,Kolkata,India,West Bengal,13963.7,4.55,17
+Shaheed Minar,4.4,2904,Kolkata,India,West Bengal,12777.6,4.54,18
+Metcalfe Hall,4.6,2409,Kolkata,India,West Bengal,11081.4,4.54,19
+Shiv Mandir Sarbajanin Durgapuja,4.5,1859,Kolkata,India,West Bengal,8365.5,4.54,20
+Smaranika Tram Museum,4.4,1565,Kolkata,India,West Bengal,6886,4.54,21
+Nipponzan Myohoji Buddhist Temple,4.6,1125,Kolkata,India,West Bengal,5175,4.55,22
+Nature Study Park,4.2,965,Kolkata,India,West Bengal,4053,4.43,23
+St. John's Church,4.6,726,Kolkata,India,West Bengal,3339.6,4.55,24
+Victoria Square,4.4,651,Kolkata,India,West Bengal,2864.4,4.43,25
+Kolkata Police Museum,4.6,566,Kolkata,India,West Bengal,2603.6,4.54,26
+Citizen's Park,4.4,184,Kolkata,India,West Bengal,809.6,4.43,27
+Jorasanko Rajbati,4.3,157,Kolkata,India,West Bengal,675.1,4.54,28
+Maulana Azad Museum,4.5,99,Kolkata,India,West Bengal,445.5,4.54,29
+Minmangal Ghat,4.3,102,Kolkata,India,West Bengal,438.6,4.54,30
+leniner muurti,4.1,66,Kolkata,India,West Bengal,270.6,4.54,31
+Mata Sarwamangla Temple,4.6,2221,Korba,India,Chhattisgarh,10216.6,4.49,1
+Silver Jubilee Park NTPC Jamnipali,4.2,1794,Korba,India,Chhattisgarh,7534.8,4.21,2
+Kohadiya Garden KP,4.2,74,Korba,India,Chhattisgarh,310.8,4.21,3
+Kovalam Beach,4.4,68353,Kovalam,India,Kerala,300753.2,4.43,1
+Grove Beach,4.3,1564,Kovalam,India,Kerala,6725.2,4.43,2
+Rock Cut Cave Shiva Temple,4.2,1266,Kovalam,India,Kerala,5317.2,4.42,3
+Samudra Beach Park,4.3,746,Kovalam,India,Kerala,3207.8,4.43,4
+Kovalam Sea View,4.5,131,Kovalam,India,Kerala,589.5,4.43,5
+Lavasa Nature Trail,4.3,1731,Lavasa,India,Maharashtra,7443.3,4.35,1
+Dasve View Point,4.4,461,Lavasa,India,Maharashtra,2028.4,4.35,2
+"Hall of Fame, Leh",4.7,8795,Leh,India,Jammu And Kashmir,41336.5,4.5,1
+Shanti Stupa,4.7,5745,Leh,India,Jammu And Kashmir,27001.5,4.68,2
+Karla Caves,4.4,27343,Lonavala,India,Maharashtra,120309.2,4.49,1
+Shree Narayani Dham Temple,4.7,19655,Lonavala,India,Maharashtra,92378.5,4.69,2
+Bhairavnath Temple,4.2,238,Lonavala,India,Maharashtra,999.6,4.69,3
+Bada Imambara,4.4,45613,Lucknow,India,Uttar Pradesh,200697.2,4.5,1
+Gomti Riverfront Park,4.3,33759,Lucknow,India,Uttar Pradesh,145163.7,4.29,2
+Rumi Darwaza,4.5,16431,Lucknow,India,Uttar Pradesh,73939.5,4.5,3
+"The Residency, Lucknow",4.3,14881,Lucknow,India,Uttar Pradesh,63988.3,4.5,4
+Chota Imambara,4.5,13431,Lucknow,India,Uttar Pradesh,60439.5,4.5,5
+State Museum Lucknow,4.3,3720,Lucknow,India,Uttar Pradesh,15996,4.5,6
+Sikandar Bagh,4.1,2524,Lucknow,India,Uttar Pradesh,10348.4,4.5,7
+Satkhanda,4.4,1145,Lucknow,India,Uttar Pradesh,5038,4.5,8
+Shaheed Smarak,4.4,1013,Lucknow,India,Uttar Pradesh,4457.2,4.5,9
+Chhatar Manzil,4.2,1051,Lucknow,India,Uttar Pradesh,4414.2,4.5,10
+Suraj Kund Park,4.1,370,Lucknow,India,Uttar Pradesh,1517,4.29,11
+Big Foot Goa,4.1,7491,Madgaon,India,Goa,30713.1,4.25,1
+Shri Kamakshi Temple,4.8,3380,Madgaon,India,Goa,16224,4.54,2
+Our Lady of Grace Church,4.5,1414,Madgaon,India,Goa,6363,4.54,3
+Palacio do Deao,4.6,817,Madgaon,India,Goa,3758.2,4.25,4
+Shree Damodar Temple,4.6,563,Madgaon,India,Goa,2589.8,4.54,5
+SGPDA Joggers Park,4.1,336,Madgaon,India,Goa,1377.6,4.44,6
+St. Sebastian Church,4.4,311,Madgaon,India,Goa,1368.4,4.54,7
+Shri Damodar Sal,4.7,231,Madgaon,India,Goa,1085.7,4.54,8
+Rachol Historical Fort Gate,4.4,228,Madgaon,India,Goa,1003.2,4.25,9
+Raja's Seat View point,4.4,845,Madikeri,India,Karnataka,3718,4.43,1
+Elephants' Statue,4.2,128,Madikeri,India,Karnataka,537.6,4.41,2
+Raja's seat park,4.5,96,Madikeri,India,Karnataka,432,4.43,3
+Kunduru Motte Sri Chowtti Maramma Tayi Temple,4.7,77,Madikeri,India,Karnataka,361.9,4.62,4
+Gandhi Mantapa,4.1,73,Madikeri,India,Karnataka,299.3,4.41,5
+Karwale Bhagavathi Temple,4.5,53,Madikeri,India,Karnataka,238.5,4.62,6
+Meenakshi Amman Temple,4.7,65537,Madurai,India,Tamil Nadu,308023.9,4.69,1
+Shri Koodal Azhagar Temple,4.7,9769,Madurai,India,Tamil Nadu,45914.3,4.69,2
+Maariamman Kovil Teppakulam,4.6,5856,Madurai,India,Tamil Nadu,26937.6,4.69,3
+Arulmigu Inmaiyil Nanmai Tharuvar Temple,4.7,4777,Madurai,India,Tamil Nadu,22451.9,4.69,4
+Madurai Corporation Eco Park,4.1,3546,Madurai,India,Tamil Nadu,14538.6,4.41,5
+Sri Alagar Temple,4.7,890,Madurai,India,Tamil Nadu,4183,4.69,6
+Arulmigu Sri Muktheeswarar Temple vaayu sthalam,4.8,826,Madurai,India,Tamil Nadu,3964.8,4.69,7
+Yanai Malai Hill,4.4,332,Madurai,India,Tamil Nadu,1460.8,4.37,8
+Shri Madurai Veeran Swamy Temple,4.6,80,Madurai,India,Tamil Nadu,368,4.69,9
+Mahabaleshwar Temple,4.7,11319,Mahabaleshwar,India,Maharashtra,53199.3,4.69,1
+Venna Lake,4.4,3607,Mahabaleshwar,India,Maharashtra,15870.8,4.35,2
+Krishnabai Mandir,4.7,1301,Mahabaleshwar,India,Maharashtra,6114.7,4.69,3
+Bhilar Water Fall Point,4.2,1332,Mahabaleshwar,India,Maharashtra,5594.4,4.35,4
+Holy Cross Church Mahabaleshwar,4.5,106,Mahabaleshwar,India,Maharashtra,477,4.69,5
+Valley View Waterfall,4.6,58,Mahabaleshwar,India,Maharashtra,266.8,4.35,6
+Hadimba Devi Temple,4.6,38406,Manali,India,Himachal Pradesh,176667.6,4.59,1
+Shri Vashishtha Temple,4.5,22904,Manali,India,Himachal Pradesh,103068,4.59,2
+Solang Valley,4.6,17681,Manali,India,Himachal Pradesh,81332.6,4.49,3
+Van Vihar National Park,4.2,8055,Manali,India,Himachal Pradesh,33831,4.49,4
+"Manu Temple, Old Manali",4.5,3993,Manali,India,Himachal Pradesh,17968.5,4.59,5
+Shri Anjani Mahadev Mandir,4.7,2782,Manali,India,Himachal Pradesh,13075.4,4.59,6
+Museum of Himachal Culture & Folk Art,4.1,1016,Manali,India,Himachal Pradesh,4165.6,4.55,7
+Ghatotkach Tree Temple,4.5,326,Manali,India,Himachal Pradesh,1467,4.59,8
+Whiteland holidays,4.6,252,Manali,India,Himachal Pradesh,1159.2,4.59,9
+Snow Man Point,4.4,170,Manali,India,Himachal Pradesh,748,4.49,10
+Gauri Shankar Temple,4.6,158,Manali,India,Himachal Pradesh,726.8,4.59,11
+Manali Nature Park,4.7,139,Manali,India,Himachal Pradesh,653.3,4.49,12
+Bhrigu Lake Trek,4.8,70,Manali,India,Himachal Pradesh,336,4.49,13
+Hadimba Himachal Park,4.6,54,Manali,India,Himachal Pradesh,248.4,4.49,14
+Sinquerim Fort,4.5,15553,Marmagao,India,Goa,69988.5,4.25,1
+Japanese Garden,4.1,7542,Marmagao,India,Goa,30922.2,4.44,2
+Big Foot Goa,4.1,7491,Marmagao,India,Goa,30713.1,4.25,3
+Joggers Park,4.4,1676,Marmagao,India,Goa,7374.4,4.44,4
+Siridao Rock Beach,4.5,404,Marmagao,India,Goa,1818,4.44,5
+Vasco Clock Tower,4.1,111,Marmagao,India,Goa,455.1,4.25,6
+Matheran Hill Station,4.5,28780,Matheran,India,Maharashtra,129510,4.35,1
+Panorama Point,4.6,591,Matheran,India,Maharashtra,2718.6,4.35,2
+Madhavji Point,4.3,337,Matheran,India,Maharashtra,1449.1,4.35,3
+Pay Master Park,4.2,170,Matheran,India,Maharashtra,714,4.35,4
+Pisarnath Mahadev Mandir,4.6,133,Matheran,India,Maharashtra,611.8,4.69,5
+Matheran Shiv Mandir,4.2,52,Matheran,India,Maharashtra,218.4,4.69,6
+Holi Gate,4.4,6552,Mathura,India,Uttar Pradesh,28828.8,4.5,1
+"Chinta Haran Mahadev, Mathura",4.7,2200,Mathura,India,Uttar Pradesh,10340,4.69,2
+"Shri Bhuteshwar Mahadev Temple, Mathura",4.7,1542,Mathura,India,Uttar Pradesh,7247.4,4.69,3
+"Government Museum, Mathura",4.3,1542,Mathura,India,Uttar Pradesh,6630.6,4.5,4
+Basantar Park,4.2,278,Mathura,India,Uttar Pradesh,1167.6,4.29,5
+Tulsi Van,4.8,184,Mathura,India,Uttar Pradesh,883.2,4.29,6
+Bhagsu Naag Temple,4.5,7004,Mcleodganj,India,Himachal Pradesh,31518,4.59,1
+Naddi Hill Point Mcleod Ganj,4.5,2975,Mcleodganj,India,Himachal Pradesh,13387.5,4.49,2
+Tsuglagkhang Complex Dalai Lama Temple,4.6,2510,Mcleodganj,India,Himachal Pradesh,11546,4.59,3
+Mcleod Ganj Trekk,4.7,1824,Mcleodganj,India,Himachal Pradesh,8572.8,4.49,4
+Aghanjar Mahadev,4.7,1559,Mcleodganj,India,Himachal Pradesh,7327.3,4.59,5
+Namgyal Monastery,4.6,1417,Mcleodganj,India,Himachal Pradesh,6518.2,4.59,6
+Kalachakra temple,4.5,871,Mcleodganj,India,Himachal Pradesh,3919.5,4.59,7
+Laka Glacier,4.8,171,Mcleodganj,India,Himachal Pradesh,820.8,4.49,8
+Dip Tse Chok Ling,4.4,145,Mcleodganj,India,Himachal Pradesh,638,4.59,9
+McLeod Square Temple,4.5,134,Mcleodganj,India,Himachal Pradesh,603,4.59,10
+Japanese Garden,4.2,11500,Mohali,India,Chandigarh,48300,4.37,1
+Gurudwara Sri Amb Sahib,4.8,7200,Mohali,India,Punjab,34560,4.9,2
+Garden of Silence,4.5,6316,Mohali,India,Chandigarh,28422,4.37,3
+Rose Garden,4.4,5342,Mohali,India,Punjab,23504.8,4.36,4
+Silvi Park,4.4,4774,Mohali,India,Punjab,21005.6,4.36,5
+Leisure Valley,4.4,4490,Mohali,India,Chandigarh,19756,4.37,6
+Bougainvillea Park,4.4,1875,Mohali,India,Chandigarh,8250,4.37,7
+Sukhna Wildlife Sanctuary,4.4,1676,Mohali,India,Chandigarh,7374.4,4.37,8
+Topiary Park,4.2,1626,Mohali,India,Chandigarh,6829.2,4.37,9
+Butterfly Park,4.1,1605,Mohali,India,Chandigarh,6580.5,4.37,10
+Leisure Valley Park Mohali,4.5,965,Mohali,India,Punjab,4342.5,4.36,11
+Eiffel Tower Replica,4.1,803,Mohali,India,Chandigarh,3292.3,4.37,12
+Hibiscus Garden,4.4,384,Mohali,India,Chandigarh,1689.6,4.37,13
+Mandir Park,4.6,363,Mohali,India,Punjab,1669.8,4.36,14
+park sec 80,4.2,284,Mohali,India,Punjab,1192.8,4.36,15
+Freedom Fighters Park,4.1,121,Mohali,India,Punjab,496.1,4.36,16
+Tank Monument,4.3,76,Mohali,India,Chandigarh,326.8,4.41,17
+Sunset Point,4.4,11392,Mount,India,Rajasthan,50124.8,4.38,1
+Brahmakumaris Peace Park,4.2,7805,Mount,India,Rajasthan,32781,4.38,2
+Nakki Lake,4.5,5829,Mount,India,Rajasthan,26230.5,4.38,3
+Delwara Temple,4.6,4631,Mount,India,Rajasthan,21302.6,4.67,4
+Honeymoon Point,4.4,3001,Mount,India,Rajasthan,13204.4,4.38,5
+Nakki Lake Garden,4.3,3013,Mount,India,Rajasthan,12955.9,4.38,6
+LUCKY'S Celebrity Wax Museum,4.3,1939,Mount,India,Rajasthan,8337.7,4.51,7
+Arbuda Devi Temple,4.6,1660,Mount,India,Rajasthan,7636,4.67,8
+Crocodile Park,4.1,1835,Mount,India,Rajasthan,7523.5,4.38,9
+Shankar Math,4.5,923,Mount,India,Rajasthan,4153.5,4.67,10
+Adhar Devi Mandir/ Arbuda Mata Mandir,4.8,810,Mount,India,Rajasthan,3888,4.67,11
+"Adhar Devi Stop, Mount Abu",4.5,853,Mount,India,Rajasthan,3838.5,4.67,12
+Shree Swaminarayan Temple,4.4,583,Mount,India,Rajasthan,2565.2,4.67,13
+"Shri Somnath Mahadev Temple, Mt. Abu",4.5,539,Mount,India,Rajasthan,2425.5,4.67,14
+Dadi Janki Park,4.8,480,Mount,India,Rajasthan,2304,4.38,15
+Mount Abu Wildlife Sanctuary,4.4,406,Mount,India,Rajasthan,1786.4,4.38,16
+Shri Achaleshwar Mahadev Temple,4.5,394,Mount,India,Rajasthan,1773,4.67,17
+Mount Abu View Point,4.6,361,Mount,India,Rajasthan,1660.6,4.38,18
+Shri Raghunath Temple,4.4,372,Mount,India,Rajasthan,1636.8,4.67,19
+"Kanch ka Mandir, Digambar Jain Mandir and Dharmshala",4.3,244,Mount,India,Rajasthan,1049.2,4.67,20
+World Spiritual Museum (Brahmakumaris),4.2,183,Mount,India,Rajasthan,768.6,4.51,21
+Lal Temple,4.3,95,Mount,India,Rajasthan,408.5,4.67,22
+Shree Siddhivinayak Temple,4.8,103254,Mumbai,India,Maharashtra,495619.2,4.69,1
+Sanjay Gandhi National Park,4.3,60930,Mumbai,India,Maharashtra,261999,4.35,2
+Chhatrapati Shivaji Maharaj Vastu Sangrahalaya,4.6,34517,Mumbai,India,Maharashtra,158778.2,4.49,3
+Hanging Gardens,4.2,35013,Mumbai,India,Maharashtra,147054.6,4.35,4
+Flora Fountain,4.5,22573,Mumbai,India,Maharashtra,101578.5,4.49,5
+Mahakali Caves,4.2,7507,Mumbai,India,Maharashtra,31529.4,4.49,6
+Shiv Fort,4.1,3642,Mumbai,India,Maharashtra,14932.2,4.49,7
+Munnar Rose Garden,4.3,7013,Munnar,India,Kerala,30155.9,4.43,1
+Top Station,4.4,2713,Munnar,India,Tamil Nadu,11937.2,4.41,2
+C.S.I Christ Church,4.5,745,Munnar,India,Kerala,3352.5,4.72,3
+Meeshappulimala View Point,4.7,658,Munnar,India,Kerala,3092.6,4.43,4
+"Silent Valley, Munnar",4.8,136,Munnar,India,Kerala,652.8,4.43,5
+Munnar Hiking Trails,5,81,Munnar,India,Kerala,405,4.43,6
+Munnar Hiking Adventures | Munnar Trekking | Munnar Trekking Adventure | Best Munnar Trekking | Munnar Hiking,5,61,Munnar,India,Kerala,305,4.43,7
+Lal Tibba Scenic Point,4.2,15154,Mussoorie,India,Uttarakhand,63646.8,4.34,1
+Christ Church,4.3,341,Mussoorie,India,Uttarakhand,1466.3,4.64,2
+SOHAM Himalayan Centre,4.6,212,Mussoorie,India,Uttarakhand,975.2,4.49,3
+Shri Garib Nath Mandir,4.7,8149,Muzaffarpur,India,Bihar,38300.3,4.65,1
+Saraiyaganj Tower,4.2,4619,Muzaffarpur,India,Bihar,19399.8,4.19,2
+Shri Raj Rajeshwari Devi Temple,4.7,3056,Muzaffarpur,India,Bihar,14363.2,4.65,3
+Shahid Khudiram Bose Smarak sthal,4.1,374,Muzaffarpur,India,Bihar,1533.4,4.19,4
+Ramchandra Shahi Sangrahalaya,4.1,160,Muzaffarpur,India,Bihar,656,4.19,5
+Bharat Mata Naman Sthal,4.2,144,Muzaffarpur,India,Bihar,604.8,4.19,6
+City park,4.2,125,Muzaffarpur,India,Bihar,525,4.19,7
+Zakaria Colony Masjid dhkhry khlwny msjd,4.3,87,Muzaffarpur,India,Bihar,374.1,4.65,8
+Sand Museum Mysuru,4.7,59113,Mysore,India,Karnataka,277831.1,4.41,1
+Melody World Wax Museum,4.1,12695,Mysore,India,Karnataka,52049.5,4.41,2
+Jaganmohan Palace Art Gallery And Auditorium,4.2,10422,Mysore,India,Karnataka,43772.4,4.41,3
+Cheluvamba Park,4.4,4629,Mysore,India,Karnataka,20367.6,4.43,4
+Lingambudhi Park,4.5,2276,Mysore,India,Karnataka,10242,4.43,5
+Chamundi Hill View Point.,4.7,2171,Mysore,India,Karnataka,10203.7,4.43,6
+Manuvana Park,4.3,2368,Mysore,India,Karnataka,10182.4,4.43,7
+Chikka Gadiyara,4.5,2261,Mysore,India,Karnataka,10174.5,4.41,8
+Regional Museum of Natural History Mysore,4.4,1496,Mysore,India,Karnataka,6582.4,4.41,9
+Guinness World Record Sea Shell Art Museum,4.5,832,Mysore,India,Karnataka,3744,4.41,10
+Big Clock Tower,4.5,810,Mysore,India,Karnataka,3645,4.41,11
+Folklore Museum,4.3,556,Mysore,India,Karnataka,2390.8,4.41,12
+Jayalakshmi Vilas Mansion jylkssmii vilaas armne,4.3,171,Mysore,India,Karnataka,735.3,4.41,13
+Chamundi Hills sunrise view point,4.6,135,Mysore,India,Karnataka,621,4.43,14
+Kalisthan Temple,4.6,236,Nahan,India,Himachal Pradesh,1085.6,4.59,1
+Rani Tal,4.2,194,Nahan,India,Himachal Pradesh,814.8,4.49,2
+"Gompa Buddhist Temple - Itanagar, Arunachal Pradesh, India",4.4,1869,Naharlagun,India,Arunachal Pradesh,8223.6,4.59,1
+State Museum,4.2,311,Naharlagun,India,Arunachal Pradesh,1306.2,4.2,2
+Nainital Lake View Point,4.6,5411,Nainital,India,Uttarakhand,24890.6,4.34,1
+Sankat Mochan Mandir,4.8,2686,Nainital,India,Uttarakhand,12892.8,4.64,2
+Tiffin Top,4.5,2190,Nainital,India,Uttarakhand,9855,4.34,3
+"Snow Valley, Nainital",4.6,277,Nainital,India,Uttarakhand,1274.2,4.34,4
+Pasan Devi Temple,4.5,75,Nainital,India,Uttarakhand,337.5,4.64,5
+Muktidham Mandir,4.5,14748,Nashik,India,Maharashtra,66366,4.69,1
+Shree Kalaram Mandir Sansthan,4.7,10970,Nashik,India,Maharashtra,51559,4.69,2
+Ramkund Panchwati,4.4,7455,Nashik,India,Maharashtra,32802,4.69,3
+Bhaktidham,4.4,1785,Nashik,India,Maharashtra,7854,4.69,4
+Temple Hill,4.4,1736,Nashik,India,Maharashtra,7638.4,4.35,5
+Shrine of the Infant Jesus (Nashik),4.8,1289,Nashik,India,Maharashtra,6187.2,4.69,6
+Chambar Leni,4.5,1027,Nashik,India,Maharashtra,4621.5,4.69,7
+Coin Museum (Shanti-Krishna Museum of Money and History),4.3,970,Nashik,India,Maharashtra,4171,4.49,8
+Naroshankar Temple,4.5,876,Nashik,India,Maharashtra,3942,4.69,9
+Sai Baba Temple,4.5,875,Nashik,India,Maharashtra,3937.5,4.69,10
+Triveni Sangam,4.4,877,Nashik,India,Maharashtra,3858.8,4.69,11
+Ved Mandir,4.4,840,Nashik,India,Maharashtra,3696,4.69,12
+Savata Nagar - Shree Saptashrungi Nivasini Devi Shaktipeeth,4.4,799,Nashik,India,Maharashtra,3515.6,4.69,13
+Sundar narayan mandir,4.5,532,Nashik,India,Maharashtra,2394,4.69,14
+Shri Laxman Rekha Temple,4.4,473,Nashik,India,Maharashtra,2081.2,4.49,15
+Shri Laxmi Narayan Mandir,4.5,438,Nashik,India,Maharashtra,1971,4.69,16
+JAGANNATH MANDIR,4.7,361,Nashik,India,Maharashtra,1696.7,4.69,17
+Kalavati Aai Mandir,4.6,113,Nashik,India,Maharashtra,519.8,4.69,18
+Kusumagraj Pratishthan,4.4,110,Nashik,India,Maharashtra,484,4.49,19
+BIRLA AROGYA MANDIR,4.3,102,Nashik,India,Maharashtra,438.6,4.69,20
+goraaraam mNdir,4.5,91,Nashik,India,Maharashtra,409.5,4.69,21
+Ganapati Temple,4.5,58,Nashik,India,Maharashtra,261,4.69,22
+Government Rose Garden,4.1,28067,Ooty,India,Tamil Nadu,115074.7,4.41,1
+Pine Forest Ooty,4.3,2850,Ooty,India,Tamil Nadu,12255,4.41,2
+"Murugan Temple, Elk Hill",4.7,1801,Ooty,India,Tamil Nadu,8464.7,4.69,3
+C.S.I St. Stephen's Church,4.5,1598,Ooty,India,Tamil Nadu,7191,4.69,4
+Government Museum,4.2,1309,Ooty,India,Tamil Nadu,5497.8,4.37,5
+Wax Planet,4.5,714,Ooty,India,Tamil Nadu,3213,4.37,6
+Government Botanical Garden,4.3,461,Ooty,India,Tamil Nadu,1982.3,4.41,7
+Arboretum Tree Garden,4.2,422,Ooty,India,Tamil Nadu,1772.4,4.41,8
+Boating Spot and Children's Park,4.1,392,Ooty,India,Tamil Nadu,1607.2,4.41,9
+Sacred Heart Cathedral,4.6,309,Ooty,India,Tamil Nadu,1421.4,4.69,10
+Kandal Cross Shrine,4.7,250,Ooty,India,Tamil Nadu,1175,4.69,11
+Marlimund lake,4.4,248,Ooty,India,Tamil Nadu,1091.2,4.41,12
+Toda Temple,4.1,128,Ooty,India,Tamil Nadu,524.8,4.69,13
+Lake view point at Pine forest,4.4,91,Ooty,India,Tamil Nadu,400.4,4.41,14
+Jatashankar Temple,4.6,2295,Pachmarhi,India,Madhya Pradesh,10557,4.74,1
+Amba Mai,4.6,168,Pachmarhi,India,Madhya Pradesh,772.8,4.74,2
+Pachmarhi Catholic Church,4.3,125,Pachmarhi,India,Madhya Pradesh,537.5,4.74,3
+Pandava Garden,4.4,108,Pachmarhi,India,Madhya Pradesh,475.2,4.34,4
+Aguada Fort,4.2,96887,Panaji,India,Goa,406925.4,4.25,1
+Immaculate Conception Church,4.4,23873,Panaji,India,Goa,105041.2,4.54,2
+St. Augustine Tower,4.5,3222,Panaji,India,Goa,14499,4.25,3
+Campal Gardens,4.2,2142,Panaji,India,Goa,8996.4,4.44,4
+Azad Maidan,4.2,1759,Panaji,India,Goa,7387.8,4.25,5
+St. Inez Church,4.4,808,Panaji,India,Goa,3555.2,4.54,6
+Malson Shoes,4.1,597,Panaji,India,Goa,2447.7,4.44,7
+Jama Masjid,4.6,354,Panaji,India,Goa,1628.4,4.54,8
+Bhagwan Mahaveer Children's Park,4.4,221,Panaji,India,Goa,972.4,4.44,9
+Shree Shankar Temple,4.5,101,Panaji,India,Goa,454.5,4.54,10
+Public Astronomical Observatory Goa,4.5,87,Panaji,India,Goa,391.5,4.44,11
+Bhagwan Mahavir Bal Vihar,4.4,83,Panaji,India,Goa,365.2,4.44,12
+Statue of Lord Parashuram,4.7,63,Panaji,India,Goa,296.1,4.25,13
+Panjim Municipal Garden,4.4,62,Panaji,India,Goa,272.8,4.44,14
+Tau Devi Lal Park,4.2,2111,Panipat,India,Haryana,8866.2,4.27,1
+"Ugra Kheri, Park",4.4,544,Panipat,India,Haryana,2393.6,4.27,2
+Kala Amb Park,4.2,545,Panipat,India,Haryana,2289,4.27,3
+Mela Ram Park,4.1,164,Panipat,India,Haryana,672.4,4.27,4
+Ganga Park,4.1,90,Panipat,India,Haryana,369,4.27,5
+"Shri Badi Patan Devi Temple, Patna",4.6,7480,Patan,India,Bihar,34408,4.65,1
+Shree Siddhraj Jaysinh Statue Patan,4.6,339,Patan,India,Gujarat,1559.4,4.35,2
+Patan Fort,4.5,115,Patan,India,Gujarat,517.5,4.35,3
+Rock Beach,4.5,28430,Pondicherry,India,Puducherry,127935,4.44,1
+Arulmigu Manakula Vinayagar Devasthanam,4.7,20058,Pondicherry,India,Puducherry,94272.6,4.67,2
+Bharathi Park Puducherry,4.2,7490,Pondicherry,India,Puducherry,31458,4.44,3
+Puducherry Museum,4.1,7288,Pondicherry,India,Puducherry,29880.8,4.14,4
+Immaculate Conception Cathedral,4.5,3197,Pondicherry,India,Puducherry,14386.5,4.67,5
+Sri Varadaraja Perumal Temple,4.7,2208,Pondicherry,India,Puducherry,10377.6,4.67,6
+Mahakavi Bharathiyar Memorial Centre,4.6,643,Pondicherry,India,Puducherry,2957.8,4.14,7
+Rock Cut Cave Shiva Temple,4.2,1266,Poovar,India,Kerala,5317.2,4.42,1
+Golden Sand Beach,4.4,406,Poovar,India,Kerala,1786.4,4.43,2
+Shaniwar Wada,4.3,120582,Pune,India,Maharashtra,518502.6,4.49,1
+Raja Dinkar Kelkar Museum,4.4,10865,Pune,India,Maharashtra,47806,4.49,2
+Katraj Lake,4.2,9911,Pune,India,Maharashtra,41626.2,4.49,3
+Laal Mahal,4.5,7228,Pune,India,Maharashtra,32526,4.49,4
+Shree Devdeveshwar Temple (Parvati Temple),4.5,4315,Pune,India,Maharashtra,19417.5,4.69,5
+Osho Teerth Park,4.1,3936,Pune,India,Maharashtra,16137.6,4.35,6
+Bagul Udyan,4.2,2666,Pune,India,Maharashtra,11197.2,4.35,7
+Vishrambaug Wada,4.3,2247,Pune,India,Maharashtra,9662.1,4.49,8
+Mahatma Phule Museum,4.1,1923,Pune,India,Maharashtra,7884.3,4.49,9
+Parvati Hill,4.5,1732,Pune,India,Maharashtra,7794,4.49,10
+Pashan Hill,4.5,1633,Pune,India,Maharashtra,7348.5,4.35,11
+Peshwe Museum,4.3,1089,Pune,India,Maharashtra,4682.7,4.49,12
+Darshan Museum,4.5,885,Pune,India,Maharashtra,3982.5,4.49,13
+Zero Stone,4.4,764,Pune,India,Maharashtra,3361.6,4.49,14
+Nana Wada,4.3,723,Pune,India,Maharashtra,3108.9,4.49,15
+Shree Jagannatha Temple Puri,4.7,102556,Puri,India,Odisha,482013.2,4.69,1
+"Shree Gundicha Temple, Puri",4.6,3413,Puri,India,Odisha,15699.8,4.69,2
+Mahatma Gandhi Park,4.4,3266,Puri,India,Odisha,14370.4,4.49,3
+"Sakshi Gopal Temple , Puri",4.5,1503,Puri,India,Odisha,6763.5,4.69,4
+Maa Baliharachandi Temple,4.5,829,Puri,India,Odisha,3730.5,4.69,5
+Niladri Beach,4.6,745,Puri,India,Odisha,3427,4.49,6
+Shri Markandeswara Swamy Temple,4.4,528,Puri,India,Odisha,2323.2,4.69,7
+Sunara Gouranga Temple,4.4,397,Puri,India,Odisha,1746.8,4.69,8
+"Shri Vimala Shakti Peetha Temple, Puri",4.6,229,Puri,India,Odisha,1053.4,4.69,9
+Digabareni Pillar,4.3,71,Puri,India,Odisha,305.3,4.46,10
+"Jagatpita Shri Brahma Mandir, Pushkar",4.6,29279,Pushkar,India,Rajasthan,134683.4,4.67,1
+Savitri Mata Temple,4.6,4328,Pushkar,India,Rajasthan,19908.8,4.67,2
+Gau Ghat,4.5,1692,Pushkar,India,Rajasthan,7614,4.67,3
+Rangji Temple,4.6,328,Pushkar,India,Rajasthan,1508.8,4.67,4
+Varaha Temple,4.3,314,Pushkar,India,Rajasthan,1350.2,4.67,5
+Veer Gurjar Ghat Pushkar,4.5,152,Pushkar,India,Rajasthan,684,4.51,6
+Sri Panchkund Shiva Temple,4.7,93,Pushkar,India,Rajasthan,437.1,4.67,7
+Kelo Dam Park,4.1,872,Raigarh,India,Chhattisgarh,3575.2,4.21,1
+Kabir chowk,4.1,732,Raigarh,India,Chhattisgarh,3001.2,4.33,2
+Pahad Mandir (Hanumaan Temple),4.5,512,Raigarh,India,Chhattisgarh,2304,4.49,3
+Atal Rock Garden,4.1,482,Raigarh,India,Chhattisgarh,1976.2,4.21,4
+Ambedkar chowk raigarh,4.5,62,Raigarh,India,Chhattisgarh,279,4.21,5
+Energy Park(Urja park),4.2,6219,Raipur,India,Chhattisgarh,26119.8,4.21,1
+Purkhouti Muktangan,4.2,5827,Raipur,India,Chhattisgarh,24473.4,4.21,2
+Katora Talab Park,4.2,4391,Raipur,India,Chhattisgarh,18442.2,4.21,3
+Maa Banjari Mandir,4.4,3642,Raipur,India,Chhattisgarh,16024.8,4.49,4
+Banjari Mata Mandir,4.4,2981,Raipur,India,Chhattisgarh,13116.4,4.49,5
+Mahaveer Udyan,4.1,2122,Raipur,India,Chhattisgarh,8700.2,4.21,6
+Atal Park,4.2,1828,Raipur,India,Chhattisgarh,7677.6,4.21,7
+"Lal Qila, The Red Fort",4.4,1673,Raipur,India,Chhattisgarh,7361.2,4.33,8
+Mahant Ghasidas Memorial Museum,4.4,968,Raipur,India,Chhattisgarh,4259.2,4.33,9
+New Swami Vivekananda Gardens (New Buddha Garden),4.3,826,Raipur,India,Chhattisgarh,3551.8,4.21,10
+Swagat Vatika Naya Raipur,4.2,456,Raipur,India,Chhattisgarh,1915.2,4.21,11
+ISKCON Raipur,4.5,392,Raipur,India,Chhattisgarh,1764,4.49,12
+Shree Hatkeshwar Mahadev Raipur,4.4,360,Raipur,India,Chhattisgarh,1584,4.49,13
+National Flag- Telibandha Talab Raipur,4.5,318,Raipur,India,Chhattisgarh,1431,4.21,14
+Ekatma Path park,4.4,138,Raipur,India,Chhattisgarh,607.2,4.21,15
+Shree shree shree Sholapuri Mata mandir,4.7,89,Raipur,India,Chhattisgarh,418.3,4.49,16
+"BAPS Shri Swaminarayan Mandir, Rajkot",4.6,6347,Rajkot,India,Gujarat,29196.2,4.6,1
+Mahatma Gandhi Museum,4.5,5261,Rajkot,India,Gujarat,23674.5,4.35,2
+Jubilee Garden,4.1,5483,Rajkot,India,Gujarat,22480.3,4.4,3
+Ishwariya Park,4.5,4779,Rajkot,India,Gujarat,21505.5,4.4,4
+Prem Mandir,4.4,2135,Rajkot,India,Gujarat,9394,4.6,5
+Aji Park,4.3,1460,Rajkot,India,Gujarat,6278,4.4,6
+Watson Museum,4.4,1200,Rajkot,India,Gujarat,5280,4.35,7
+Narshi Mehta Garden,4.4,942,Rajkot,India,Gujarat,4144.8,4.4,8
+"Shree Ishwariya Mahadev Mandir , Rajkot",4.6,355,Rajkot,India,Gujarat,1633,4.6,9
+Tramba Triveni Sangam,4.6,219,Rajkot,India,Gujarat,1007.4,4.4,10
+Kaba Gandhi No Delo,4.7,164,Rajkot,India,Gujarat,770.8,4.35,11
+Aryabhatt Science Museum,4.2,85,Rajkot,India,Gujarat,357,4.35,12
+Rajkot garden,4.1,79,Rajkot,India,Gujarat,323.9,4.4,13
+Blue Step Garden,4.5,62,Rajkot,India,Gujarat,279,4.4,14
+House of Kalam (APJ Abdul Kalam House / Museum,4.5,20223,Rameshwaram,India,Tamil Nadu,91003.5,4.37,1
+Shree Rameshwaram Jyotirlinga Shivam Temple,4.7,9731,Rameshwaram,India,Tamil Nadu,45735.7,4.69,2
+Sri Arulmigu Ramanathaswamy Temple,4.6,9834,Rameshwaram,India,Tamil Nadu,45236.4,4.69,3
+Ramar Padam,4.5,4916,Rameshwaram,India,Tamil Nadu,22122,4.69,4
+Villoondi Theertham,4.5,2424,Rameshwaram,India,Tamil Nadu,10908,4.69,5
+Lakshmana Tirtham,4.5,1161,Rameshwaram,India,Tamil Nadu,5224.5,4.69,6
+Vivekananda Memorial House,4.4,592,Rameshwaram,India,Tamil Nadu,2604.8,4.37,7
+Rameshwaram Beach Park,4.3,179,Rameshwaram,India,Tamil Nadu,769.7,4.41,8
+Rameswaram Ariya Vysya Nagaraja Temple,4.5,86,Rameshwaram,India,Tamil Nadu,387,4.69,9
+"Pahari Mandir, Ranchi",4.6,13596,Ranchi,India,Jharkhand,62541.6,4.63,1
+Oxygen Park,4.3,9556,Ranchi,India,Jharkhand,41090.8,4.28,2
+Jagannath Mandir,4.7,6296,Ranchi,India,Jharkhand,29591.2,4.63,3
+"Biodiversity Park - Ranchi District, Jharkhand, India",4.3,3288,Ranchi,India,Jharkhand,14138.4,4.28,4
+Shahid Sankalp Children Park,4.2,3273,Ranchi,India,Jharkhand,13746.6,4.28,5
+Kanke Dam Park,4.2,2081,Ranchi,India,Jharkhand,8740.2,4.28,6
+Dhurwa Dam Park,4.2,910,Ranchi,India,Jharkhand,3822,4.28,7
+State Museum,4.3,839,Ranchi,India,Jharkhand,3607.7,4.23,8
+Ranthambore National Park,4.5,8675,Ranthambore,India,Rajasthan,39037.5,4.38,1
+Jogi Mahal,4.4,100,Ranthambore,India,Rajasthan,440,4.51,2
+The Ranthambore Tiger,4.7,70,Ranthambore,India,Rajasthan,329,4.38,3
+Madhuban Ashram,4.5,1747,Rishikesh,India,Uttarakhand,7861.5,4.64,1
+Marine Drive( Aastha Path ),4.6,1126,Rishikesh,India,Uttarakhand,5179.6,4.34,2
+Bhootnath Temple Rishikesh,4.6,998,Rishikesh,India,Uttarakhand,4590.8,4.64,3
+"Trayambakeshwar, Om Shiv Pooja bhandar",4.5,640,Rishikesh,India,Uttarakhand,2880,4.64,4
+Virbhadra Temple,4.7,587,Rishikesh,India,Uttarakhand,2758.9,4.64,5
+Shri Bharat Mandir,4.5,602,Rishikesh,India,Uttarakhand,2709,4.64,6
+"Maharishi Mahesh Yogi's Ashram ""Shankaracharya Nagar"" (Rishikesh)",4.5,549,Rishikesh,India,Uttarakhand,2470.5,4.64,7
+Terah Manzil Mandir : terh mNjil mNdir,4.4,258,Rishikesh,India,Uttarakhand,1135.2,4.64,8
+Lakshman Temple,4.4,230,Rishikesh,India,Uttarakhand,1012,4.64,9
+Garud Chatti Temple,4.6,131,Rishikesh,India,Uttarakhand,602.6,4.64,10
+"Christ Church, Shimla",4.6,19538,Shimla,India,Himachal Pradesh,89874.8,4.59,1
+Shri Hanuman Mandir Jakhoo,4.8,17868,Shimla,India,Himachal Pradesh,85766.4,4.59,2
+"Ridge, Shimla",4.6,10996,Shimla,India,Himachal Pradesh,50581.6,4.55,3
+Viceregal Lodge,4.6,8598,Shimla,India,Himachal Pradesh,39550.8,4.55,4
+"Kali Bari Temple, Shimla",4.6,4099,Shimla,India,Himachal Pradesh,18855.4,4.59,5
+Vaishno Devi Temple,4.6,1714,Shimla,India,Himachal Pradesh,7884.4,4.59,6
+Himachal State Museum,4.5,1672,Shimla,India,Himachal Pradesh,7524,4.55,7
+Gorton Castle,4.4,309,Shimla,India,Himachal Pradesh,1359.6,4.55,8
+Shivamogga Zoo & Safari,4.1,5279,Shimoga,India,Karnataka,21643.9,4.43,1
+Sri Murudeshwar Temple,4.4,2990,Shimoga,India,Karnataka,13156,4.62,2
+Freedom Park Old Shimoga Jail,4.4,978,Shimoga,India,Karnataka,4303.2,4.43,3
+Gandhi Nagar Park,4.1,997,Shimoga,India,Karnataka,4087.7,4.43,4
+"SACRED HEART Cathedral, Shivamogga",4.5,808,Shimoga,India,Karnataka,3636,4.62,5
+Shivappa Nayaka Palace Museum,4.3,675,Shimoga,India,Karnataka,2902.5,4.41,6
+"Shree Baala Subramanya Swamy Temple, Guddekal.",4.6,418,Shimoga,India,Karnataka,1922.8,4.62,7
+Ravindranagara Park,4.1,384,Shimoga,India,Karnataka,1574.4,4.43,8
+Lord Shiva Temple,4.7,315,Shimoga,India,Karnataka,1480.5,4.62,9
+Bhimeshwara temple,4.7,205,Shimoga,India,Karnataka,963.5,4.62,10
+Shri Sai Baba Temple Shirdi,4.7,69636,Shirdi,India,Maharashtra,327289.2,4.69,1
+"Prasadalaya Shirdi , Saibaba Mandir",4.7,63563,Shirdi,India,Maharashtra,298746.1,4.69,2
+Sai Heritage Village,4.3,7203,Shirdi,India,Maharashtra,30972.9,4.49,3
+Shri Khandoba Mandir,4.7,829,Shirdi,India,Maharashtra,3896.3,4.69,4
+Shree Saibaba Chavadi,4.8,372,Shirdi,India,Maharashtra,1785.6,4.69,5
+Chhatrapati Sambhaji Park,4.3,362,Shirdi,India,Maharashtra,1556.6,4.35,6
+Lendi Garden / Baug,4.5,212,Shirdi,India,Maharashtra,954,4.35,7
+Dixit Wada Museum,4.4,185,Shirdi,India,Maharashtra,814,4.49,8
+Bengal Safari,4.2,10446,Siliguri,India,West Bengal,43873.2,4.43,1
+ISKCON Siliguri,4.5,8776,Siliguri,India,West Bengal,39492,4.55,2
+SALUGARA MONASTERY,4.4,2009,Siliguri,India,West Bengal,8839.6,4.55,3
+Sevokeshwari Kali Temple,4.6,1717,Siliguri,India,West Bengal,7898.2,4.55,4
+Sepoy Dhura Tea Garden,4.1,957,Siliguri,India,West Bengal,3923.7,4.43,5
+Lokenath Mandir,4.5,483,Siliguri,India,West Bengal,2173.5,4.55,6
+Sevoke Forest,4.6,165,Siliguri,India,West Bengal,759,4.43,7
+Lokenath Baba Mandir,4.5,61,Siliguri,India,West Bengal,274.5,4.55,8
+Shalimar Bagh Mughal Garden,4.4,19028,Srinagar,India,Jammu And Kashmir,83723.2,4.41,1
+Tulip Garden Srinagar,4.5,14755,Srinagar,India,Jammu And Kashmir,66397.5,4.41,2
+Cheshma Shahi Garden,4.4,10524,Srinagar,India,Jammu And Kashmir,46305.6,4.41,3
+Sri Shankaracharya Temple,4.8,6000,Srinagar,India,Jammu And Kashmir,28800,4.68,4
+Jamia Masjid Srinagar,4.6,4560,Srinagar,India,Jammu And Kashmir,20976,4.68,5
+Harwan Garden,4.3,3713,Srinagar,India,Jammu And Kashmir,15965.9,4.41,6
+Zabarwan Park zbrwn prkh,4.1,1564,Srinagar,India,Jammu And Kashmir,6412.4,4.41,7
+Shah E Hamdan R.H Mosque,4.8,1195,Srinagar,India,Jammu And Kashmir,5736,4.68,8
+Char Chinar Dal lake,4.5,1119,Srinagar,India,Jammu And Kashmir,5035.5,4.41,9
+Pathar Masjid Srinagar pthr msjd sry ngr,4.5,838,Srinagar,India,Jammu And Kashmir,3771,4.68,10
+Sangeen darwaza,4.3,868,Srinagar,India,Jammu And Kashmir,3732.4,4.5,11
+SPS Museum,4.3,601,Srinagar,India,Jammu And Kashmir,2584.3,4.5,12
+Ali Masjid msjd shryf,4.6,277,Srinagar,India,Jammu And Kashmir,1274.2,4.68,13
+Ali Park `ly prkh,4.1,297,Srinagar,India,Jammu And Kashmir,1217.7,4.41,14
+Jehlum View Park jhlm nZrh prkh,4.1,286,Srinagar,India,Jammu And Kashmir,1172.6,4.41,15
+Lake View Garden,4.1,5938,Surat,India,Gujarat,24345.8,4.4,1
+ISKCON Temple Surat,4.7,5123,Surat,India,Gujarat,24078.1,4.6,2
+Surat Castle,4.4,2605,Surat,India,Gujarat,11462,4.35,3
+Joggers Park,4.5,2503,Surat,India,Gujarat,11263.5,4.4,4
+Jawaharlal Nehru Garden,4.2,2515,Surat,India,Gujarat,10563,4.4,5
+Three Leaf Banyan Tree,4.4,1152,Surat,India,Gujarat,5068.8,4.35,6
+Sai Mandir Sansthan,4.8,945,Surat,India,Gujarat,4536,4.6,7
+Maharana Pratap Garden (Chowpati),4.3,940,Surat,India,Gujarat,4042,4.4,8
+Sardar Patel Museum,4.3,379,Surat,India,Gujarat,1629.7,4.35,9
+Summer Palace,4.3,185,Surat,India,Gujarat,795.5,4.35,10
+Navdi Bandar Statue,4.2,59,Surat,India,Gujarat,247.8,4.35,11
+Tawang Monastery,4.7,3360,Tawang,India,Arunachal Pradesh,15792,4.59,1
+"Bomdila Buddhist Monastery - Bomdila, West Kameng District, Arunachal Pradesh, India",4.6,1311,Tawang,India,Arunachal Pradesh,6030.6,4.59,2
+Buddha Park,4.1,389,Tawang,India,Arunachal Pradesh,1594.9,4.1,3
+"Taktsang Gompa, Tawang - Bumla Road, Tawang",4.8,92,Tawang,India,Arunachal Pradesh,441.6,4.59,4
+Brihadeeswara Temple,4.8,35384,Thanjavur,India,Tamil Nadu,169843.2,4.69,1
+Thanjavur Big Temple,4.8,5758,Thanjavur,India,Tamil Nadu,27638.4,4.69,2
+Thanjavur Maratha Palace,4.2,5820,Thanjavur,India,Tamil Nadu,24444,4.37,3
+Manimandapam,4.2,4370,Thanjavur,India,Tamil Nadu,18354,4.41,4
+Royal Palace Museum,4.1,1549,Thanjavur,India,Tamil Nadu,6350.9,4.37,5
+Thanjavur Sri Bangaru Kamakshi Amman Temple,4.6,1042,Thanjavur,India,Tamil Nadu,4793.2,4.69,6
+Rajarajan Manimandapam,4.2,944,Thanjavur,India,Tamil Nadu,3964.8,4.37,7
+Carmel Infant Jesus Shrine,4.6,726,Thanjavur,India,Tamil Nadu,3339.6,4.69,8
+Anjaneya Temple,4.3,74,Thanjavur,India,Tamil Nadu,318.2,4.69,9
+Sri Kamakshi Temple,4.4,70,Thanjavur,India,Tamil Nadu,308,4.69,10
+Raja Raja Cholan Statue Park,4.3,51,Thanjavur,India,Tamil Nadu,219.3,4.41,11
+Kovalam Beach,4.4,69588,Thiruvananthapuram,India,Kerala,306187.2,4.43,1
+Sree Padmanabhaswamy Temple,4.7,47563,Thiruvananthapuram,India,Kerala,223546.1,4.72,2
+Attukal Bhagavathy Temple,4.8,23607,Thiruvananthapuram,India,Kerala,113313.6,4.72,3
+Kanakakkunnu Palace,4.5,21333,Thiruvananthapuram,India,Kerala,95998.5,4.42,4
+Napier Museum,4.4,20962,Thiruvananthapuram,India,Kerala,92232.8,4.42,5
+Pazhavangaadi Sree Maha Ganapathy Temple,4.8,8845,Thiruvananthapuram,India,Kerala,42456,4.72,6
+Karikkakom Sri Chamundi Temple,4.8,6485,Thiruvananthapuram,India,Kerala,31128,4.72,7
+Sri Parasurama Swamy Temple Thiruvallam,4.6,6552,Thiruvananthapuram,India,Kerala,30139.2,4.72,8
+Sreekanteswaram Temple,4.8,5607,Thiruvananthapuram,India,Kerala,26913.6,4.72,9
+Beemapally Masjid,4.4,5324,Thiruvananthapuram,India,Kerala,23425.6,4.72,10
+Veli Beach,4.2,4015,Thiruvananthapuram,India,Kerala,16863,4.43,11
+Palayam Juma Masjid - Trivandrum,4.6,3659,Thiruvananthapuram,India,Kerala,16831.4,4.72,12
+Sunil's Wax Museum Trivandrum,4.3,2730,Thiruvananthapuram,India,Kerala,11739,4.42,13
+East Fort,4.4,1752,Thiruvananthapuram,India,Kerala,7708.8,4.42,14
+Grove Beach,4.3,1628,Thiruvananthapuram,India,Kerala,7000.4,4.43,15
+Maharaja Swathi Thirunal Palace,4.5,1070,Thiruvananthapuram,India,Kerala,4815,4.42,16
+Thumba Beach,4.3,786,Thiruvananthapuram,India,Kerala,3379.8,4.43,17
+Keralam - Museum of History and Heritage,4.4,534,Thiruvananthapuram,India,Kerala,2349.6,4.42,18
+Kuthira Maliga Palace Museum,4.6,501,Thiruvananthapuram,India,Kerala,2304.6,4.42,19
+Thrichakrapuram Sri Krishna Swamy Temple,4.8,380,Thiruvananthapuram,India,Kerala,1824,4.72,20
+Kunnumpara Sree Murugan Temple,4.7,372,Thiruvananthapuram,India,Kerala,1748.4,4.72,21
+Padmatheertha Pond,4.6,263,Thiruvananthapuram,India,Kerala,1209.8,4.72,22
+Sree Palkulangara Devi Temple,4.4,254,Thiruvananthapuram,India,Kerala,1117.6,4.72,23
+Sree Mithranandapuram Thrimoorthy Temple,4.5,161,Thiruvananthapuram,India,Kerala,724.5,4.72,24
+Methan Mani,4.5,151,Thiruvananthapuram,India,Kerala,679.5,4.42,25
+Kovalam Sea View,4.5,134,Thiruvananthapuram,India,Kerala,603,4.43,26
+TESLA Pedagogy Park,4.2,131,Thiruvananthapuram,India,Kerala,550.2,4.43,27
+Pettah Shiva Temple,4.5,120,Thiruvananthapuram,India,Kerala,540,4.72,28
+Sree Kulashekharaperumal Sree Venkitachalapathy Devasthanam Deshikar Sannidhi,4.6,64,Thiruvananthapuram,India,Kerala,294.4,4.72,29
+Sree Kunnuvila Bhagavathi Temple,4.6,64,Thiruvananthapuram,India,Kerala,294.4,4.72,29
+Vizhinjam Rock Temple,4.4,59,Thiruvananthapuram,India,Kerala,259.6,4.72,30
+Sri Venkateswara Swamy Temple,4.7,113903,Tirupati,India,Andhra Pradesh,535344.1,4.7,1
+Tirumala Deer Park Reserve,4.5,17042,Tirupati,India,Andhra Pradesh,76689,4.4,2
+Srivari Paadaalu,4.7,10973,Tirupati,India,Andhra Pradesh,51573.1,4.7,3
+Japali Anjaneya Swami devalayam,4.8,9517,Tirupati,India,Andhra Pradesh,45681.6,4.7,4
+Prakasam Park,4.3,10028,Tirupati,India,Andhra Pradesh,43120.4,4.4,5
+Chandragiri Fort,4.2,8438,Tirupati,India,Andhra Pradesh,35439.6,4.34,6
+Silathoranam Garden,4.6,5942,Tirupati,India,Andhra Pradesh,27333.2,4.4,7
+Sri Kapileswara Swamy Temple | Tirupati,4.7,5608,Tirupati,India,Andhra Pradesh,26357.6,4.7,8
+"Sri Prasanna Venkateswara Swamy Temple, Appalayagunta",4.8,5218,Tirupati,India,Andhra Pradesh,25046.4,4.7,9
+Narayanagiri Gardens,4.4,5507,Tirupati,India,Andhra Pradesh,24230.8,4.4,10
+Tirumala Chakratheertham,4.5,4005,Tirupati,India,Andhra Pradesh,18022.5,4.7,11
+Sri Babu Jagjivanram park,4.3,4076,Tirupati,India,Andhra Pradesh,17526.8,4.4,12
+Lepakshi Circle,4.6,3687,Tirupati,India,Andhra Pradesh,16960.2,4.34,13
+Papavinasam Theertham,4.5,3702,Tirupati,India,Andhra Pradesh,16659,4.7,14
+Divyaramam Park,4.4,3726,Tirupati,India,Andhra Pradesh,16394.4,4.4,15
+"Sri Anjaneyaswami Mandir, Tirumala Tirupati",4.8,2333,Tirupati,India,Andhra Pradesh,11198.4,4.7,16
+Sri Padmavathi Park,4.2,2517,Tirupati,India,Andhra Pradesh,10571.4,4.4,17
+Sri Venugopala Swamy Temple,4.5,1542,Tirupati,India,Andhra Pradesh,6939,4.7,18
+Hanuman Temple,4.7,1214,Tirupati,India,Andhra Pradesh,5705.8,4.7,19
+Geetopadesam Park,4.5,1035,Tirupati,India,Andhra Pradesh,4657.5,4.4,20
+Govindaraja Swamy Temple Museum,4.6,840,Tirupati,India,Andhra Pradesh,3864,4.34,21
+Swami Pushkarini,4.7,710,Tirupati,India,Andhra Pradesh,3337,4.7,22
+Archaeological Museum,4.3,737,Tirupati,India,Andhra Pradesh,3169.1,4.34,23
+Jungle Book & Park,4.1,713,Tirupati,India,Andhra Pradesh,2923.3,4.4,24
+Gogarbham Dam Park,4.3,542,Tirupati,India,Andhra Pradesh,2330.6,4.4,25
+Sri Bedi Anjaneya Swamy Temple,4.7,386,Tirupati,India,Andhra Pradesh,1814.2,4.7,26
+Sri Venkateshwara Temple,4.5,167,Tirupati,India,Andhra Pradesh,751.5,4.7,27
+Tirumala View Point,4.8,148,Tirupati,India,Andhra Pradesh,710.4,4.4,28
+Chakra Teertham,4.5,153,Tirupati,India,Andhra Pradesh,688.5,4.4,29
+Sri Siva Nagendra Swami Temple,4.3,138,Tirupati,India,Andhra Pradesh,593.4,4.7,30
+Rock Garden.,4.5,130,Tirupati,India,Andhra Pradesh,585,4.4,31
+GMR Eco Park,4.6,124,Tirupati,India,Andhra Pradesh,570.4,4.4,32
+Sri Venkateswara Dhyana Jnana Mandiram,4.5,123,Tirupati,India,Andhra Pradesh,553.5,4.34,33
+Kumaradhara Theertham,4.6,99,Tirupati,India,Andhra Pradesh,455.4,4.7,34
+View Point of Jungle Book,4.2,71,Tirupati,India,Andhra Pradesh,298.2,4.4,35
+P3,4.3,65,Tirupati,India,Andhra Pradesh,279.5,4.4,36
+Seshachala Vanadarshini Forest Museum,4.3,52,Tirupati,India,Andhra Pradesh,223.6,4.34,37
+City Palace,4.5,89396,Udaipur,India,Rajasthan,402282,4.51,1
+Wax Museum Udaipur,4.7,32481,Udaipur,India,Rajasthan,152660.7,4.51,2
+Sajjangarh Monsoon Palace,4.4,27697,Udaipur,India,Rajasthan,121866.8,4.51,3
+Jagdish Temple,4.7,14337,Udaipur,India,Rajasthan,67383.9,4.67,4
+Saheliyon ki bari,4.4,14146,Udaipur,India,Rajasthan,62242.4,4.38,5
+Gangour Ghat,4.5,10657,Udaipur,India,Rajasthan,47956.5,4.51,6
+Jagmandir,4.4,8076,Udaipur,India,Rajasthan,35534.4,4.51,7
+"Karni Mata Temple, Udaipur",4.6,5803,Udaipur,India,Rajasthan,26693.8,4.67,8
+Sukhadia Circle Statue,4.4,5926,Udaipur,India,Rajasthan,26074.4,4.38,9
+Navlakha Mahal (Satyarth Prakash Nyas),4.9,3872,Udaipur,India,Rajasthan,18972.8,4.51,10
+Rajiv Gandhi Garden,4.2,4408,Udaipur,India,Rajasthan,18513.6,4.38,11
+Bagore Ki Haveli,4.5,3463,Udaipur,India,Rajasthan,15583.5,4.51,12
+Mahakaleshwar Temple,4.8,2480,Udaipur,India,Rajasthan,11904,4.67,13
+Ghantaghar,4.3,2280,Udaipur,India,Rajasthan,9804,4.51,14
+Ahar Museum,4.3,1624,Udaipur,India,Rajasthan,6983.2,4.51,15
+Sajjangarh Wildlife Sanctuary,4.3,1525,Udaipur,India,Rajasthan,6557.5,4.38,16
+Nehru Garden,4.1,1492,Udaipur,India,Rajasthan,6117.2,4.38,17
+Pratap Park,4.1,1400,Udaipur,India,Rajasthan,5740,4.38,18
+Sunset Point Park Udaipur,4.6,1164,Udaipur,India,Rajasthan,5354.4,4.38,19
+Manik Lal Verma Park,4.2,982,Udaipur,India,Rajasthan,4124.4,4.38,20
+"Amrakh Ji Mahadev Temple Amberi, Udaipur",4.8,697,Udaipur,India,Rajasthan,3345.6,4.67,21
+Pandit Deendayal Upadhyay Park,4.3,710,Udaipur,India,Rajasthan,3053,4.38,22
+Udaipur Solar Observatory,4.4,511,Udaipur,India,Rajasthan,2248.4,4.38,23
+Shree Mahalaxmi Mandir Udaipur,4.8,300,Udaipur,India,Rajasthan,1440,4.67,24
+Guru Gobind Singh Park,4.4,307,Udaipur,India,Rajasthan,1350.8,4.38,25
+Sita Mata Mandir,4.2,224,Udaipur,India,Rajasthan,940.8,4.67,26
+Nature Park,4.2,109,Udaipur,India,Rajasthan,457.8,4.38,27
+Lake Garden,4.4,72,Udaipur,India,Rajasthan,316.8,4.38,28
+Mahakaleshwar Jyotirlinga,4.8,125861,Ujjain,India,Madhya Pradesh,604132.8,4.74,1
+"Shree Kaal Bhairav Mandir, Ujjain",4.7,58437,Ujjain,India,Madhya Pradesh,274653.9,4.74,2
+"Shri Chintaman Ganesh Temple, Ujjain",4.7,11731,Ujjain,India,Madhya Pradesh,55135.7,4.74,3
+"ISKCON Temple, Ujjain",4.7,6266,Ujjain,India,Madhya Pradesh,29450.2,4.74,4
+Mahakal Lok,4.8,4898,Ujjain,India,Madhya Pradesh,23510.4,4.74,5
+Jai Maa Gadhkalika Mata Mandir,4.7,4358,Ujjain,India,Madhya Pradesh,20482.6,4.74,6
+"Jantar Mantar, Ujjain",4.3,3681,Ujjain,India,Madhya Pradesh,15828.3,4.34,7
+Triveni Museum,4.5,2181,Ujjain,India,Madhya Pradesh,9814.5,4.43,8
+Ujjain Temple,4.7,1063,Ujjain,India,Madhya Pradesh,4996.1,4.74,9
+Chamunda Mata Mandir,4.6,1005,Ujjain,India,Madhya Pradesh,4623,4.74,10
+Muskan yatri grah ( guest house),4.5,835,Ujjain,India,Madhya Pradesh,3757.5,4.74,11
+Do taalaab,4.3,872,Ujjain,India,Madhya Pradesh,3749.6,4.34,12
+Prashanti Dham,4.5,710,Ujjain,India,Madhya Pradesh,3195,4.74,13
+bhaart rtn shrddhey attl bihaarii vaajpeyii anubhuuti udyaan Atal Park,4.6,643,Ujjain,India,Madhya Pradesh,2957.8,4.34,14
+Gandhi Bal Udhyan,4.1,526,Ujjain,India,Madhya Pradesh,2156.6,4.34,15
+Vikram Kirti Mandir,4.2,502,Ujjain,India,Madhya Pradesh,2108.4,4.43,16
+Shree Bada Ganesh Mandir,4.7,439,Ujjain,India,Madhya Pradesh,2063.3,4.74,17
+Ujjain Tower,4.5,442,Ujjain,India,Madhya Pradesh,1989,4.43,18
+"Shri Chaubis Khamba Mata Temple, Ujjain",4.5,414,Ujjain,India,Madhya Pradesh,1863,4.74,19
+Nehru Park,4.1,389,Ujjain,India,Madhya Pradesh,1594.9,4.34,20
+Chakor Park Ground,4.2,324,Ujjain,India,Madhya Pradesh,1360.8,4.34,21
+Nagchandreshwar Mandir,4.7,239,Ujjain,India,Madhya Pradesh,1123.3,4.74,22
+Triveni Ghat,4.3,261,Ujjain,India,Madhya Pradesh,1122.3,4.74,23
+"Nagarkot Ki Rani Temple, Ujjain",4.5,187,Ujjain,India,Madhya Pradesh,841.5,4.74,24
+Lotus lake,4.4,139,Ujjain,India,Madhya Pradesh,611.6,4.34,25
+Yantra Mahal,4.3,100,Ujjain,India,Madhya Pradesh,430,4.34,26
+raamghaatt ujjain,4.6,74,Ujjain,India,Madhya Pradesh,340.4,4.74,27
+Laxmi Vilas Palace,4.4,17977,Vadodara,India,Gujarat,79098.8,4.35,1
+Kirti Stambh,4.4,10354,Vadodara,India,Gujarat,45557.6,4.35,2
+Sayaji Garden,4.5,4872,Vadodara,India,Gujarat,21924,4.4,3
+Radhakrishna (Akota) Garden,4.2,5079,Vadodara,India,Gujarat,21331.8,4.4,4
+EME Temple,4.7,3373,Vadodara,India,Gujarat,15853.1,4.6,5
+ISKCON Temple,4.7,3123,Vadodara,India,Gujarat,14678.1,4.6,6
+Vidhyadhar Vaav (Stepwell) at Sevasi,4.3,3038,Vadodara,India,Gujarat,13063.4,4.35,7
+Nimeta Garden,4.2,2697,Vadodara,India,Gujarat,11327.4,4.4,8
+Maharaja Fateh Singh Museum,4.2,2639,Vadodara,India,Gujarat,11083.8,4.35,9
+Sur Sagar Lake,4.5,1408,Vadodara,India,Gujarat,6336,4.4,10
+Nandalay Temple,4.6,1120,Vadodara,India,Gujarat,5152,4.6,11
+Jagnath Mahadev Mandir - Navnath,4.7,696,Vadodara,India,Gujarat,3271.2,4.6,12
+Kamati Baug Vadodra,4.5,543,Vadodara,India,Gujarat,2443.5,4.4,13
+Siddhivinayak Temple,4.7,467,Vadodara,India,Gujarat,2194.9,4.6,14
+Nandan Kanan Park,4.4,427,Vadodara,India,Gujarat,1878.8,4.4,15
+"VAYA Hanuman Temple, Deluxe, Nizampura",4.6,304,Vadodara,India,Gujarat,1398.4,4.6,16
+Shri Rameshwar Mahadev Temple,4.5,308,Vadodara,India,Gujarat,1386,4.6,17
+Nature Education Park,4.1,222,Vadodara,India,Gujarat,910.2,4.4,18
+Surya Narayan Temple,4.4,194,Vadodara,India,Gujarat,853.6,4.6,19
+Sai Baba Temple,4.7,139,Vadodara,India,Gujarat,653.3,4.6,20
+Sayaji Baug Health Museum,4.4,115,Vadodara,India,Gujarat,506,4.35,21
+Surpaneshwar Mahadev Temple,4.5,100,Vadodara,India,Gujarat,450,4.6,22
+Vaishno Devi,4.7,55225,Vaishno,India,Jammu And Kashmir,259557.5,4.68,1
+Bhairo Baba Temple,4.7,1367,Vaishno,India,Jammu And Kashmir,6424.9,4.68,2
+Shri Kashi Vishwanath Temple,4.7,90162,Varanasi,India,Uttar Pradesh,423761.4,4.69,1
+Dashashwamedh Ghat,4.6,60345,Varanasi,India,Uttar Pradesh,277587,4.69,2
+Ramnagar Fort,4.1,31425,Varanasi,India,Uttar Pradesh,128842.5,4.5,3
+Archaeological Buddhist Remains of Sarnath,4.5,21281,Varanasi,India,Uttar Pradesh,95764.5,4.5,4
+Shri Satyanarayan Tulsi Manas Mandir,4.6,7577,Varanasi,India,Uttar Pradesh,34854.2,4.69,5
+Khidkiya Ghat,4.5,7556,Varanasi,India,Uttar Pradesh,34002,4.69,6
+"Dhamekh Stupa, Sarnath",4.6,6038,Varanasi,India,Uttar Pradesh,27774.8,4.69,7
+Shaheed Udyan Nagar Nigam,4.2,3700,Varanasi,India,Uttar Pradesh,15540,4.29,8
+Chaukhandi Stupa,4.4,3296,Varanasi,India,Uttar Pradesh,14502.4,4.5,9
+Anand Park,4.1,2845,Varanasi,India,Uttar Pradesh,11664.5,4.29,10
+Chet Singh Ghat,4.4,2137,Varanasi,India,Uttar Pradesh,9402.8,4.69,11
+Man Singh Observatory,4.5,2054,Varanasi,India,Uttar Pradesh,9243,4.29,12
+Tulsi Ghat,4.5,1823,Varanasi,India,Uttar Pradesh,8203.5,4.69,13
+Shivala Ghat,4.4,1580,Varanasi,India,Uttar Pradesh,6952,4.69,14
+Bharat Kala Bhavan Museum,4.5,1178,Varanasi,India,Uttar Pradesh,5301,4.5,15
+Dr. Rajendra Prasad Ghat,4.5,1150,Varanasi,India,Uttar Pradesh,5175,4.5,16
+Shree Annapurna Mandir,4.7,983,Varanasi,India,Uttar Pradesh,4620.1,4.69,17
+Sant Shiromani Guru Ravidas Mandir,4.3,943,Varanasi,India,Uttar Pradesh,4054.9,4.69,18
+Ashoka Pillar,4.6,819,Varanasi,India,Uttar Pradesh,3767.4,4.5,19
+Panchganga Ghat,4.5,788,Varanasi,India,Uttar Pradesh,3546,4.69,20
+Darbhanga Ghat,4.6,768,Varanasi,India,Uttar Pradesh,3532.8,4.69,21
+Nepali Temple,4.6,668,Varanasi,India,Uttar Pradesh,3072.8,4.69,22
+Tibetan Temple,4.4,594,Varanasi,India,Uttar Pradesh,2613.6,4.69,23
+Meer Ghat,4.4,498,Varanasi,India,Uttar Pradesh,2191.2,4.69,24
+Golden Temple,4.6,424,Varanasi,India,Uttar Pradesh,1950.4,4.69,25
+Subah-e-Banaras,4.7,379,Varanasi,India,Uttar Pradesh,1781.3,4.69,26
+Scindia Ghat,4.4,375,Varanasi,India,Uttar Pradesh,1650,4.69,27
+Ahilyabai Ghat,4.4,264,Varanasi,India,Uttar Pradesh,1161.6,4.69,28
+The Giant Buddha,4.6,215,Varanasi,India,Uttar Pradesh,989,4.69,29
+Ganga Mahal Ghat (2),4.4,174,Varanasi,India,Uttar Pradesh,765.6,4.69,30
+Bhonsale Ghat,4.4,146,Varanasi,India,Uttar Pradesh,642.4,4.69,31
+Gola Ghat,4.1,153,Varanasi,India,Uttar Pradesh,627.3,4.69,32
+Babua Pandey Ghat,4.4,132,Varanasi,India,Uttar Pradesh,580.8,4.69,33
+Dandi Ghat,4.5,92,Varanasi,India,Uttar Pradesh,414,4.69,34
+Panchkot Ghat,4.4,77,Varanasi,India,Uttar Pradesh,338.8,4.69,35
+Manmandir Sri Someshwara Swamy Temple,4.7,60,Varanasi,India,Uttar Pradesh,282,4.69,36
+Sankatha Ghat,4.3,63,Varanasi,India,Uttar Pradesh,270.9,4.69,37
+Mulagandha Kuti,4.7,52,Varanasi,India,Uttar Pradesh,244.4,4.69,38
+Varkala Beachside Cliff,4.6,3131,Varkala,India,Kerala,14402.6,4.43,1
+Sri Janardanaswamy Temple,4.7,2714,Varkala,India,Kerala,12755.8,4.72,2
+Kappil Beach,4.5,2342,Varkala,India,Kerala,10539,4.43,3
+The Black Sand Beach Varkala,4.5,1404,Varkala,India,Kerala,6318,4.43,4
+Arivalam Beach Park Varkala,4.2,254,Varkala,India,Kerala,1066.8,4.43,5
+Varkala Bali Mandapam,4.5,140,Varkala,India,Kerala,630,4.72,6
+Papanasam Beach,4.4,140,Varkala,India,Kerala,616,4.43,7
+Aaliyirakkam Beach,4.2,83,Varkala,India,Kerala,348.6,4.43,8
+Varkala International Beach,4.5,54,Varkala,India,Kerala,243,4.43,9
+Sri Varahalakshmi Narasimha Swamy Vari Devasthanam,4.7,59411,Visakhapatnam,India,Andhra Pradesh,279231.7,4.7,1
+VMRDA-Kailasagiri,4.4,59284,Visakhapatnam,India,Andhra Pradesh,260849.6,4.4,2
+Tenneti Park,4.5,28260,Visakhapatnam,India,Andhra Pradesh,127170,4.4,3
+Dr Y S Rajasekhar Reddy Central park,4.4,23523,Visakhapatnam,India,Andhra Pradesh,103501.2,4.4,4
+VMRDA PARK,4.3,20780,Visakhapatnam,India,Andhra Pradesh,89354,4.4,5
+Sivaji Park,4.2,10087,Visakhapatnam,India,Andhra Pradesh,42365.4,4.4,6
+Thotlakonda,4.3,8060,Visakhapatnam,India,Andhra Pradesh,34658,4.34,7
+Ross Hill Church,4.6,6099,Visakhapatnam,India,Andhra Pradesh,28055.4,4.7,8
+Visakha Museum,4.4,6058,Visakhapatnam,India,Andhra Pradesh,26655.2,4.34,9
+Lumbini Park,4.4,3558,Visakhapatnam,India,Andhra Pradesh,15655.2,4.4,10
+Gokul Park,4.3,3158,Visakhapatnam,India,Andhra Pradesh,13579.4,4.4,11
+Hawa Mahal,4.3,1260,Visakhapatnam,India,Andhra Pradesh,5418,4.34,12
+Appikonda Beach,4.3,867,Visakhapatnam,India,Andhra Pradesh,3728.1,4.4,13
+Lawsons Bay Beach Park,4.3,813,Visakhapatnam,India,Andhra Pradesh,3495.9,4.4,14
+Beach View Point,4.5,303,Visakhapatnam,India,Andhra Pradesh,1363.5,4.4,15
+Kailasgiri Park,4.4,180,Visakhapatnam,India,Andhra Pradesh,792,4.4,16
+Tenneti Sea View Point,4.6,91,Visakhapatnam,India,Andhra Pradesh,418.6,4.4,17
+Sri Sri Krishna Balaram Mandir (ISKCON Vrindavan),4.8,65844,Vrindavan,India,Uttar Pradesh,316051.2,4.69,1
+"Prem Mandir, Vrindavan",4.8,46103,Vrindavan,India,Uttar Pradesh,221294.4,4.69,2
+Sri Rangnath Ji Mandir,4.6,8020,Vrindavan,India,Uttar Pradesh,36892,4.69,3
+"Shri Pagal Baba Temple, Vrindavan",4.4,5556,Vrindavan,India,Uttar Pradesh,24446.4,4.69,4
+Vrindavan Chandrodaya Mandir,4.6,4394,Vrindavan,India,Uttar Pradesh,20212.4,4.69,5
+"Shri Radha Damodar Dev Ji Temple, Vrindavan",4.8,4150,Vrindavan,India,Uttar Pradesh,19920,4.69,6
+"Shri Radhavallabh Lal Ji Temple, Vrindavan",4.9,3811,Vrindavan,India,Uttar Pradesh,18673.9,4.69,7
+Birla Temple,4.4,1555,Vrindavan,India,Uttar Pradesh,6842,4.69,8
+"Shri Radha Madan Mohan Ji Temple, Vrindavan",4.7,1404,Vrindavan,India,Bihar,6598.8,4.65,9
+"Seva Kunj, Vrindavan",4.7,968,Vrindavan,India,Uttar Pradesh,4549.6,4.69,10
+"Keshi Ghat, Vrindavan",4.6,832,Vrindavan,India,Uttar Pradesh,3827.2,4.69,11
+"Shri Garud Govind Temple, Vrindavan",4.7,761,Vrindavan,India,Uttar Pradesh,3576.7,4.69,12
+"Shahji Temple, Vrindavan",4.5,419,Vrindavan,India,Uttar Pradesh,1885.5,4.69,13
+prem mndir vaattikaa,4.7,112,Vrindavan,India,Uttar Pradesh,526.4,4.29,14
+Temple of Dauji,4.5,89,Vrindavan,India,Uttar Pradesh,400.5,4.69,15
+"Shri Jugal Kishore Ji Temple, Vrindavan",4.7,70,Vrindavan,India,Uttar Pradesh,329,4.69,16
+Lakkidi View Point,4.5,18115,Wayanad,India,Kerala,81517.5,4.43,1
+Honey Museum Wayanad,4.8,8152,Wayanad,India,Kerala,39129.6,4.42,2
+Meenmutty View Point,4.2,1102,Wayanad,India,Kerala,4628.4,4.43,3
+PAZHASSI RAJA MEMORIAL,4.3,390,Wayanad,India,Kerala,1677,4.42,4
+Attamala View Point,4.5,352,Wayanad,India,Kerala,1584,4.43,5
+Wayanad view point,4.7,58,Wayanad,India,Kerala,272.6,4.43,6
+Sunrise Valley View Point,4.2,51,Wayanad,India,Kerala,214.2,4.43,7

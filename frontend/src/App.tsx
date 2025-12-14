@@ -13,11 +13,15 @@ import CommunityHub from "./pages/CommunityHub";
 import Dashboard from "./pages/Dashboard";
 import Tourism from "./pages/Tourism";
 import Inventory from "./pages/Inventory";
-import Reviews from "./pages/Reviews";
-import Offers from "./pages/Offers";
+import Reviews from "./pages/ReviewsPage";
 import ChefGuru from "./pages/ChefGuru";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
+
+import PosterMaker from "./pages/PosterMaker";
+import SalesTracker from "./pages/SalesTracker";
+import LicenseHelp from "./pages/LicenseHelp";
+import Feedback from "./pages/Feedback";
 
 const queryClient = new QueryClient();
 
@@ -39,10 +43,14 @@ const App = () => (
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/trend-insights" element={<Reviews />} />
-            <Route path="/offers" element={<Offers />} />
+
             <Route path="/chef-guru" element={<ChefGuru />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/notifications" element={<Notifications />} />
+            <Route path="/poster-maker" element={<PosterMaker />} />
+            <Route path="/sales-tracker" element={<SalesTracker />} />
+            <Route path="/license-help" element={<LicenseHelp />} />
+            <Route path="/feedback" element={<Feedback />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
