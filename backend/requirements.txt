@@ -1,9 +1,0 @@
-flask
-flask-cors
-langchain
-langchain-google-genai
-google-api-python-client
-google-auth
-scikit-learn
-pandas
-python-dotenv
