@@ -197,10 +197,10 @@ const StartupMitra = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background text-foreground">
+      <div className="h-[100dvh] flex w-full bg-background text-foreground overflow-hidden">
         <AppSidebar />
 
-        <main className="flex-1 flex flex-col h-screen overflow-hidden">
+        <main className="flex-1 flex flex-col h-full overflow-hidden relative">
           <MobileSidebarTrigger />
 
           {/* Header */}
@@ -298,7 +298,7 @@ const StartupMitra = () => {
 
           {/* CHAT MODE */}
           {mode === 'chat' && (
-            <div className="flex-1 flex flex-col bg-background">
+            <div className="flex-1 flex flex-col bg-background min-h-0">
               <ScrollArea className="flex-1 p-4">
                 <div className="space-y-6 max-w-3xl mx-auto pb-4">
                   {messages.map((msg) => (

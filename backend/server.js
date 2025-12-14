@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,8 +10,10 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Initialize Ollama
+const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'mistral';
+const OLLAMA_API_KEY = process.env.OLLAMA_API_KEY;
 
 app.post('/api/chat', async (req, res) => {
     try {
@@ -21,17 +23,35 @@ app.post('/api/chat', async (req, res) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
-        // For a simple chatbot, we can use the gemini-pro model
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
         const prompt = `You are Startup Mitra, a helpful and knowledgeable business assistant for small business owners in India. 
     You help with starting focused businesses like food stalls, trucks, providing licensing info (FSSAI), and pricing strategies.
     Keep your answers concise, encouraging, and easy to understand.
+    IMPORTANT: Provide the response in SIMPLE PLAIN TEXT format. 
+    - Use bullet points (-) for lists.
+    - Keep it concise but helpful.
+    - Structure your answer clearly.
     Original user query: ${message}`;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        // Call Ollama API
+        const response = await fetch(`${OLLAMA_BASE_URL}/api/generate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(OLLAMA_API_KEY ? { 'Authorization': `Bearer ${OLLAMA_API_KEY}` } : {})
+            },
+            body: JSON.stringify({
+                model: OLLAMA_MODEL,
+                prompt: prompt,
+                stream: false
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Ollama API error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const text = data.response;
 
         res.json({
             text: text,
@@ -40,7 +60,7 @@ app.post('/api/chat', async (req, res) => {
 
     } catch (error) {
         console.error('Error generating response:', error);
-        res.status(500).json({ error: 'Failed to generate response' });
+        res.status(500).json({ error: 'Failed to generate response. Ensure Ollama is running.' });
     }
 });
 
