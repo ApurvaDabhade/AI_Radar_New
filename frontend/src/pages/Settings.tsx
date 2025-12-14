@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -5,167 +6,230 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { ArrowLeft, User, Bell, Shield, Globe, Store } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { ArrowLeft, User, Bell, Shield, Globe, Store, LogOut, Save } from 'lucide-react';
 
 const Settings = () => {
   const navigate = useNavigate();
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage } = useLanguage();
+  const { toast } = useToast();
+
+  // State for form fields
+  const [profile, setProfile] = useState({
+    businessName: "Sharma's Food Corner",
+    ownerName: "Rajesh Sharma",
+    phone: "+91 98765 43210",
+    email: "rajesh@example.com",
+    businessType: "Street Food Vendor",
+    location: "Gateway of India, Mumbai",
+    openTime: "09:00",
+    closeTime: "22:00"
+  });
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('vendorProfile');
+    if (saved) {
+      setProfile(JSON.parse(saved));
+    } else {
+      // If no profile, try to load from 'user' (set during registration)
+      const regUser = localStorage.getItem('user');
+      if (regUser) {
+        const u = JSON.parse(regUser);
+        setProfile(prev => ({
+          ...prev,
+          ownerName: u.name || prev.ownerName,
+          businessName: u.stallName || prev.businessName,
+          phone: u.phone || prev.phone,
+          businessType: u.specialty || prev.businessType, // approximation
+          location: u.location || prev.location
+        }));
+      }
+    }
+  }, []);
+
+  const handleChange = (field: string, value: string) => {
+    setProfile(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = () => {
+    localStorage.setItem('vendorProfile', JSON.stringify(profile));
+    // Also update main user object if needed, but keeping separate for safety
+    toast({
+      title: "Settings Saved ✅",
+      description: "Your profile details have been updated."
+    });
+  };
+
+  const handleLogout = () => {
+    // Clear auth data
+    localStorage.removeItem('user');
+    toast({
+      title: "Logged Out",
+      description: "See you soon!"
+    });
+    navigate('/auth');
+  };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground pb-20">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
+      <header className="sticky top-0 z-50 bg-background/80 border-b border-border backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} className="text-foreground hover:bg-primary/10">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="text-2xl font-bold text-primary">⚙️ Settings</h1>
-              <p className="text-sm text-muted-foreground">Manage your account & preferences</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} className="text-foreground hover:bg-muted">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <h1 className="text-2xl font-bold text-primary">⚙️ Settings</h1>
+              </div>
             </div>
+            <Button variant="destructive" size="sm" onClick={handleLogout} className="hidden md:flex">
+              <LogOut className="mr-2 h-4 w-4" /> Logout
+            </Button>
+            <Button variant="destructive" size="icon" onClick={handleLogout} className="flex md:hidden">
+              <LogOut className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-4xl space-y-6">
+        
         {/* Profile Settings */}
-        <Card className="bg-card border-primary/30 p-6 mb-6 shadow-lg">
-          <div className="flex items-center gap-2 mb-4">
+        <Card className="bg-card border-border shadow-sm p-6">
+          <div className="flex items-center gap-2 mb-6">
             <User className="h-5 w-5 text-primary" />
             <h3 className="text-xl font-bold text-card-foreground">Profile Information</h3>
           </div>
           <div className="space-y-4">
             <div>
-              <Label className="text-foreground">Business Name</Label>
-              <Input defaultValue="Sharma's Food Corner" className="bg-muted border-border" />
+              <Label>Business Name</Label>
+              <Input 
+                value={profile.businessName} 
+                onChange={(e) => handleChange('businessName', e.target.value)} 
+                className="bg-muted"
+              />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label className="text-foreground">Owner Name</Label>
-                <Input defaultValue="Rajesh Sharma" className="bg-muted border-border" />
+                <Label>Owner Name</Label>
+                <Input 
+                  value={profile.ownerName}
+                  onChange={(e) => handleChange('ownerName', e.target.value)}
+                  className="bg-muted"
+                />
               </div>
               <div>
-                <Label className="text-foreground">Phone Number</Label>
-                <Input defaultValue="+91 98765 43210" className="bg-muted border-border" />
+                <Label>Phone Number</Label>
+                <Input 
+                  value={profile.phone}
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                  className="bg-muted"
+                />
               </div>
             </div>
             <div>
-              <Label className="text-foreground">Email</Label>
-              <Input defaultValue="rajesh@example.com" className="bg-muted border-border" />
+              <Label>Email</Label>
+              <Input 
+                value={profile.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                className="bg-muted"
+              />
             </div>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">Save Changes</Button>
           </div>
         </Card>
 
         {/* Business Settings */}
-        <Card className="bg-card border-accent/30 p-6 mb-6 shadow-lg">
-          <div className="flex items-center gap-2 mb-4">
+        <Card className="bg-card border-border shadow-sm p-6">
+          <div className="flex items-center gap-2 mb-6">
             <Store className="h-5 w-5 text-accent" />
             <h3 className="text-xl font-bold text-card-foreground">Business Details</h3>
           </div>
           <div className="space-y-4">
             <div>
-              <Label className="text-foreground">Business Type</Label>
-              <Input defaultValue="Street Food Vendor" className="bg-muted border-border" />
+              <Label>Business Type</Label>
+              <Input 
+                value={profile.businessType}
+                onChange={(e) => handleChange('businessType', e.target.value)}
+                className="bg-muted"
+              />
             </div>
             <div>
-              <Label className="text-foreground">Location</Label>
-              <Input defaultValue="Gateway of India, Mumbai" className="bg-muted border-border" />
+              <Label>Location</Label>
+              <Input 
+                value={profile.location}
+                onChange={(e) => handleChange('location', e.target.value)}
+                className="bg-muted"
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-foreground">Opening Time</Label>
-                <Input type="time" defaultValue="09:00" className="bg-muted border-border" />
+                <Label>Opening Time</Label>
+                <Input 
+                  type="time" 
+                  value={profile.openTime}
+                  onChange={(e) => handleChange('openTime', e.target.value)}
+                  className="bg-muted"
+                />
               </div>
               <div>
-                <Label className="text-foreground">Closing Time</Label>
-                <Input type="time" defaultValue="22:00" className="bg-muted border-border" />
+                <Label>Closing Time</Label>
+                <Input 
+                  type="time" 
+                  value={profile.closeTime}
+                  onChange={(e) => handleChange('closeTime', e.target.value)}
+                  className="bg-muted"
+                />
               </div>
             </div>
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">Update Business</Button>
           </div>
         </Card>
 
-        {/* Notification Preferences */}
-        <Card className="bg-card border-secondary/30 p-6 mb-6 shadow-lg">
+        {/* Save Button */}
+        <Button onClick={handleSave} className="w-full h-12 text-lg font-bold bg-primary hover:bg-primary/90">
+          <Save className="mr-2 h-5 w-5" /> Save Changes
+        </Button>
+
+        {/* Language & Region */}
+        <Card className="bg-card border-border shadow-sm p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Bell className="h-5 w-5 text-secondary" />
+            <Globe className="h-5 w-5 text-secondary" />
+            <h3 className="text-xl font-bold text-card-foreground">Language</h3>
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium">App Language</p>
+              <p className="text-sm text-muted-foreground">Current: {language === 'en' ? 'English' : 'हिंदी'}</p>
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+            >
+              Switch to {language === 'en' ? 'हिंदी' : 'English'}
+            </Button>
+          </div>
+        </Card>
+
+        {/* Notifications (Mock) */}
+        <Card className="bg-card border-border shadow-sm p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Bell className="h-5 w-5 text-muted-foreground" />
             <h3 className="text-xl font-bold text-card-foreground">Notifications</h3>
           </div>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-foreground">Stock Alerts</p>
-                <p className="text-sm text-muted-foreground">Get notified when inventory is low</p>
-              </div>
+              <Label>Stock Alerts</Label>
               <Switch defaultChecked />
             </div>
             <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-foreground">Customer Reviews</p>
-                <p className="text-sm text-muted-foreground">Notifications for new feedback</p>
-              </div>
-              <Switch defaultChecked />
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-foreground">Sales Reports</p>
-                <p className="text-sm text-muted-foreground">Daily sales summary</p>
-              </div>
+              <Label>Sales Reports</Label>
               <Switch />
             </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-foreground">Festival Reminders</p>
-                <p className="text-sm text-muted-foreground">Upcoming events and trends</p>
-              </div>
-              <Switch defaultChecked />
-            </div>
           </div>
         </Card>
 
-        {/* Language & Region */}
-        <Card className="bg-card border-primary/30 p-6 mb-6 shadow-lg">
-          <div className="flex items-center gap-2 mb-4">
-            <Globe className="h-5 w-5 text-primary" />
-            <h3 className="text-xl font-bold text-card-foreground">Language & Region</h3>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-foreground">Preferred Language</p>
-                <p className="text-sm text-muted-foreground">Current: {language === 'en' ? 'English' : 'हिंदी'}</p>
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-                className="border-primary text-primary hover:bg-primary/10"
-              >
-                Switch to {language === 'en' ? 'हिंदी' : 'English'}
-              </Button>
-            </div>
-          </div>
-        </Card>
-
-        {/* Security */}
-        <Card className="bg-card border-destructive/30 p-6 shadow-lg">
-          <div className="flex items-center gap-2 mb-4">
-            <Shield className="h-5 w-5 text-destructive" />
-            <h3 className="text-xl font-bold text-card-foreground">Security</h3>
-          </div>
-          <div className="space-y-4">
-            <Button variant="outline" className="w-full border-destructive text-destructive hover:bg-destructive/10">
-              Change Password
-            </Button>
-            <Button variant="outline" className="w-full border-secondary text-secondary hover:bg-secondary/10">
-              Two-Factor Authentication
-            </Button>
-            <Button variant="outline" className="w-full border-border text-muted-foreground hover:bg-muted">
-              Privacy Settings
-            </Button>
-          </div>
-        </Card>
       </div>
     </div>
   );
