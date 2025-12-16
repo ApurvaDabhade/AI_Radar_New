@@ -1,10 +1,96 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const natural = require('natural'); // Import natural library
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
+
+// Initialize Classifier
+const classifier = new natural.BayesClassifier();
+
+// Define Templates for different categories
+const TEMPLATES = {
+    "Urgent & Hype": [
+        "🔥 FLASH DEAL! {offerType} on {cuisine} at {businessName}! Only {price}. Hurry! ⏳",
+        "🛑 STOP SCROLLING! {offerType} is LIVE. Best {cuisine} in {location}. Grab it now! 🏃‍♂️",
+        "🚨 URGENT: {businessName} Special! {cuisine} for just {price}. Offer ends soon! ⏰",
+        "💥 BOOM! Price Drop! {cuisine} now only {price}. Visit {businessName} today! 📉",
+        "⚡ LIGHTNING SALE! {offerType} on all items at {businessName}. Don't miss out! ⚡"
+    ],
+    "Elegant & Minimal": [
+        "✨ Simply Delicious. {cuisine} by {businessName}. {location}.",
+        "🌿 Authentic. Fresh. {cuisine}. Experience it at {businessName}.",
+        "🍽️ The Art of Eating. {offerType} at {businessName}. Starting {price}.",
+        "🕯️ Pure Taste. {cuisine} Redefined. {businessName}, {location}.",
+        "🥗 Minimalist Flavors. Maximum Taste. {cuisine} @ {price}. {businessName}."
+    ],
+    "Community & Trust": [
+        "❤️ Your Neighborhood Favorite, {businessName}. Serving fresh {cuisine} since always.",
+        "🤝 Trust the taste of home. {cuisine} just like Mom makes. Only at {businessName}.",
+        "🏘️ {location}'s Best Kept Secret: {businessName}. Special {offerType} for locals!",
+        "👨‍👩‍👧‍👦 Bring the family! Authentic {cuisine} at {businessName}. Good food, good times.",
+        "🏆 Voted Best in {location}! Try our {cuisine} today. {businessName} guarantees quality."
+    ],
+    "Direct Offer": [
+        "💰 SAVE BIG! {offerType} at {businessName}. {cuisine} starting at {price}.",
+        "🏷️ BEST PRICE: {cuisine} for {price}. Only at {businessName} in {location}.",
+        "💸 VALUE DEAL: {offerType}. Eat more, pay less at {businessName}!",
+        "📉 PRICE DROP: {cuisine} is now just {price}. Order at {businessName}.",
+        "💲 {offerType} Alert! Get your favorite {cuisine} at unbeatable prices."
+    ],
+    "Short & Catchy": [
+        "😋 Yum Alert! {cuisine} @ {price}.",
+        "🚀 Blast of Flavor! {businessName}.",
+        "🤑 Eat Cheap. Eat Good. {price}.",
+        "🤤 Craving {cuisine}? We got you.",
+        "📍 {location}'s Best {cuisine}. Period."
+    ]
+};
+
+// Train the Model on Startup
+const trainModel = () => {
+    // Urgent & Hype
+    classifier.addDocument('limited time offer', 'Urgent & Hype');
+    classifier.addDocument('hurry', 'Urgent & Hype');
+    classifier.addDocument('flash sale', 'Urgent & Hype');
+    classifier.addDocument('act fast', 'Urgent & Hype');
+    classifier.addDocument('today only', 'Urgent & Hype');
+
+    // Elegant & Minimal
+    classifier.addDocument('authentic', 'Elegant & Minimal');
+    classifier.addDocument('traditional', 'Elegant & Minimal');
+    classifier.addDocument('premium', 'Elegant & Minimal');
+    classifier.addDocument('luxury', 'Elegant & Minimal');
+    classifier.addDocument('gourmet', 'Elegant & Minimal');
+
+    // Community & Trust
+    classifier.addDocument('family', 'Community & Trust');
+    classifier.addDocument('home style', 'Community & Trust');
+    classifier.addDocument('local', 'Community & Trust');
+    classifier.addDocument('neighborhood', 'Community & Trust');
+    classifier.addDocument('trusted', 'Community & Trust');
+
+    // Direct Offer
+    classifier.addDocument('discount', 'Direct Offer');
+    classifier.addDocument('save', 'Direct Offer');
+    classifier.addDocument('value', 'Direct Offer');
+    classifier.addDocument('cheap', 'Direct Offer');
+    classifier.addDocument('price', 'Direct Offer');
+
+    // Short & Catchy
+    classifier.addDocument('snack', 'Short & Catchy');
+    classifier.addDocument('quick', 'Short & Catchy');
+    classifier.addDocument('tasty', 'Short & Catchy');
+    classifier.addDocument('yum', 'Short & Catchy');
+
+    classifier.train();
+    console.log('🧠 Natural AI Model Trained Successfully!');
+};
+
+// Run Training
+trainModel();
 
 // Middleware
 app.use(cors());
@@ -34,6 +120,7 @@ app.post('/api/chat', async (req, res) => {
     - Use clearly numbered steps.
     - Keep language simple and easy to understand.
     - Use bullet points (-) for lists.
+    - IMPORTANT: Receive the output in short and concise (under 60 words if possible).
     - IMPORTANT: Do NOT use the phrase "Kaljee naka karu".
     
     Original user query: ${message}`;
@@ -67,6 +154,62 @@ app.post('/api/chat', async (req, res) => {
     } catch (error) {
         console.error('Error generating response:', error);
         res.status(500).json({ error: 'Failed to generate response. Ensure Ollama is running.' });
+    }
+});
+
+app.post('/api/poster-assistant', async (req, res) => {
+    try {
+        const { businessName, cuisine, location, offerType, price, designFormat, keywords } = req.body;
+
+        // Classify the intent based on keywords or offerType
+        let category = 'Direct Offer'; // Default category
+
+        if (keywords && keywords.length > 0) {
+            const keywordString = keywords.join(' ');
+            category = classifier.classify(keywordString);
+        } else if (offerType) {
+            // Simple classification based on offerType if no keywords
+            if (offerType.toLowerCase().includes('limited') || offerType.toLowerCase().includes('flash')) {
+                category = 'Urgent & Hype';
+            } else if (offerType.toLowerCase().includes('special') || offerType.toLowerCase().includes('discount')) {
+                category = 'Direct Offer';
+            } else if (offerType.toLowerCase().includes('authentic') || offerType.toLowerCase().includes('traditional')) {
+                category = 'Elegant & Minimal';
+            }
+        }
+
+        const selectedTemplates = TEMPLATES[category] || TEMPLATES['Direct Offer']; // Fallback
+
+        const suggestions = selectedTemplates.map(template => {
+            let filledTemplate = template
+                .replace(/{businessName}/g, businessName || 'Our Shop')
+                .replace(/{cuisine}/g, cuisine || 'Delicious Food')
+                .replace(/{location}/g, location || 'Here')
+                .replace(/{offerType}/g, offerType || 'Special Offer');
+
+            if (price) {
+                filledTemplate = filledTemplate.replace(/{price}/g, `₹${price}`);
+            } else {
+                filledTemplate = filledTemplate.replace(/{price}/g, 'Best Price');
+            }
+            return filledTemplate;
+        });
+
+        res.json({
+            suggestions: suggestions
+        });
+
+    } catch (error) {
+        console.error('Error generating poster slogans:', error);
+        res.status(500).json({
+            suggestions: [
+                "Error generating suggestions. Please try again.",
+                `Fresh ${req.body.cuisine || 'Food'}, Great Taste!`,
+                `Special Offer at ${req.body.businessName || 'Our Shop'}!`,
+                `Visit us in ${req.body.location || 'your area'} today!`,
+                "We're here to help your business shine!"
+            ]
+        });
     }
 });
 
@@ -332,8 +475,8 @@ app.post('/api/inventory', (req, res) => {
 const fs = require('fs');
 const path = require('path');
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
 
 // --- Dynamic Data Loading (CSV) ---

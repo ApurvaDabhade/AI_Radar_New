@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -27,36 +28,38 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <LanguageProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/registration" element={<Registration />} />
-            <Route path="/startup-mitra" element={<StartupMitra />} />
-            <Route path="/community-hub" element={<CommunityHub />} />
-            <Route path="/tourism" element={<Tourism />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/reviews" element={<Reviews />} />
-            <Route path="/trend-insights" element={<Reviews />} />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <LanguageProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/registration" element={<Registration />} />
+              <Route path="/startup-mitra" element={<StartupMitra />} />
+              <Route path="/community-hub" element={<CommunityHub />} />
+              <Route path="/tourism" element={<Tourism />} />
+              <Route path="/inventory" element={<Inventory />} />
+              <Route path="/reviews" element={<Reviews />} />
+              <Route path="/trend-insights" element={<Reviews />} />
 
-            <Route path="/chef-guru" element={<ChefGuru />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/poster-maker" element={<PosterMaker />} />
-            <Route path="/sales-tracker" element={<SalesTracker />} />
-            <Route path="/license-help" element={<LicenseHelp />} />
-            <Route path="/feedback" element={<Feedback />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </LanguageProvider>
+              <Route path="/chef-guru" element={<ChefGuru />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/poster-maker" element={<PosterMaker />} />
+              <Route path="/sales-tracker" element={<SalesTracker />} />
+              <Route path="/license-help" element={<LicenseHelp />} />
+              <Route path="/feedback" element={<Feedback />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

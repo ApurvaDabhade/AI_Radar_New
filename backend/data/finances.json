@@ -62,5 +62,37 @@
     "category": "other",
     "note": "",
     "timestamp": "2025-12-14T11:37:51.522Z"
+  },
+  {
+    "id": "1765729687041",
+    "type": "expense",
+    "amount": 2000,
+    "category": "packaging",
+    "note": "",
+    "timestamp": "2025-12-14T16:28:07.042Z"
+  },
+  {
+    "id": "1765729701789",
+    "type": "expense",
+    "amount": 10000,
+    "category": "rent",
+    "note": "",
+    "timestamp": "2025-12-14T16:28:21.789Z"
+  },
+  {
+    "id": "1765902266397",
+    "type": "sale",
+    "amount": 10000,
+    "category": "upi",
+    "note": "",
+    "timestamp": "2025-12-16T16:24:26.397Z"
+  },
+  {
+    "id": "1765902271210",
+    "type": "expense",
+    "amount": 2000,
+    "category": "packaging",
+    "note": "",
+    "timestamp": "2025-12-16T16:24:31.210Z"
   }
 ]

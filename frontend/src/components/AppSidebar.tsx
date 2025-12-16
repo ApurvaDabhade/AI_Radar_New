@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { ModeToggle } from "@/components/mode-toggle";
 import {
     Sidebar,
     SidebarContent,
@@ -64,6 +65,9 @@ export function AppSidebar() {
                         <p className="text-xs text-sidebar-foreground/70">रसोई साथी</p>
                         <p className="text-[10px] text-green-400 font-serif italic">"तुमची प्रगती, आमचे ध्येय"</p>
                     </div>
+                </div>
+                <div className="ml-auto">
+                    <ModeToggle />
                 </div>
             </SidebarHeader>
 
@@ -137,7 +141,7 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-        </Sidebar>
+        </Sidebar >
     );
 }
 
