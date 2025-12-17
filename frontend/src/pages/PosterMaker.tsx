@@ -12,6 +12,15 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import QRCode from "react-qr-code";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const templateCategories = [
   { id: 'festival', label: 'Festival', emoji: '🎉' },
@@ -47,6 +56,10 @@ const localBloggers = [
   { name: 'Street Food Stories', platform: 'Instagram', followers: '50K', contact: '+91 98765 43210', handle: '@streetfoodstories' },
   { name: 'Mumbai Food Vlogger', platform: 'YouTube', followers: '120K', contact: '+91 87654 32109', handle: '@mumbaifoodvlog' },
   { name: 'Desi Khana Reviews', platform: 'Instagram', followers: '35K', contact: '+91 76543 21098', handle: '@desikhanareviews' },
+  { name: 'Pune Eats & Treats', platform: 'YouTube', followers: '85K', contact: '+91 99887 76655', handle: '@puneeats' },
+  { name: 'Vadapav World', platform: 'Instagram', followers: '25K', contact: '+91 88990 01122', handle: '@vadapav_kings' },
+  { name: 'Spicy Affair Blog', platform: 'Instagram', followers: '42K', contact: '+91 77665 54433', handle: '@spicyaffair' },
+  { name: 'Maharashtrian Zayka', platform: 'YouTube', followers: '95K', contact: '+91 91234 56789', handle: '@mz_official' },
 ];
 
 // Daily tips
@@ -77,6 +90,7 @@ const PosterMaker = () => {
   const [generatingSlogans, setGeneratingSlogans] = useState(false);
   const [suggestedSlogans, setSuggestedSlogans] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<any[]>([]); // Store fetched menu items
+  const [showQR, setShowQR] = useState(false);
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const posterRef = React.useRef<HTMLDivElement>(null);
@@ -201,6 +215,28 @@ const PosterMaker = () => {
     toast({ title: '📞 Contact Info', description: `Call ${blogger.name}: ${blogger.contact}` });
   };
 
+  const handleDownloadQR = async () => {
+    const element = document.getElementById('qr-code-view');
+    if (!element) return;
+
+    toast({ title: '📥 Saving QR...', description: 'Generating image...' });
+
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 2 });
+
+      const link = document.createElement('a');
+      link.download = 'My-Digital-Menu-QR.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+      toast({ title: '✅ Saved!', description: 'QR Code downloaded to your device.' });
+    } catch (err) {
+      console.error(err);
+      toast({ title: '❌ Error', description: 'Failed to download QR', variant: 'destructive' });
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background text-foreground">
@@ -278,7 +314,8 @@ const PosterMaker = () => {
                 🧰 Tools
               </TabsTrigger>
               <TabsTrigger value="tips" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                💡 Tips
+                <span className="mr-2">💡</span>
+                Influencer Connect
               </TabsTrigger>
             </TabsList>
 
@@ -793,11 +830,55 @@ const PosterMaker = () => {
                     <p className="text-muted-foreground text-sm mb-4">
                       No printing costs! Customers scan & see your menu on their phone.
                     </p>
-                    <Button className="w-full text-foreground" variant="outline">
+                    <Button className="w-full text-foreground" variant="outline" onClick={() => setShowQR(true)}>
                       Create Menu →
                     </Button>
                   </CardContent>
                 </Card>
+
+                {/* QR Code Dialog */}
+                <Dialog open={showQR} onOpenChange={setShowQR}>
+                  <DialogContent className="sm:max-w-md bg-white text-black">
+                    <DialogHeader>
+                      <DialogTitle>📱 Your Digital Menu QR</DialogTitle>
+                      <DialogDescription>
+                        Print this QR code. Customers can scan it to order directly!
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex flex-col items-center justify-center p-6 space-y-4">
+
+                      {/* QR Container with ID for download */}
+                      <div id="qr-code-view" className="bg-white p-4 rounded-xl border-2 border-black flex flex-col items-center gap-2">
+                        <QRCode
+                          value={`${window.location.origin}/menu/vendor_123`}
+                          size={200}
+                        />
+                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Scan for Menu</p>
+                      </div>
+
+                      <div className="bg-yellow-50 border border-yellow-200 p-2 rounded text-xs text-yellow-800 text-center max-w-[200px]">
+                        ⚠️ <b>Localhost Limitation</b><br />
+                        Phones cannot scan `localhost`. Use "Open Link" to test locally.
+                      </div>
+
+                      <div className="flex flex-col gap-2 w-full">
+                        <div className="flex gap-2">
+                          <Button className="flex-1 text-blue-600 bg-blue-50 hover:bg-blue-100 border-blue-200" variant="outline" onClick={() => {
+                            window.open(`${window.location.origin}/menu/vendor_123`, '_blank');
+                          }}>
+                            Open Link 🔗
+                          </Button>
+                          <Button className="flex-1 text-purple-600 bg-purple-50 hover:bg-purple-100 border-purple-200" variant="outline" onClick={handleDownloadQR}>
+                            Download ⬇️
+                          </Button>
+                        </div>
+                        <Button className="w-full bg-primary text-primary-foreground font-bold hover:bg-primary/90" onClick={() => setShowQR(false)}>
+                          Done
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
 
                 {/* Make Reels */}
                 <Card className="bg-card border-border shadow-lg hover:shadow-primary/20 transition-shadow cursor-pointer">
@@ -880,34 +961,58 @@ const PosterMaker = () => {
             </TabsContent>
 
             {/* DAILY TIPS TAB */}
+            {/* DAILY TIPS TAB - Repurposed for Influencers */}
             <TabsContent value="tips" className="space-y-6">
               <Card className="bg-card border-border shadow-xl">
                 <CardHeader className="bg-gradient-to-r from-accent/10 to-primary/10 border-b border-border">
                   <CardTitle className="flex items-center gap-3 text-2xl">
-                    <Lightbulb className="h-8 w-8 text-accent" />
-                    Aaj Ke Tips (Daily Tips)
+                    <span className="text-3xl">🤝</span>
+                    Influencer Connect
                   </CardTitle>
                   <CardDescription className="text-base">
-                    Practical advice to grow your business
+                    Collaborate with local food vloggers to grow your business
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-6">
-                  <div className="space-y-4">
-                    {dailyTips.map((tip, idx) => (
-                      <div
-                        key={idx}
-                        className="p-4 bg-muted rounded-xl border-l-4 border-primary"
-                      >
-                        <p className="text-lg text-foreground">{tip}</p>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {localBloggers.map((blogger, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-4 bg-card border border-border rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-12 rounded-full flex items-center justify-center ${blogger.platform === 'Instagram' ? 'bg-pink-100 text-pink-600' : 'bg-red-100 text-red-600'}`}>
+                            {blogger.platform === 'Instagram' ? <Instagram className="h-6 w-6" /> : <Youtube className="h-6 w-6" />}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-lg text-foreground">{blogger.name}</p>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <Badge variant="secondary" className="h-5 text-xs">{blogger.platform}</Badge>
+                              <span>{blogger.followers} Fans</span>
+                            </div>
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-9 px-4 text-blue-600 bg-blue-50 hover:bg-blue-100 border-blue-200 font-semibold transition-colors"
+                          onClick={() => {
+                            window.open(`https://${blogger.platform.toLowerCase()}.com/${blogger.handle.replace('@', '')}`, '_blank');
+                          }}
+                        >
+                          Contact
+                        </Button>
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-6 p-4 bg-accent/10 rounded-xl border border-accent/20">
-                    <h4 className="font-bold text-accent mb-2">📊 Today's Best Time to Post</h4>
-                    <p className="text-muted-foreground">
-                      Post your food photos at <strong className="text-foreground">7:00 PM</strong> today for maximum reach!
-                    </p>
+                  <div className="mt-8 p-4 bg-accent/10 rounded-xl border border-accent/20 flex gap-4 items-start">
+                    <div className="bg-accent/20 p-2 rounded-lg">
+                      <Lightbulb className="h-6 w-6 text-accent" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-accent mb-1">Pro Tip</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Invite them for a free tasting session! A single reel or video can bring 100+ new customers to your stall.
+                      </p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -915,7 +1020,7 @@ const PosterMaker = () => {
           </Tabs>
         </main>
       </div>
-    </SidebarProvider>
+    </SidebarProvider >
   );
 };
 

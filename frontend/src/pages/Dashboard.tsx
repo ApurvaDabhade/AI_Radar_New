@@ -20,7 +20,8 @@ import {
   ArrowUp,
   ArrowDown,
   Minus,
-  ChevronRight
+  ChevronRight,
+  Clock
 } from 'lucide-react';
 import foodStallBg from '@/assets/food-stall-bg.jpg';
 import indianThali from '@/assets/indian-thali.png';
@@ -37,6 +38,33 @@ const Dashboard = () => {
   const [costBreakdown, setCostBreakdown] = useState<any[]>([]);
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [metricsData, setMetricsData] = useState<any>({
+    sales: { value: 'Loading...', change: '...', trend: 'neutral' },
+    waste: { value: '...', change: '...', trend: 'neutral' },
+    topItem: { value: 'Loading...', change: '...', trend: 'neutral' },
+    event: { value: 'Loading...', change: '...', trend: 'neutral' }
+  });
+
+  const [pendingOrders, setPendingOrders] = useState<any[]>([]);
+
+  // Poll for new orders (simulating websocket/real-time)
+  useEffect(() => {
+    const checkOrders = () => {
+      const orders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
+      setPendingOrders(orders);
+    };
+    checkOrders(); // Initial check
+    const interval = setInterval(checkOrders, 3000); // Check every 3s
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleCompleteOrder = (id: number) => {
+    const remainingOrders = pendingOrders.filter(o => o.id !== id);
+    setPendingOrders(remainingOrders);
+    localStorage.setItem('pendingOrders', JSON.stringify(remainingOrders));
+    // Optional: Move to 'completedOrders' history
+  };
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -59,6 +87,7 @@ const Dashboard = () => {
           const data = await insightsRes.json();
           setCostBreakdown(data.costBreakdown);
           setRecommendations(data.recommendations);
+          if (data.metrics) setMetricsData(data.metrics);
         }
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -68,16 +97,14 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [t]);
 
-  // Recipe breakdown data - cost per plate
-
-
+  // Convert metricsData object to array for rendering
   const metrics = [
-    { label: t('dashboard.sales'), value: '₹12,450', change: '+15%', trend: 'up' },
-    { label: t('dashboard.waste'), value: '8%', change: '-3%', trend: 'down' },
-    { label: t('dashboard.topItem'), value: 'Paneer Roll', change: '234 sold', trend: 'neutral' },
-    { label: t('dashboard.nextEvent'), value: 'Diwali', change: 'in 5 days', trend: 'neutral' },
+    { label: t('dashboard.sales'), ...metricsData.sales },
+    { label: t('dashboard.waste'), ...metricsData.waste },
+    { label: t('dashboard.topItem'), ...metricsData.topItem },
+    { label: t('dashboard.nextEvent'), ...metricsData.event },
   ];
 
   const quickActions = [
@@ -207,6 +234,71 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* 🚨 LIVE ORDER QUEUE (New Feature) */}
+            <div className="mb-8">
+              <Card className="bg-card border-border shadow-xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                <CardHeader className="bg-gradient-to-r from-orange-100 to-red-50 border-b border-border flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-2xl flex items-center gap-3 text-orange-700">
+                      <span className="text-3xl animate-pulse">🔔</span>
+                      Live Order Queue
+                      <span className="block text-sm font-normal text-orange-600/80 font-serif ml-2">("प्रलंबित ऑर्डर्स")</span>
+                    </CardTitle>
+                    <CardDescription>
+                      Orders placed via Digital Menu QR
+                    </CardDescription>
+                  </div>
+                  <Badge variant="destructive" className="text-lg px-3 py-1">
+                    {pendingOrders.length} Pending
+                  </Badge>
+                </CardHeader>
+                <CardContent className="p-0">
+                  {pendingOrders.length === 0 ? (
+                    <div className="p-8 text-center text-muted-foreground bg-muted/20">
+                      <p className="text-lg">No pending orders</p>
+                      <p className="text-sm">Scan your QR to test!</p>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-border">
+                      {pendingOrders.map((order: any) => (
+                        <div key={order.id} className="p-4 flex flex-col md:flex-row items-start md:items-center justify-between bg-white hover:bg-orange-50/50 transition-colors gap-4">
+                          {/* Order Info */}
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <Badge variant="outline" className="text-orange-600 border-orange-200 bg-orange-50 font-bold">
+                                {order.customerName}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {new Date(order.id).toLocaleTimeString()}
+                              </span>
+                            </div>
+                            <div className="space-y-1">
+                              {order.items.map((item: any, idx: number) => (
+                                <div key={idx} className="flex gap-2 text-sm">
+                                  <span className="font-bold text-gray-700">{item.qty}x</span>
+                                  <span>{item.name}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <p className="mt-2 font-bold text-lg text-green-700">Total: ₹{order.total}</p>
+                          </div>
+
+                          {/* Actions */}
+                          <Button
+                            onClick={() => handleCompleteOrder(order.id)}
+                            className="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white font-bold shadow-md hover:shadow-lg transition-all"
+                          >
+                            Mark Ready ✅
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
 
             {/* Metrics Grid */}
@@ -347,6 +439,24 @@ const Dashboard = () => {
                         <p className="text-lg font-bold">Cost Breakdown for {selectedDish}</p>
                         <p className="text-muted-foreground">Estimated Cost: <span className="text-primary font-bold">₹{costBreakdown.find(c => c.name === selectedDish)?.cost}</span></p>
                         <p className="text-muted-foreground">Recommended Price: <span className="text-green-600 font-bold">₹{costBreakdown.find(c => c.name === selectedDish)?.recommendedPrice}</span></p>
+
+                        {/* Ingredient Details List */}
+                        <div className="mt-4 bg-white rounded-lg border border-border overflow-hidden">
+                          <div className="grid grid-cols-3 bg-muted px-4 py-2 text-xs font-semibold text-muted-foreground">
+                            <span className="text-left">Ingredient</span>
+                            <span className="text-center">Qty</span>
+                            <span className="text-right">Cost</span>
+                          </div>
+                          <div className="divide-y divide-border">
+                            {costBreakdown.find(c => c.name === selectedDish)?.ingredients?.map((ing: any, idx: number) => (
+                              <div key={idx} className="grid grid-cols-3 px-4 py-2 text-sm">
+                                <span className="text-left font-medium">{ing.name}</span>
+                                <span className="text-center text-muted-foreground">{ing.qty}</span>
+                                <span className="text-right font-bold">₹{ing.cost}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}

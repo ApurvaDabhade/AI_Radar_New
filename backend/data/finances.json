@@ -94,5 +94,21 @@
     "category": "packaging",
     "note": "",
     "timestamp": "2025-12-16T16:24:31.210Z"
+  },
+  {
+    "id": "1765952911575",
+    "type": "sale",
+    "amount": 20000,
+    "category": "upi",
+    "note": "",
+    "timestamp": "2025-12-17T06:28:31.575Z"
+  },
+  {
+    "id": "1765952919571",
+    "type": "expense",
+    "amount": 2000,
+    "category": "vegetables",
+    "note": "",
+    "timestamp": "2025-12-17T06:28:39.571Z"
   }
 ]

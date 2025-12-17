@@ -19,6 +19,7 @@ import ChefGuru from "./pages/ChefGuru";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
 
+import DigitalMenu from "./pages/DigitalMenu";
 import PosterMaker from "./pages/PosterMaker";
 import SalesTracker from "./pages/SalesTracker";
 import LicenseHelp from "./pages/LicenseHelp";
@@ -49,10 +50,13 @@ const App = () => (
               <Route path="/chef-guru" element={<ChefGuru />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/notifications" element={<Notifications />} />
+
               <Route path="/poster-maker" element={<PosterMaker />} />
               <Route path="/sales-tracker" element={<SalesTracker />} />
               <Route path="/license-help" element={<LicenseHelp />} />
               <Route path="/feedback" element={<Feedback />} />
+              <Route path="/menu/:vendorId" element={<DigitalMenu />} />
+
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

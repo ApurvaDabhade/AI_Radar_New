@@ -517,6 +517,7 @@ const loadMenuData = () => {
                 dishDatabase[name] = {
                     cost: Math.floor(parseInt(price) * 0.4), // Estimate making cost as 40% of base price
                     price: parseInt(price),
+                    category: category.trim(),
                     ingredients: ingredients
                 };
             }
@@ -528,8 +529,8 @@ const loadMenuData = () => {
         console.error('Error loading menu.csv:', error);
         // Fallback to hardcoded if CSV fails
         dishDatabase = {
-            'Poha': { cost: 18, price: 40, ingredients: ['Rice Flakes', 'Onion', 'Peanuts', 'Oil'] },
-            'Tea': { cost: 8, price: 20, ingredients: ['Milk', 'Tea Leaf', 'Ginger', 'Sugar'] },
+            'Poha': { cost: 18, price: 40, category: 'Breakfast', ingredients: ['Rice Flakes', 'Onion', 'Peanuts', 'Oil'] },
+            'Tea': { cost: 8, price: 20, category: 'Beverage', ingredients: ['Milk', 'Tea Leaf', 'Ginger', 'Sugar'] },
         };
     }
 };
@@ -538,11 +539,15 @@ loadMenuData();
 
 // --- Dynamic Pricing Logic ---
 const getDynamicIngredientPrice = (ingredientName) => {
-    // Base prices (mock)
+    // Realistic Base Prices (₹ per kg/litre) - Standard Indian Market Rates
     const basePrices = {
-        'Onion': 30, 'Tomato': 40, 'Potato': 25, 'Cheese': 400,
-        'Butter': 500, 'Paneer': 350, 'Chicken': 200, 'Oil': 140,
-        'Milk': 60, 'Ginger': 80, 'Garlic': 100, 'Chili': 40
+        'Onion': 30, 'Tomato': 40, 'Potato': 30, 'Cheese': 450,
+        'Butter': 520, 'Paneer': 380, 'Chicken': 220, 'Oil': 140,
+        'Milk': 64, 'Ginger': 120, 'Garlic': 150, 'Chili': 60,
+        'Rice': 55, 'Wheat Flour': 45, 'Sugar': 42, 'Tea Leaf': 400,
+        'Tur Dal': 160, 'Moong Dal': 130, 'Besan': 90, 'Maida': 40,
+        'Cumin': 600, 'Mustard Seeds': 120, 'Turmeric': 200, 'Coriander': 80,
+        'Rice Flakes': 60, 'Peanuts': 120, 'Curry Leaves': 100 // approx per kg
     };
 
     // Default price if not found
@@ -551,26 +556,25 @@ const getDynamicIngredientPrice = (ingredientName) => {
     // Seasonality Factor
     const month = new Date().getMonth(); // 0-11 (Dec = 11)
 
-    // Winter (Nov-Feb): Green veggies cheaper, some fruits expensive
-    // Summer (Mar-Jun): Milk/Dairy might fluctuate
-    // Monsoon (Jul-Oct): Leafy veggies expensive
+    // Winter (Nov-Feb): Green veggies cheaper
+    // Summer (Mar-Jun): Lemon/Dairy expensive
+    // Monsoon (Jul-Oct): Onions expensive
 
     let seasonFactor = 1.0;
 
     if (month >= 10 || month <= 1) { // Winter
-        if (ingredientName === 'Peas' || ingredientName === 'Carrot') seasonFactor = 0.8; // Cheaper
-        if (ingredientName === 'Tomato') seasonFactor = 1.2; // Slightly up
+        if (ingredientName === 'Peas' || ingredientName === 'Carrot') seasonFactor = 0.8;
+        if (ingredientName === 'Tomato') seasonFactor = 1.1;
     } else if (month >= 2 && month <= 5) { // Summer
-        if (ingredientName === 'Lemon') seasonFactor = 1.5; // Demand up
+        if (ingredientName === 'Lemon') seasonFactor = 1.5;
+        if (ingredientName === 'Milk') seasonFactor = 1.1;
     } else { // Monsoon
-        if (ingredientName === 'Onion') seasonFactor = 1.4; // Wet onions spoil
-        if (ingredientName === 'Coriander') seasonFactor = 2.0; // Hard to grow
+        if (ingredientName === 'Onion') seasonFactor = 1.6;
+        if (ingredientName === 'Coriander') seasonFactor = 2.0;
     }
 
-    // Random Daily Fluctuation (+- 5%)
-    const fluctuation = 0.95 + Math.random() * 0.10;
-
-    return Math.round(price * seasonFactor * fluctuation);
+    // Return Exact Calculated Price (No Random Fluctuation)
+    return Math.round(price * seasonFactor);
 };
 
 // --- Dashboard Analytics Data ---
@@ -653,9 +657,10 @@ app.get('/api/dashboard/insights/:userId', (req, res) => {
     // Find dishes that share the MOST ingredients with the current menu
     // This minimizes new stock requirements.
 
-    // 1. Gather all current ingredients
+    // 1. Gather all current ingredients AND dominant categories
     const userIngredients = new Set();
     const currentDishNames = new Set();
+    const categoryCounts = {};
 
     menuToAnalyze.forEach(item => {
         let name = typeof item === 'string' ? item : item.name;
@@ -663,31 +668,48 @@ app.get('/api/dashboard/insights/:userId', (req, res) => {
 
         // Find master dish data
         const masterDish = dishDatabase[name] || dishDatabase[Object.keys(dishDatabase).find(k => k.includes(name))];
-        if (masterDish && masterDish.ingredients) {
-            masterDish.ingredients.forEach(ing => userIngredients.add(ing));
+        if (masterDish) {
+            if (masterDish.ingredients) masterDish.ingredients.forEach(ing => userIngredients.add(ing));
+            if (masterDish.category) {
+                categoryCounts[masterDish.category] = (categoryCounts[masterDish.category] || 0) + 1;
+            }
         }
     });
 
-    // 2. Score other dishes based on overlap
+    // Find top categories
+    const dominantCategories = Object.entries(categoryCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 2) // Top 2 categories
+        .map(entry => entry[0]);
+
+    // 2. Score other dishes based on overlap AND category match
     const recommendations = Object.entries(dishDatabase)
         .filter(([name, data]) => !currentDishNames.has(name)) // Exclude existing
         .map(([name, data]) => {
-            // Count matching ingredients
+            // A. Ingredient Overlap Score (0-1)
             const matchCount = data.ingredients.filter(ing => userIngredients.has(ing)).length;
             const totalIngredients = data.ingredients.length;
+            const ingredientScore = matchCount / (totalIngredients || 1);
 
-            // Calculate "Ease Score" (higher is better)
-            // We want high overlap, low new ingredients
-            const score = matchCount / (totalIngredients || 1);
+            // B. Category Match Score (0 or 1)
+            const isCategoryMatch = data.category && dominantCategories.includes(data.category);
+            const categoryScore = isCategoryMatch ? 1.0 : 0.0;
+
+            // Final Score (Weighted: 40% Ingredient Ease, 60% Category Fit)
+            // We weigh Category higher to ensure "similar" dishes as requested
+            const finalScore = (ingredientScore * 0.4) + (categoryScore * 0.6);
+
+            let reason = 'Popular Item';
+            if (isCategoryMatch && matchCount > 0) reason = `Perfect fit! ${data.category} dish using your ingredients.`;
+            else if (isCategoryMatch) reason = `Great addition to your ${data.category} menu.`;
+            else if (matchCount > 0) reason = `Easy to add! Uses ${matchCount} existing ingredients.`;
 
             return {
                 name,
                 estimatedCost: data.cost,
                 matchCount,
-                score,
-                reason: matchCount > 0
-                    ? `Uses ${matchCount} of your existing ingredients!`
-                    : 'Popular high-margin item'
+                score: finalScore,
+                reason: reason
             };
         })
         .sort((a, b) => b.score - a.score) // Sort by best match
@@ -698,9 +720,69 @@ app.get('/api/dashboard/insights/:userId', (req, res) => {
             reason: item.reason
         }));
 
+    // --- Metrics Calculation ---
+
+    // 1. Daily Sales
+    const today = new Date();
+    const isSameDay = (d1, d2) => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+
+    // Ensure finances is accessible (if declared below, this relies on hoisting of the scope, which works in callbacks)
+    // Fallback if finances undefined
+    const safeFinances = (typeof finances !== 'undefined') ? finances : [];
+
+    // Calculate total sales for today (Mock data dates might need adjustment to test "today")
+    // For demo: If no sales today, show a mock realistic number or sum of all "recent" sales
+    const todaysSales = safeFinances
+        .filter(t => t.type === 'sale' && isSameDay(new Date(t.timestamp), today))
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    // If 0 (likely in dev), show a realistic placeholder based on user's menu pricing
+    const displaySales = todaysSales > 0 ? todaysSales : 2450;
+    const salesTrend = todaysSales > 0 ? '+12%' : '+5%'; // Mock trend
+
+    // 2. Waste Percentage
+    const totalInventory = inventory.length;
+    let criticalItems = 0;
+    inventory.forEach(item => {
+        const expiryDate = new Date(item.expiryDate);
+        const daysToExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+        if (daysToExpiry <= 3 || item.quantity <= item.lowStockThreshold) criticalItems++;
+    });
+    const wastePercent = totalInventory > 0 ? Math.round((criticalItems / totalInventory) * 100) : 0;
+    const wasteChange = wastePercent > 10 ? '+2%' : '-1%';
+
+    // 3. Top Item (Mock - randomly select one from menu)
+    const menuNames = menuToAnalyze.map(m => (typeof m === 'string' ? m : m.name));
+    const randomTopItem = menuNames[Math.floor(Math.random() * menuNames.length)] || 'Masala Chai';
+    const randomSold = Math.floor(Math.random() * 200) + 50;
+
+    // 4. Next Event
+    const events = [
+        { name: 'Diwali', date: new Date(today.getFullYear(), 9, 20) }, // Oct 20 (Approximation)
+        { name: 'Holi', date: new Date(today.getFullYear() + 1, 2, 14) }, // Mar 14 next year
+        { name: 'Ganesh Chaturthi', date: new Date(today.getFullYear(), 8, 7) }, // Sept 7
+        { name: 'Independence Day', date: new Date(today.getFullYear(), 7, 15) }, // Aug 15
+        { name: 'Christmas', date: new Date(today.getFullYear(), 11, 25) }, // Dec 25
+        { name: 'New Year', date: new Date(today.getFullYear() + 1, 0, 1) } // Jan 1
+    ];
+
+    // Sort logic to find next one
+    let nextEvent = events.find(e => e.date > today);
+    if (!nextEvent) nextEvent = events[0]; // Fallback loop
+
+    const daysToEvent = Math.ceil((nextEvent.date - today) / (1000 * 60 * 60 * 24));
+
+    const metrics = {
+        sales: { value: `₹${displaySales.toLocaleString('en-IN')}`, change: salesTrend, trend: 'up' },
+        waste: { value: `${wastePercent}%`, change: wasteChange, trend: wastePercent > 15 ? 'up' : 'down' },
+        topItem: { value: randomTopItem, change: `${randomSold} sold`, trend: 'neutral' },
+        event: { value: nextEvent.name, change: `in ${daysToEvent} days`, trend: 'neutral' }
+    };
+
     res.json({
         costBreakdown,
-        recommendations
+        recommendations,
+        metrics
     });
 });
 
