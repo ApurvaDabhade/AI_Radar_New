@@ -25,6 +25,7 @@ import {
     MapPin,
     Bot,
     Settings,
+    Video,
     Bell
 } from 'lucide-react';
 
@@ -42,6 +43,7 @@ const businessMenuItems = [
     { title: 'Reviews', url: '/reviews', icon: MessageSquare },
     { title: 'Community Hub', url: '/community-hub', icon: Users },
     { title: 'Tourism', url: '/tourism', icon: MapPin },
+    { title: 'Reel Creator', url: '/video-reels', icon: Video },
 ];
 
 const settingsMenuItems = [

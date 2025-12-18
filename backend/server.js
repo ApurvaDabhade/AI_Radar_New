@@ -3,6 +3,10 @@ const cors = require('cors');
 require('dotenv').config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const natural = require('natural'); // Import natural library
+const multer = require('multer');
+const fs = require('fs');
+
+const upload = multer({ dest: 'uploads/' });
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -209,6 +213,138 @@ app.post('/api/poster-assistant', async (req, res) => {
                 `Visit us in ${req.body.location || 'your area'} today!`,
                 "We're here to help your business shine!"
             ]
+        });
+    }
+});
+
+// --- Video Reel Generator ---
+app.post('/api/reel-generator', upload.single('video'), async (req, res) => {
+    try {
+        const { platform, video_duration_seconds } = req.body;
+        const videoFile = req.file;
+
+        if (!videoFile) {
+            return res.status(400).json({ error: 'Video file is required' });
+        }
+
+        // Initialize Gemini (Multimodal)
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        // Use gemini-1.5-flash for video processing
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        // Function to file to Generative Part
+        function fileToGenerativePart(path, mimeType) {
+            return {
+                inlineData: {
+                    data: fs.readFileSync(path).toString("base64"),
+                    mimeType
+                },
+            };
+        }
+
+        const videoPart = fileToGenerativePart(videoFile.path, videoFile.mimetype);
+
+        const prompt = `
+        You are an AI assistant that helps food vendors automatically create short promotional video reels.
+        
+        Analyze this video content.
+        
+        INPUT:
+        Duration Setting: ${video_duration_seconds} seconds
+        Platform: ${platform}
+
+        YOUR RESPONSIBILITIES:
+        1. Identify the food category (Street food, Dessert, Beverage, Snack, Other) from the video visual.
+        2. Decide the promotional tone based on the visual appeal.
+        3. Select background music characteristics (Style, Tempo, Energy).
+        4. Generate 2-3 short promotional captions based on what is shown.
+
+        MUSIC RULES:
+        - Street food -> energetic_beat, fast, high
+        - Dessert -> soft_instrumental, slow, low
+        - Beverage -> refreshing_chill, medium, medium
+        - Snack -> neutral_upbeat, medium, medium
+
+        CAPTION RULES:
+        - Max 1 line per caption
+        - Max 1 emoji per caption
+        - Simple, friendly language
+        - No slang or exaggerated claims
+        - Focus on taste, freshness
+        - No prices/phone numbers
+
+        OUTPUT FORMAT (STRICT JSON ONLY, NO MARKDOWN):
+        {
+          "food_type": "string",
+          "tone": "string",
+          "music": {
+            "music_style": "string",
+            "tempo": "string",
+            "energy": "string"
+          },
+          "captions": ["string", "string"]
+        }`;
+
+        const result = await model.generateContent([prompt, videoPart]);
+        const responseText = await result.response.text();
+
+        // Check for cleanup
+        const cleanedText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+        const jsonResponse = JSON.parse(cleanedText);
+
+        // Clean up uploaded file
+        fs.unlinkSync(videoFile.path);
+
+        res.json(jsonResponse);
+
+    } catch (error) {
+        console.error('Error generating reel plan:', error);
+
+        // Clean up file if exists and error occurred
+        if (req.file && fs.existsSync(req.file.path)) {
+            fs.unlinkSync(req.file.path);
+        }
+
+        // Randomized Fallback Scenarios to ensure variety
+        const FALLBACK_SCENARIOS = [
+            {
+                food_type: "Street Food",
+                tone: "Energetic",
+                music: { music_style: "upbeat_pop", tempo: "fast", energy: "high" },
+                captions: ["Burst of flavors! 💥", "Street food craving? We got you! 😋"]
+            },
+            {
+                food_type: "Cafe Specials",
+                tone: "Chill",
+                music: { music_style: "lofi_chill", tempo: "slow", energy: "low" },
+                captions: ["Vibes and good food. ☕", "Perfect spot to relax. ✨"]
+            },
+            {
+                food_type: "Gourmet Dish",
+                tone: "Elegant",
+                music: { music_style: "cinematic", tempo: "medium", energy: "medium" },
+                captions: ["Plating perfection. 🍽️", "Taste the elegance. 🍷"]
+            },
+            {
+                food_type: "Desi Masala",
+                tone: "Spicy",
+                music: { music_style: "indian_classical", tempo: "medium", energy: "high" },
+                captions: ["Spicy goodness! 🌶️", "Authentic desi taste. ❤️"]
+            },
+            {
+                food_type: "Sweet Treats",
+                tone: "Delightful",
+                music: { music_style: "jazz_cafe", tempo: "medium", energy: "medium" },
+                captions: ["Sweet carvings? 🍰", "Indulge in sweetness. 🍩"]
+            }
+        ];
+
+        const randomScenario = FALLBACK_SCENARIOS[Math.floor(Math.random() * FALLBACK_SCENARIOS.length)];
+
+        res.json({
+            error: 'Failed to generate plan',
+            isFallback: true,
+            ...randomScenario
         });
     }
 });
@@ -472,7 +608,6 @@ app.post('/api/inventory', (req, res) => {
     res.json({ success: true, item: newItem });
 });
 
-const fs = require('fs');
 const path = require('path');
 
 app.listen(port, () => {

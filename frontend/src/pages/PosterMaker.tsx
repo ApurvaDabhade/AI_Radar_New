@@ -895,7 +895,7 @@ const PosterMaker = () => {
                     <p className="text-muted-foreground text-sm mb-4">
                       Upload your food video - we add music & captions automatically!
                     </p>
-                    <Button className="w-full text-foreground" variant="outline">
+                    <Button className="w-full text-foreground" variant="outline" onClick={() => navigate('/video-reels')}>
                       <Upload className="h-4 w-4 mr-2" />
                       Upload Video
                     </Button>

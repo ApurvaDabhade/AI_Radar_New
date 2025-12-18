@@ -24,6 +24,7 @@ import PosterMaker from "./pages/PosterMaker";
 import SalesTracker from "./pages/SalesTracker";
 import LicenseHelp from "./pages/LicenseHelp";
 import Feedback from "./pages/Feedback";
+import VideoReelCreator from "./pages/VideoReelCreator";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => (
               <Route path="/license-help" element={<LicenseHelp />} />
               <Route path="/feedback" element={<Feedback />} />
               <Route path="/menu/:vendorId" element={<DigitalMenu />} />
+              <Route path="/video-reels" element={<VideoReelCreator />} />
 
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
