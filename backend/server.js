@@ -4,12 +4,24 @@ require('dotenv').config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const natural = require('natural'); // Import natural library
 const multer = require('multer');
+const bcrypt = require('bcryptjs'); // Import bcryptjs
+const mongoose = require('mongoose'); // Import mongoose
 const fs = require('fs');
 
 const upload = multer({ dest: 'uploads/' });
 
 const app = express();
 const port = process.env.PORT || 5001;
+
+// Connect to MongoDB
+const connectDB = require('./config/db');
+connectDB();
+
+// Import Models
+const User = require('./models/User');
+const Post = require('./models/Post');
+const Discussion = require('./models/Discussion');
+const Inventory = require('./models/Inventory');
 
 // Initialize Classifier
 const classifier = new natural.BayesClassifier();
@@ -349,263 +361,261 @@ app.post('/api/reel-generator', upload.single('video'), async (req, res) => {
     }
 });
 
-// --- Community & User Data Storage (In-Memory) ---
-const users = [
-    { id: '1', name: 'Ramesh Kumar', stallName: 'Sharma Tea Stall', specialty: 'Tea, Snacks', phone: '+91 98765 43210', isVerified: true, location: 'Mumbai' },
-    { id: '2', name: 'Priya Patel', stallName: 'Priya Chaat Corner', specialty: 'Chaat, Pani Puri', phone: '+91 87654 32109', isVerified: true, location: 'Pune' },
-    { id: '3', name: 'Amit Verma', stallName: 'Verma Sweets', specialty: 'Sweets, Namkeen', phone: '+91 76543 21098', isVerified: false, location: 'Delhi' },
-];
+// --- Community & User Data Storage (Moved to MongoDB) ---
 
-// --- Community Posts ---
-// Mock Initial Posts with expanded structure
-const communityPosts = [
-    {
-        id: '1',
-        author: 'Ramesh Kumar',
-        content: 'Tomatoes are cheap today at Sabzi Mandi - ₹30/kg! Go buy now.',
-        timestamp: new Date(Date.now() - 3600000),
-        likes: 12,
-        replies: 5,
-        type: 'update',
-        comments: [
-            { id: 'c1', author: 'Suresh', text: 'Thanks for the info!', timestamp: new Date(Date.now() - 1000000) }
-        ]
-    },
-    {
-        id: '2',
-        author: 'Priya Patel',
-        content: 'Just got my FSSAI license! If anyone needs help, ask me.',
-        timestamp: new Date(Date.now() - 7200000),
-        likes: 25,
-        replies: 8,
-        type: 'update',
-        comments: []
-    },
-];
+// --- Community Posts (Moved to MongoDB) ---
 
-// Mock Discussions
-const discussions = [
-    { id: '1', title: 'How to apply for FSSAI license?', author: 'New Vendor', replies: 15, category: 'license', timestamp: new Date() },
-    { id: '2', title: 'Zomato registration - is it worth it?', author: 'Tea Shop Owner', replies: 23, category: 'platform', timestamp: new Date() },
-];
+// --- Discussions (Moved to MongoDB) ---
 
 // --- User Registration ---
-app.post('/api/register', (req, res) => {
-    const { name, phone, businessName, businessType, location, email, password } = req.body;
+app.post('/api/register', async (req, res) => {
+    try {
+        const { name, phone, businessName, businessType, location, email, password, menuItems } = req.body;
 
-    if (!name || !phone || !businessName) {
-        return res.status(400).json({ error: 'Missing required fields' });
+        if (!name || !phone || !businessName) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        // Check if phone or email already exists
+        const existingUser = await User.findOne({
+            $or: [{ phone }, { email }]
+        });
+
+        if (existingUser) {
+            return res.status(400).json({ error: 'User already exists' });
+        }
+
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password || '123456', salt);
+
+        const newUser = await User.create({
+            id: new mongoose.Types.ObjectId().toString(), // Generate ID
+            name,
+            phone,
+            email: email || undefined, // Send undefined if empty to avoid unique constraint if sparse
+            password: hashedPassword,
+            stallName: businessName,
+            specialty: businessType,
+            location: location || 'Unknown',
+            menuItems: menuItems || [],
+            isVerified: false
+        });
+
+        res.json({ success: true, user: newUser });
+    } catch (error) {
+        console.error('Register Error:', error);
+        res.status(500).json({ error: 'Server Error' });
     }
-
-    // Check if phone or email already exists
-    if (users.some(u => u.phone === phone || (email && u.email === email))) {
-        return res.status(400).json({ error: 'User already exists' });
-    }
-
-    const newUser = {
-        id: (users.length + 1).toString(),
-        name,
-        phone,
-        email: email || '',
-        password: password || '123456', // Default mock password if not provided
-        stallName: businessName,
-        specialty: businessType,
-        location: location || 'Unknown',
-        menuItems: req.body.menuItems || [], // Store menu items
-        isVerified: false
-    };
-
-    users.push(newUser);
-    res.json({ success: true, user: newUser });
 });
 
-app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Email and Password required' });
-    }
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and Password required' });
+        }
 
-    // Find user by email
-    const user = users.find(u => u.email === email && u.password === password);
+        // Find user by email
+        const user = await User.findOne({ email });
 
-    if (user) {
-        res.json({ success: true, user });
-    } else {
-        res.status(401).json({ error: 'Invalid credentials' });
+        if (user && (await bcrypt.compare(password, user.password))) {
+            res.json({ success: true, user });
+        } else {
+            res.status(401).json({ error: 'Invalid credentials' });
+        }
+    } catch (error) {
+        console.error('Login Error:', error);
+        res.status(500).json({ error: 'Server Error' });
     }
 });
 
 // --- Get Vendors/Users ---
-app.get('/api/users', (req, res) => {
-    // In a real app, we would support filtering by location
-    // For now, return all users but add a random distance for UI simulation
-    const usersWithDistance = users.map(u => ({
-        ...u,
-        distance: (Math.random() * 5).toFixed(1) // Random distance 0-5 km
-    }));
-    res.json(usersWithDistance);
+app.get('/api/users', async (req, res) => {
+    try {
+        const users = await User.find({});
+        // Add random distance for UI simulation
+        const usersWithDistance = users.map(u => ({
+            ...u.toObject(),
+            distance: (Math.random() * 5).toFixed(1)
+        }));
+        res.json(usersWithDistance);
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
+    }
 });
 
 // --- Community Posts ---
-app.get('/api/community/posts', (req, res) => {
-    // Sort by newest first
-    const sortedPosts = [...communityPosts].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    res.json(sortedPosts);
-});
-
-app.post('/api/community/posts', (req, res) => {
-    const { author, content, type } = req.body;
-
-    if (!content) {
-        return res.status(400).json({ error: 'Content is required' });
+app.get('/api/community/posts', async (req, res) => {
+    try {
+        const posts = await Post.find({}).sort({ timestamp: -1 });
+        res.json(posts);
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
     }
-
-    const newPost = {
-        id: (communityPosts.length + 1).toString(),
-        author: author || 'Guest User',
-        content,
-        type: type || 'question',
-        timestamp: new Date(),
-        likes: 0,
-        replies: 0,
-        comments: []
-    };
-
-    communityPosts.unshift(newPost); // Add to beginning
-    res.json({ success: true, post: newPost });
 });
 
-app.post('/api/community/posts/:id/like', (req, res) => {
-    const { id } = req.params;
-    const post = communityPosts.find(p => p.id === id);
-    if (!post) return res.status(404).json({ error: 'Post not found' });
+app.post('/api/community/posts', async (req, res) => {
+    try {
+        const { author, content, type } = req.body;
 
-    post.likes += 1;
-    res.json({ success: true, likes: post.likes });
+        if (!content) {
+            return res.status(400).json({ error: 'Content is required' });
+        }
+
+        const newPost = await Post.create({
+            id: Date.now().toString(),
+            author: author || 'Guest User',
+            content,
+            type: type || 'question'
+        });
+
+        res.json({ success: true, post: newPost });
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
+    }
 });
 
-app.post('/api/community/posts/:id/comment', (req, res) => {
-    const { id } = req.params;
-    const { author, text } = req.body;
-    const post = communityPosts.find(p => p.id === id);
+app.post('/api/community/posts/:id/like', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const post = await Post.findOne({ id });
+        if (!post) return res.status(404).json({ error: 'Post not found' });
 
-    if (!post) return res.status(404).json({ error: 'Post not found' });
-    if (!text) return res.status(400).json({ error: 'Comment text required' });
+        post.likes += 1;
+        await post.save();
+        res.json({ success: true, likes: post.likes });
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
+    }
+});
 
-    const newComment = {
-        id: Date.now().toString(),
-        author: author || 'Guest',
-        text,
-        timestamp: new Date()
-    };
+app.post('/api/community/posts/:id/comment', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { author, text } = req.body;
+        const post = await Post.findOne({ id });
 
-    if (!post.comments) post.comments = [];
-    post.comments.push(newComment);
-    post.replies = post.comments.length; // Update reply count
+        if (!post) return res.status(404).json({ error: 'Post not found' });
+        if (!text) return res.status(400).json({ error: 'Comment text required' });
 
-    res.json({ success: true, comment: newComment, replies: post.replies });
+        const newComment = {
+            id: Date.now().toString(),
+            author: author || 'Guest',
+            text,
+            timestamp: new Date()
+        };
+
+        post.comments.push(newComment);
+        post.replies = post.comments.length;
+        await post.save();
+
+        res.json({ success: true, comment: newComment, replies: post.replies });
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
+    }
 });
 
 // --- Discussions ---
-app.get('/api/community/discussions', (req, res) => {
-    res.json(discussions);
-});
-
-app.post('/api/community/discussions', (req, res) => {
-    const { title, author, category } = req.body;
-    if (!title) return res.status(400).json({ error: 'Title required' });
-
-    const newDiscussion = {
-        id: (discussions.length + 1).toString(),
-        title,
-        author: author || 'Guest',
-        category: category || 'general',
-        replies: 0,
-        timestamp: new Date()
-    };
-
-    discussions.push(newDiscussion);
-    res.json({ success: true, discussion: newDiscussion });
-});
-
-// --- Inventory Management ---
-// Mock Inventory Data
-const inventory = [
-    { id: '1', name: 'Paneer', quantity: 5, unit: 'kg', expiryDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), category: 'raw', lowStockThreshold: 10 },
-    { id: '2', name: 'Tomato', quantity: 15, unit: 'kg', expiryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000), category: 'raw', lowStockThreshold: 10 },
-    { id: '3', name: 'Onion', quantity: 2, unit: 'kg', expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), category: 'raw', lowStockThreshold: 5 },
-    { id: '4', name: 'Rice', quantity: 20, unit: 'kg', expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), category: 'preserved', lowStockThreshold: 10 },
-    { id: '5', name: 'Oil', quantity: 5, unit: 'L', expiryDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), category: 'preserved', lowStockThreshold: 5 },
-    { id: '6', name: 'Spices', quantity: 1, unit: 'kg', expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), category: 'preserved', lowStockThreshold: 2 },
-];
-
-app.get('/api/inventory', (req, res) => {
-    const today = new Date();
-    const sevenDaysFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-
-    const inventoryWithStatus = inventory.map(item => {
-        let status = 'good';
-        const expiryDate = new Date(item.expiryDate);
-        const daysToExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
-
-        // Check Low Stock (Custom Thresholds: 5 and 3)
-        // User requested: "threshold 5 - 3"
-        // Interpretation: Warning at 5, Critical at 3
-        if (item.quantity <= 3) {
-            status = 'critical';
-        } else if (item.quantity <= 5) {
-            status = 'low';
-        }
-
-        // Check Expiry
-        if (daysToExpiry <= 3) {
-            status = 'critical'; // Expiring very soon (3 days)
-        } else if (daysToExpiry <= 7 && status !== 'critical') {
-            status = 'low'; // Expiring soon (7 days)
-        }
-
-        return {
-            ...item,
-            status,
-            expiryDays: daysToExpiry,
-            // Simple logic for Marathi name placeholder
-            marathiName: item.name
-        };
-    });
-
-    const alerts = {
-        lowStock: inventoryWithStatus.filter(i => i.status === 'low' || i.status === 'critical'),
-        expiringSoon: inventoryWithStatus.filter(i => i.expiryDays <= 7)
-    };
-
-    res.json({ items: inventoryWithStatus, alerts });
-});
-
-app.post('/api/inventory', (req, res) => {
-    const { name, quantity, unit, expiryDays, category } = req.body;
-
-    if (!name || !quantity) {
-        return res.status(400).json({ error: 'Missing required fields' });
+app.get('/api/community/discussions', async (req, res) => {
+    try {
+        const discussions = await Discussion.find({}).sort({ timestamp: -1 });
+        res.json(discussions);
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
     }
+});
 
-    const expiryDate = new Date();
-    // Default to 30 days if not provided
-    const daysToAdd = expiryDays ? parseInt(expiryDays) : 30;
-    expiryDate.setDate(expiryDate.getDate() + daysToAdd);
+app.post('/api/community/discussions', async (req, res) => {
+    try {
+        const { title, author, category } = req.body;
+        if (!title) return res.status(400).json({ error: 'Title required' });
 
-    const newItem = {
-        id: Date.now().toString(),
-        name,
-        quantity: parseFloat(quantity),
-        unit: unit || 'kg',
-        expiryDate,
-        category: category || 'raw',
-        lowStockThreshold: 5 // Default
-    };
+        const newDiscussion = await Discussion.create({
+            id: Date.now().toString(),
+            title,
+            author: author || 'Guest',
+            category: category || 'general'
+        });
 
-    inventory.push(newItem);
-    res.json({ success: true, item: newItem });
+        res.json({ success: true, discussion: newDiscussion });
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
+    }
+});
+
+// --- Inventory Management (Moved to MongoDB) ---
+
+app.get('/api/inventory', async (req, res) => {
+    try {
+        const inventory = await Inventory.find({});
+        const today = new Date();
+        const sevenDaysFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+        const inventoryWithStatus = inventory.map(item => {
+            const itemObj = item.toObject();
+            let status = 'good';
+            const expiryDate = new Date(itemObj.expiryDate);
+            const daysToExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+
+            if (itemObj.quantity <= 3) {
+                status = 'critical';
+            } else if (itemObj.quantity <= 5) {
+                status = 'low';
+            }
+
+            if (daysToExpiry <= 3) {
+                status = 'critical';
+            } else if (daysToExpiry <= 7 && status !== 'critical') {
+                status = 'low';
+            }
+
+            return {
+                ...itemObj,
+                status,
+                expiryDays: daysToExpiry,
+                marathiName: itemObj.name
+            };
+        });
+
+        const alerts = {
+            lowStock: inventoryWithStatus.filter(i => i.status === 'low' || i.status === 'critical'),
+            expiringSoon: inventoryWithStatus.filter(i => i.expiryDays <= 7)
+        };
+
+        res.json({ items: inventoryWithStatus, alerts });
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
+    }
+});
+
+app.post('/api/inventory', async (req, res) => {
+    try {
+        const { name, quantity, unit, expiryDays, category } = req.body;
+
+        if (!name || !quantity) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const expiryDate = new Date();
+        const daysToAdd = expiryDays ? parseInt(expiryDays) : 30;
+        expiryDate.setDate(expiryDate.getDate() + daysToAdd);
+
+        const newItem = await Inventory.create({
+            id: Date.now().toString(),
+            name,
+            quantity: parseFloat(quantity),
+            unit: unit || 'kg',
+            expiryDate,
+            category: category || 'raw',
+            lowStockThreshold: 5
+        });
+
+        res.json({ success: true, item: newItem });
+    } catch (error) {
+        res.status(500).json({ error: 'Server Error' });
+    }
 });
 
 const path = require('path');
@@ -740,185 +750,193 @@ app.get('/api/market-prices', (req, res) => {
     });
 });
 
-app.get('/api/dashboard/insights/:userId', (req, res) => {
+app.get('/api/dashboard/insights/:userId', async (req, res) => {
     const { userId } = req.params;
     // For demo, we might find by ID or name, but let's just find the latest user if ID doesn't match directly
     // or simulate based on local storage ID. For now, assuming user exists in our mock array.
-    const user = users.find(u => u.id === userId) || users[users.length - 1]; // Fallback to last user
+    // For demo, we might find by ID or name, but let's just find the latest user if ID doesn't match directly
+    // or simulate based on local storage ID. For now, assuming user exists in our mock array.
+    try {
+        const user = await User.findOne({ id: userId }) || await User.findOne({}); // Fallback to any user
 
-    if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // Cost Breakdown
-    // Match user's menu items to our DB. If not found, generate a random realistic cost.
-    const registeredMenu = user.menuItems || [];
-    // Fallback menu if empty
-    const menuToAnalyze = registeredMenu.length > 0 ? registeredMenu : ['Poha', 'Tea', 'Vada Pav'];
+        // Cost Breakdown
+        // Match user's menu items to our DB. If not found, generate a random realistic cost.
+        const registeredMenu = user.menuItems || [];
+        // Fallback menu if empty
+        const menuToAnalyze = registeredMenu.length > 0 ? registeredMenu : ['Poha', 'Tea', 'Vada Pav'];
 
-    const costBreakdown = menuToAnalyze.map(item => {
-        let dishName = typeof item === 'string' ? item : item.name; // Handle if object
-        const masterDish = dishDatabase[dishName] || dishDatabase[Object.keys(dishDatabase).find(k => k.includes(dishName))] || null;
+        const costBreakdown = menuToAnalyze.map(item => {
+            let dishName = typeof item === 'string' ? item : item.name; // Handle if object
+            const masterDish = dishDatabase[dishName] || dishDatabase[Object.keys(dishDatabase).find(k => k.includes(dishName))] || null;
 
-        let ingredientsDetails = [];
-        if (masterDish && masterDish.ingredients) {
-            ingredientsDetails = masterDish.ingredients.map(ingName => {
-                const pricePerKg = getDynamicIngredientPrice(ingName);
-                // Assume ~50g per ingredient for a plate calculation to be rough but realistic
-                // This is a simplification. Real recipes need quantities.
-                const estCost = Math.round((pricePerKg / 1000) * 50);
+            let ingredientsDetails = [];
+            if (masterDish && masterDish.ingredients) {
+                ingredientsDetails = masterDish.ingredients.map(ingName => {
+                    const pricePerKg = getDynamicIngredientPrice(ingName);
+                    // Assume ~50g per ingredient for a plate calculation to be rough but realistic
+                    // This is a simplification. Real recipes need quantities.
+                    const estCost = Math.round((pricePerKg / 1000) * 50);
 
-                // Calculate trend
-                const prevPrice = getDynamicIngredientPrice(ingName); // Simulating fluctuation
-                const change = ((pricePerKg - prevPrice) / prevPrice * 100);
-                const trend = change > 0 ? 'up' : (change < 0 ? 'down' : 'neutral');
+                    // Calculate trend
+                    const prevPrice = getDynamicIngredientPrice(ingName); // Simulating fluctuation
+                    const change = ((pricePerKg - prevPrice) / prevPrice * 100);
+                    const trend = change > 0 ? 'up' : (change < 0 ? 'down' : 'neutral');
 
-                return {
-                    name: ingName,
-                    qty: '50g', // Mock quantity
-                    cost: Math.max(1, estCost), // Min 1 rs
-                    trend: trend
-                };
-            });
-        }
-
-        return {
-            name: dishName,
-            cost: masterDish ? masterDish.cost : Math.floor(Math.random() * 20) + 10, // Mock cost if unknown
-            recommendedPrice: masterDish ? masterDish.cost * 2 : 0, // Rough margin
-            ingredients: ingredientsDetails
-        };
-    });
-
-    // Recommendations Strategy: "Easy Additions"
-    // Find dishes that share the MOST ingredients with the current menu
-    // This minimizes new stock requirements.
-
-    // 1. Gather all current ingredients AND dominant categories
-    const userIngredients = new Set();
-    const currentDishNames = new Set();
-    const categoryCounts = {};
-
-    menuToAnalyze.forEach(item => {
-        let name = typeof item === 'string' ? item : item.name;
-        currentDishNames.add(name);
-
-        // Find master dish data
-        const masterDish = dishDatabase[name] || dishDatabase[Object.keys(dishDatabase).find(k => k.includes(name))];
-        if (masterDish) {
-            if (masterDish.ingredients) masterDish.ingredients.forEach(ing => userIngredients.add(ing));
-            if (masterDish.category) {
-                categoryCounts[masterDish.category] = (categoryCounts[masterDish.category] || 0) + 1;
+                    return {
+                        name: ingName,
+                        qty: '50g', // Mock quantity
+                        cost: Math.max(1, estCost), // Min 1 rs
+                        trend: trend
+                    };
+                });
             }
-        }
-    });
-
-    // Find top categories
-    const dominantCategories = Object.entries(categoryCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 2) // Top 2 categories
-        .map(entry => entry[0]);
-
-    // 2. Score other dishes based on overlap AND category match
-    const recommendations = Object.entries(dishDatabase)
-        .filter(([name, data]) => !currentDishNames.has(name)) // Exclude existing
-        .map(([name, data]) => {
-            // A. Ingredient Overlap Score (0-1)
-            const matchCount = data.ingredients.filter(ing => userIngredients.has(ing)).length;
-            const totalIngredients = data.ingredients.length;
-            const ingredientScore = matchCount / (totalIngredients || 1);
-
-            // B. Category Match Score (0 or 1)
-            const isCategoryMatch = data.category && dominantCategories.includes(data.category);
-            const categoryScore = isCategoryMatch ? 1.0 : 0.0;
-
-            // Final Score (Weighted: 40% Ingredient Ease, 60% Category Fit)
-            // We weigh Category higher to ensure "similar" dishes as requested
-            const finalScore = (ingredientScore * 0.4) + (categoryScore * 0.6);
-
-            let reason = 'Popular Item';
-            if (isCategoryMatch && matchCount > 0) reason = `Perfect fit! ${data.category} dish using your ingredients.`;
-            else if (isCategoryMatch) reason = `Great addition to your ${data.category} menu.`;
-            else if (matchCount > 0) reason = `Easy to add! Uses ${matchCount} existing ingredients.`;
 
             return {
-                name,
-                estimatedCost: data.cost,
-                matchCount,
-                score: finalScore,
-                reason: reason
+                name: dishName,
+                cost: masterDish ? masterDish.cost : Math.floor(Math.random() * 20) + 10, // Mock cost if unknown
+                recommendedPrice: masterDish ? masterDish.cost * 2 : 0, // Rough margin
+                ingredients: ingredientsDetails
             };
-        })
-        .sort((a, b) => b.score - a.score) // Sort by best match
-        .slice(0, 3) // Top 3
-        .map(item => ({
-            name: item.name,
-            estimatedCost: item.estimatedCost,
-            reason: item.reason
-        }));
+        });
 
-    // --- Metrics Calculation ---
+        // Recommendations Strategy: "Easy Additions"
+        // Find dishes that share the MOST ingredients with the current menu
+        // This minimizes new stock requirements.
 
-    // 1. Daily Sales
-    const today = new Date();
-    const isSameDay = (d1, d2) => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+        // 1. Gather all current ingredients AND dominant categories
+        const userIngredients = new Set();
+        const currentDishNames = new Set();
+        const categoryCounts = {};
 
-    // Ensure finances is accessible (if declared below, this relies on hoisting of the scope, which works in callbacks)
-    // Fallback if finances undefined
-    const safeFinances = (typeof finances !== 'undefined') ? finances : [];
+        menuToAnalyze.forEach(item => {
+            let name = typeof item === 'string' ? item : item.name;
+            currentDishNames.add(name);
 
-    // Calculate total sales for today (Mock data dates might need adjustment to test "today")
-    // For demo: If no sales today, show a mock realistic number or sum of all "recent" sales
-    const todaysSales = safeFinances
-        .filter(t => t.type === 'sale' && isSameDay(new Date(t.timestamp), today))
-        .reduce((sum, t) => sum + t.amount, 0);
+            // Find master dish data
+            const masterDish = dishDatabase[name] || dishDatabase[Object.keys(dishDatabase).find(k => k.includes(name))];
+            if (masterDish) {
+                if (masterDish.ingredients) masterDish.ingredients.forEach(ing => userIngredients.add(ing));
+                if (masterDish.category) {
+                    categoryCounts[masterDish.category] = (categoryCounts[masterDish.category] || 0) + 1;
+                }
+            }
+        });
 
-    // If 0 (likely in dev), show a realistic placeholder based on user's menu pricing
-    const displaySales = todaysSales > 0 ? todaysSales : 2450;
-    const salesTrend = todaysSales > 0 ? '+12%' : '+5%'; // Mock trend
+        // Find top categories
+        const dominantCategories = Object.entries(categoryCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 2) // Top 2 categories
+            .map(entry => entry[0]);
 
-    // 2. Waste Percentage
-    const totalInventory = inventory.length;
-    let criticalItems = 0;
-    inventory.forEach(item => {
-        const expiryDate = new Date(item.expiryDate);
-        const daysToExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
-        if (daysToExpiry <= 3 || item.quantity <= item.lowStockThreshold) criticalItems++;
-    });
-    const wastePercent = totalInventory > 0 ? Math.round((criticalItems / totalInventory) * 100) : 0;
-    const wasteChange = wastePercent > 10 ? '+2%' : '-1%';
+        // 2. Score other dishes based on overlap AND category match
+        const recommendations = Object.entries(dishDatabase)
+            .filter(([name, data]) => !currentDishNames.has(name)) // Exclude existing
+            .map(([name, data]) => {
+                // A. Ingredient Overlap Score (0-1)
+                const matchCount = data.ingredients.filter(ing => userIngredients.has(ing)).length;
+                const totalIngredients = data.ingredients.length;
+                const ingredientScore = matchCount / (totalIngredients || 1);
 
-    // 3. Top Item (Mock - randomly select one from menu)
-    const menuNames = menuToAnalyze.map(m => (typeof m === 'string' ? m : m.name));
-    const randomTopItem = menuNames[Math.floor(Math.random() * menuNames.length)] || 'Masala Chai';
-    const randomSold = Math.floor(Math.random() * 200) + 50;
+                // B. Category Match Score (0 or 1)
+                const isCategoryMatch = data.category && dominantCategories.includes(data.category);
+                const categoryScore = isCategoryMatch ? 1.0 : 0.0;
 
-    // 4. Next Event
-    const events = [
-        { name: 'Diwali', date: new Date(today.getFullYear(), 9, 20) }, // Oct 20 (Approximation)
-        { name: 'Holi', date: new Date(today.getFullYear() + 1, 2, 14) }, // Mar 14 next year
-        { name: 'Ganesh Chaturthi', date: new Date(today.getFullYear(), 8, 7) }, // Sept 7
-        { name: 'Independence Day', date: new Date(today.getFullYear(), 7, 15) }, // Aug 15
-        { name: 'Christmas', date: new Date(today.getFullYear(), 11, 25) }, // Dec 25
-        { name: 'New Year', date: new Date(today.getFullYear() + 1, 0, 1) } // Jan 1
-    ];
+                // Final Score (Weighted: 40% Ingredient Ease, 60% Category Fit)
+                // We weigh Category higher to ensure "similar" dishes as requested
+                const finalScore = (ingredientScore * 0.4) + (categoryScore * 0.6);
 
-    // Sort logic to find next one
-    let nextEvent = events.find(e => e.date > today);
-    if (!nextEvent) nextEvent = events[0]; // Fallback loop
+                let reason = 'Popular Item';
+                if (isCategoryMatch && matchCount > 0) reason = `Perfect fit! ${data.category} dish using your ingredients.`;
+                else if (isCategoryMatch) reason = `Great addition to your ${data.category} menu.`;
+                else if (matchCount > 0) reason = `Easy to add! Uses ${matchCount} existing ingredients.`;
 
-    const daysToEvent = Math.ceil((nextEvent.date - today) / (1000 * 60 * 60 * 24));
+                return {
+                    name,
+                    estimatedCost: data.cost,
+                    matchCount,
+                    score: finalScore,
+                    reason: reason
+                };
+            })
+            .sort((a, b) => b.score - a.score) // Sort by best match
+            .slice(0, 3) // Top 3
+            .map(item => ({
+                name: item.name,
+                estimatedCost: item.estimatedCost,
+                reason: item.reason
+            }));
 
-    const metrics = {
-        sales: { value: `₹${displaySales.toLocaleString('en-IN')}`, change: salesTrend, trend: 'up' },
-        waste: { value: `${wastePercent}%`, change: wasteChange, trend: wastePercent > 15 ? 'up' : 'down' },
-        topItem: { value: randomTopItem, change: `${randomSold} sold`, trend: 'neutral' },
-        event: { value: nextEvent.name, change: `in ${daysToEvent} days`, trend: 'neutral' }
-    };
+        // --- Metrics Calculation ---
 
-    res.json({
-        costBreakdown,
-        recommendations,
-        metrics
-    });
+        // 1. Daily Sales
+        const today = new Date();
+        const isSameDay = (d1, d2) => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+
+        // Ensure finances is accessible (if declared below, this relies on hoisting of the scope, which works in callbacks)
+        // Fallback if finances undefined
+        const safeFinances = (typeof finances !== 'undefined') ? finances : [];
+
+        // Calculate total sales for today (Mock data dates might need adjustment to test "today")
+        // For demo: If no sales today, show a mock realistic number or sum of all "recent" sales
+        const todaysSales = safeFinances
+            .filter(t => t.type === 'sale' && isSameDay(new Date(t.timestamp), today))
+            .reduce((sum, t) => sum + t.amount, 0);
+
+        // If 0 (likely in dev), show a realistic placeholder based on user's menu pricing
+        const displaySales = todaysSales > 0 ? todaysSales : 2450;
+        const salesTrend = todaysSales > 0 ? '+12%' : '+5%'; // Mock trend
+
+        // 2. Waste Percentage
+        const inventoryItems = await Inventory.find({});
+        const totalInventory = inventoryItems.length;
+        let criticalItems = 0;
+        inventoryItems.forEach(item => {
+            const expiryDate = new Date(item.expiryDate);
+            const daysToExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+            if (daysToExpiry <= 3 || item.quantity <= item.lowStockThreshold) criticalItems++;
+        });
+        const wastePercent = totalInventory > 0 ? Math.round((criticalItems / totalInventory) * 100) : 0;
+        const wasteChange = wastePercent > 10 ? '+2%' : '-1%';
+
+        // 3. Top Item (Mock - randomly select one from menu)
+        const menuNames = menuToAnalyze.map(m => (typeof m === 'string' ? m : m.name));
+        const randomTopItem = menuNames[Math.floor(Math.random() * menuNames.length)] || 'Masala Chai';
+        const randomSold = Math.floor(Math.random() * 200) + 50;
+
+        // 4. Next Event
+        const events = [
+            { name: 'Diwali', date: new Date(today.getFullYear(), 9, 20) }, // Oct 20 (Approximation)
+            { name: 'Holi', date: new Date(today.getFullYear() + 1, 2, 14) }, // Mar 14 next year
+            { name: 'Ganesh Chaturthi', date: new Date(today.getFullYear(), 8, 7) }, // Sept 7
+            { name: 'Independence Day', date: new Date(today.getFullYear(), 7, 15) }, // Aug 15
+            { name: 'Christmas', date: new Date(today.getFullYear(), 11, 25) }, // Dec 25
+            { name: 'New Year', date: new Date(today.getFullYear() + 1, 0, 1) } // Jan 1
+        ];
+
+        // Sort logic to find next one
+        let nextEvent = events.find(e => e.date > today);
+        if (!nextEvent) nextEvent = events[0]; // Fallback loop
+
+        const daysToEvent = Math.ceil((nextEvent.date - today) / (1000 * 60 * 60 * 24));
+
+        const metrics = {
+            sales: { value: `₹${displaySales.toLocaleString('en-IN')}`, change: salesTrend, trend: 'up' },
+            waste: { value: `${wastePercent}%`, change: wasteChange, trend: wastePercent > 15 ? 'up' : 'down' },
+            topItem: { value: randomTopItem, change: `${randomSold} sold`, trend: 'neutral' },
+            event: { value: nextEvent.name, change: `in ${daysToEvent} days`, trend: 'neutral' }
+        };
+
+        res.json({
+            costBreakdown,
+            recommendations,
+            metrics
+        });
+    } catch (error) {
+        console.error('Insights Error:', error);
+        res.status(500).json({ error: 'Server Error' });
+    }
 });
 
 // --- Sales & Expense Tracker (Persistence) ---

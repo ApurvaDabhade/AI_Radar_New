@@ -101,12 +101,12 @@ const VideoReelCreator = () => {
     // Mock Music Library (In a real app, this would be a database or external API)
     // Mock Music Library (Using distinct remote test URLs to ensure variety)
     const MUSIC_LIBRARY: Record<string, string> = {
-        'upbeat_pop': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-        'lofi_chill': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-        'cinematic': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-        'rock_energy': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
-        'jazz_cafe': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
-        'indian_classical': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3',
+        'upbeat_pop': 'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3', // Reliable test file
+        'lofi_chill': 'https://filesamples.com/samples/audio/mp3/sample3.mp3', // Generic chill beat
+        'cinematic': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', // Orchestral/Cinematic
+        'rock_energy': 'https://filesamples.com/samples/audio/mp3/sample1.mp3', // Rock style
+        'jazz_cafe': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3', // Jazz
+        'indian_classical': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3', // Classical/Eastern
     };
 
     const handleGenerate = async () => {

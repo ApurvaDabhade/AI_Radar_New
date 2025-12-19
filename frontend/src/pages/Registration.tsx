@@ -222,6 +222,18 @@ const Registration = () => {
                   className="bg-card border-border"
                 />
               </div>
+
+              <div>
+                <Label htmlFor="password" className="text-muted-foreground">Password *</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Create a password"
+                  className="bg-card border-border text-lg py-6"
+                />
+              </div>
             </div>
           </div>
         );

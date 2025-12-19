@@ -110,5 +110,45 @@
     "category": "vegetables",
     "note": "",
     "timestamp": "2025-12-17T06:28:39.571Z"
+  },
+  {
+    "id": "1766141490388",
+    "type": "sale",
+    "amount": 10000,
+    "category": "upi",
+    "note": "",
+    "timestamp": "2025-12-19T10:51:30.388Z"
+  },
+  {
+    "id": "1766141495115",
+    "type": "expense",
+    "amount": 1000,
+    "category": "vegetables",
+    "note": "",
+    "timestamp": "2025-12-19T10:51:35.115Z"
+  },
+  {
+    "id": "1766141500968",
+    "type": "expense",
+    "amount": 500,
+    "category": "packaging",
+    "note": "",
+    "timestamp": "2025-12-19T10:51:40.968Z"
+  },
+  {
+    "id": "1766141510967",
+    "type": "sale",
+    "amount": 2000,
+    "category": "cash",
+    "note": "",
+    "timestamp": "2025-12-19T10:51:50.967Z"
+  },
+  {
+    "id": "1766141520183",
+    "type": "expense",
+    "amount": 200,
+    "category": "gas",
+    "note": "",
+    "timestamp": "2025-12-19T10:52:00.183Z"
   }
 ]
