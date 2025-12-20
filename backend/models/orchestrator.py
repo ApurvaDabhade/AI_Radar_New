@@ -10,17 +10,19 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.schema import HumanMessage, SystemMessage
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationChain
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_classic.memory import ConversationBufferMemory
+from langchain_classic.chains import ConversationChain
 
 # ============================
 # 1️⃣ Configuration
 # ============================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, "C:\\AI_Radar\\backend\\data\\calender.json")
-ORDERS_CSV = os.path.join(BASE_DIR, "C:\\AI_Radar\\backend\\data\\order.csv")
-MENU_CSV = os.path.join(BASE_DIR, "C:\\AI_Radar\\backend\\data\\menu.csv")
+# Navigate up one level from models/ to backend/, then into data/
+BACKEND_DIR = os.path.dirname(BASE_DIR)
+SERVICE_ACCOUNT_FILE = os.path.join(BACKEND_DIR, "data", "calender.json")
+ORDERS_CSV = os.path.join(BACKEND_DIR, "data", "order.csv")
+MENU_CSV = os.path.join(BACKEND_DIR, "data", "menu.csv")
 os.environ["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY", "YOUR_GEMINI_KEY")
 
 # ============================
