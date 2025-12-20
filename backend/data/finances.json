@@ -150,5 +150,61 @@
     "category": "gas",
     "note": "",
     "timestamp": "2025-12-19T10:52:00.183Z"
+  },
+  {
+    "id": "1766153910830",
+    "type": "sale",
+    "amount": 50,
+    "category": "cash",
+    "note": "",
+    "timestamp": "2025-12-19T14:18:30.830Z"
+  },
+  {
+    "id": "1766153920650",
+    "type": "expense",
+    "amount": 50,
+    "category": "transport",
+    "note": "",
+    "timestamp": "2025-12-19T14:18:40.650Z"
+  },
+  {
+    "id": "1766226507595",
+    "type": "sale",
+    "amount": 20000,
+    "category": "upi",
+    "note": "",
+    "timestamp": "2025-12-20T10:28:27.595Z"
+  },
+  {
+    "id": "1766226512197",
+    "type": "sale",
+    "amount": 1000,
+    "category": "cash",
+    "note": "",
+    "timestamp": "2025-12-20T10:28:32.197Z"
+  },
+  {
+    "id": "1766226517029",
+    "type": "expense",
+    "amount": 2000,
+    "category": "vegetables",
+    "note": "",
+    "timestamp": "2025-12-20T10:28:37.029Z"
+  },
+  {
+    "id": "1766226521449",
+    "type": "expense",
+    "amount": 100,
+    "category": "gas",
+    "note": "",
+    "timestamp": "2025-12-20T10:28:41.449Z"
+  },
+  {
+    "id": "1766226527713",
+    "type": "expense",
+    "amount": 200,
+    "category": "other",
+    "note": "",
+    "timestamp": "2025-12-20T10:28:47.713Z"
   }
 ]
