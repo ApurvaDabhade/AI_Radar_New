@@ -148,12 +148,33 @@ const StartupMitra = () => {
 
   const generateResponse = async (input: string): Promise<{ text: string, suggestions?: string[] }> => {
     try {
+      // Retrieve user context
+      const userStr = localStorage.getItem('user');
+      let contextMessage = input;
+
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          const businessInfo = [];
+          if (user.businessType) businessInfo.push(`Business Type: ${user.businessType}`);
+          if (user.stallName || user.businessName) businessInfo.push(`Name: ${user.stallName || user.businessName}`);
+          if (user.location) businessInfo.push(`Location: ${user.location}`);
+
+          if (businessInfo.length > 0) {
+            const contextStr = `\n[Context: The user is a registered vendor. ${businessInfo.join(', ')}.]`;
+            contextMessage = input + contextStr;
+          }
+        } catch (e) {
+          console.error("Error parsing user context", e);
+        }
+      }
+
       const response = await fetch('http://localhost:5001/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: contextMessage }), // Send enriched message
       });
 
       const data = await response.json();

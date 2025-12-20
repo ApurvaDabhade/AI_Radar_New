@@ -1,15 +1,20 @@
 # app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from dotenv import load_dotenv  # ✅ Import dotenv
+import os
+
+# Load environment variables
+load_dotenv()
+
 from routes.chat_routes import chat_routes
 from routes.tourism_routes import tourism_routes
 from models.orchestrator import suggest_items_orchestrator
 from insight_routes import insight_routes
 from routes.review_routes import review_routes
-from sheet_analyzer import fetch_all_google_sheet_data  # ✅ Updated import
-from gap_analysis import perform_gap_analysis  # ✅ New import
-import pandas as pd  # ✅ For food-trends
-import os
+from sheet_analyzer import fetch_all_google_sheet_data
+from gap_analysis import perform_gap_analysis
+import pandas as pd
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
@@ -23,6 +28,7 @@ CORS(app)
 # MongoDB Setup for Inventory
 # =====================================================
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
+print(f"🔌 Connecting to MongoDB: {MONGO_URI.split('@')[-1] if '@' in MONGO_URI else 'Localhost'}") # Log connection target
 client = MongoClient(MONGO_URI)
 db = client["inventoryDB"]
 inventory_collection = db["items"]
