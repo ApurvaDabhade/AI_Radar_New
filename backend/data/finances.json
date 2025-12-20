@@ -152,7 +152,6 @@
     "timestamp": "2025-12-19T10:52:00.183Z"
   },
   {
-<<<<<<< HEAD
     "id": "1766153910830",
     "type": "sale",
     "amount": 50,
@@ -194,7 +193,21 @@
   },
   {
     "id": "1766226521449",
-=======
+    "type": "expense",
+    "amount": 100,
+    "category": "gas",
+    "note": "",
+    "timestamp": "2025-12-20T10:28:41.449Z"
+  },
+  {
+    "id": "1766226527713",
+    "type": "expense",
+    "amount": 200,
+    "category": "other",
+    "note": "",
+    "timestamp": "2025-12-20T10:28:47.713Z"
+  },
+  {
     "id": "1766240829202",
     "type": "sale",
     "amount": 10000,
@@ -212,22 +225,10 @@
   },
   {
     "id": "1766240839698",
->>>>>>> bc0d3829 (fix: backend types, python deps, run scripts, and frontend port)
     "type": "expense",
     "amount": 100,
     "category": "gas",
     "note": "",
-<<<<<<< HEAD
-    "timestamp": "2025-12-20T10:28:41.449Z"
-  },
-  {
-    "id": "1766226527713",
-    "type": "expense",
-    "amount": 200,
-    "category": "other",
-    "note": "",
-    "timestamp": "2025-12-20T10:28:47.713Z"
-=======
     "timestamp": "2025-12-20T14:27:19.698Z"
   },
   {
@@ -253,6 +254,5 @@
     "category": "rent",
     "note": "",
     "timestamp": "2025-12-20T15:21:51.308Z"
->>>>>>> bc0d3829 (fix: backend types, python deps, run scripts, and frontend port)
   }
 ]
