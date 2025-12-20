@@ -1,11 +1,15 @@
 # app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from dotenv import load_dotenv  # ✅ Import dotenv
+from dotenv import load_dotenv  # ✅ Updated
 import os
 
 # Load environment variables
 load_dotenv()
+
+# Ensure GOOGLE_API_KEY is set from GEMINI_API_KEY if needed (for LangChain)
+if os.environ.get("GEMINI_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
+    os.environ["GOOGLE_API_KEY"] = os.environ["GEMINI_API_KEY"]
 
 from routes.chat_routes import chat_routes
 from routes.tourism_routes import tourism_routes
@@ -28,7 +32,8 @@ CORS(app)
 # MongoDB Setup for Inventory
 # =====================================================
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
-print(f"🔌 Connecting to MongoDB: {MONGO_URI.split('@')[-1] if '@' in MONGO_URI else 'Localhost'}") # Log connection target
+print(f"🔌 Connecting to MongoDB: {MONGO_URI.split('@')[-1] if '@' in MONGO_URI else 'Localhost'}")
+
 client = MongoClient(MONGO_URI)
 db = client["inventoryDB"]
 inventory_collection = db["items"]

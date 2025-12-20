@@ -1,7 +1,7 @@
 import re
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.schema import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from config import GEMINI_MODEL, GOOGLE_API_KEY
 
 # Set API key

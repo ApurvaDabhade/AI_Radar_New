@@ -1,7 +1,7 @@
 # memory/memory_handler.py
 
 from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain.schema import AIMessage, HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage
 
 # Shared memory instance
 history = ChatMessageHistory()

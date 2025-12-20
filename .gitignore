@@ -1,5 +1,7 @@
 # Python
 venv/
+backend/venv_mac/
+backend/venv_311/
 __pycache__/
 
 # Node

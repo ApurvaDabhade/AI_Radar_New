@@ -152,6 +152,7 @@
     "timestamp": "2025-12-19T10:52:00.183Z"
   },
   {
+<<<<<<< HEAD
     "id": "1766153910830",
     "type": "sale",
     "amount": 50,
@@ -193,10 +194,30 @@
   },
   {
     "id": "1766226521449",
+=======
+    "id": "1766240829202",
+    "type": "sale",
+    "amount": 10000,
+    "category": "upi",
+    "note": "",
+    "timestamp": "2025-12-20T14:27:09.202Z"
+  },
+  {
+    "id": "1766240835354",
+    "type": "expense",
+    "amount": 1000,
+    "category": "vegetables",
+    "note": "",
+    "timestamp": "2025-12-20T14:27:15.354Z"
+  },
+  {
+    "id": "1766240839698",
+>>>>>>> bc0d3829 (fix: backend types, python deps, run scripts, and frontend port)
     "type": "expense",
     "amount": 100,
     "category": "gas",
     "note": "",
+<<<<<<< HEAD
     "timestamp": "2025-12-20T10:28:41.449Z"
   },
   {
@@ -206,5 +227,32 @@
     "category": "other",
     "note": "",
     "timestamp": "2025-12-20T10:28:47.713Z"
+=======
+    "timestamp": "2025-12-20T14:27:19.698Z"
+  },
+  {
+    "id": "1766240845986",
+    "type": "expense",
+    "amount": 200,
+    "category": "vegetables",
+    "note": "",
+    "timestamp": "2025-12-20T14:27:25.986Z"
+  },
+  {
+    "id": "1766244100590",
+    "type": "sale",
+    "amount": 100,
+    "category": "upi",
+    "note": "",
+    "timestamp": "2025-12-20T15:21:40.590Z"
+  },
+  {
+    "id": "1766244111308",
+    "type": "expense",
+    "amount": 1000,
+    "category": "rent",
+    "note": "",
+    "timestamp": "2025-12-20T15:21:51.308Z"
+>>>>>>> bc0d3829 (fix: backend types, python deps, run scripts, and frontend port)
   }
 ]
