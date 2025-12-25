@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, IndianRupee, Check, Plus, TrendingUp, TrendingDown, Receipt, Clock } from 'lucide-react';
+import { ArrowLeft, IndianRupee, Check, Plus, TrendingUp, TrendingDown, Receipt, Clock, Mic, Wifi, WifiOff, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -34,7 +34,11 @@ interface Transaction {
   category: string;
   timestamp: Date;
   note?: string;
+  isOffline?: boolean; // New flag for offline entries
 }
+
+const STORAGE_KEY_TRANSACTIONS = 'sales_tracker_transactions';
+const STORAGE_KEY_PENDING = 'sales_tracker_pending';
 
 const SalesTracker = () => {
   const navigate = useNavigate();
@@ -46,14 +50,87 @@ const SalesTracker = () => {
   const [amount, setAmount] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [note, setNote] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [todaySales, setTodaySales] = useState(0);
   const [todayExpense, setTodayExpense] = useState(0);
 
   useEffect(() => {
+    // Load cached data first for immediate display
+    const cached = localStorage.getItem(STORAGE_KEY_TRANSACTIONS);
+    if (cached) {
+      const parsed = JSON.parse(cached).map((t: any) => ({ ...t, timestamp: new Date(t.timestamp) }));
+      setTransactions(parsed);
+      calculateTodayTotals(parsed);
+    }
+
     fetchTransactions();
+
+    // Online/Offline listeners
+    const handleOnline = () => {
+      setIsOnline(true);
+      toast({ title: "🟢 Back Online", description: "Syncing data..." });
+      syncOfflineData();
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+      toast({ title: "🔴 Offline Mode", description: "Changes will be saved locally" });
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
+
+  const syncOfflineData = async () => {
+    const pending = JSON.parse(localStorage.getItem(STORAGE_KEY_PENDING) || '[]');
+    if (pending.length === 0) {
+      fetchTransactions(); // Just refresh
+      return;
+    }
+
+    setIsSyncing(true);
+    let successCount = 0;
+    const failedTxns = [];
+
+    for (const txn of pending) {
+      try {
+        const res = await fetch('http://localhost:5001/api/finances', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: txn.type,
+            amount: txn.amount,
+            category: txn.category,
+            note: txn.note
+          })
+        });
+
+        if (res.ok) successCount++;
+        else failedTxns.push(txn);
+      } catch (error) {
+        failedTxns.push(txn);
+      }
+    }
+
+    // Update pending storage with failed ones
+    localStorage.setItem(STORAGE_KEY_PENDING, JSON.stringify(failedTxns));
+
+    if (successCount > 0) {
+      toast({ title: "✅ Synced", description: `${successCount} offline entries uploaded.` });
+      // Clear pending if all good, logic handled by filtering pending
+    }
+
+    fetchTransactions(); // Get latest from server
+    setIsSyncing(false);
+  };
 
   const fetchTransactions = async () => {
     try {
@@ -63,6 +140,8 @@ const SalesTracker = () => {
         const txns = data.map((t: any) => ({ ...t, timestamp: new Date(t.timestamp) }));
         setTransactions(txns);
         calculateTodayTotals(txns);
+        // Cache latest data
+        localStorage.setItem(STORAGE_KEY_TRANSACTIONS, JSON.stringify(txns));
       }
     } catch (error) {
       console.error("Failed to fetch transactions", error);
@@ -82,6 +161,63 @@ const SalesTracker = () => {
 
   const handleQuickAmount = (amt: number) => {
     setAmount(amt.toString());
+  };
+
+  const handleVoiceInput = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      return;
+    }
+
+    setIsRecording(true);
+    toast({ title: "🎤 Listening...", description: "Speak amount (e.g., '150')" });
+
+    // Check for browser support
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        // Basic parsing to integers from string like "one hundred fifty" or "150"
+        // For MVP, we assume numbers are spoken clearly or parsed by browser as digits often.
+        // We strip non-numeric characters just in case.
+        const num = transcript.replace(/[^0-9.]/g, '');
+
+        if (num && !isNaN(parseFloat(num))) {
+          setAmount(num);
+          toast({ title: "✅ Heard", description: `Set amount to ₹${num}` });
+        } else {
+          toast({ variant: "destructive", title: "Could not understand amount", description: `Heard: "${transcript}"` });
+        }
+        setIsRecording(false);
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error("Speech recognition error", event.error);
+        setIsRecording(false);
+        toast({ variant: "destructive", title: "Error", description: "Could not hear you. Try again." });
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognition.start();
+    } else {
+      // Simulate voice recognition delay
+      setTimeout(() => {
+        setIsRecording(false);
+        const randomAmounts = [120, 250, 500, 80, 1500];
+        const recognizedAmount = randomAmounts[Math.floor(Math.random() * randomAmounts.length)];
+        setAmount(recognizedAmount.toString());
+        toast({ title: "✅ Simulated Voice", description: `Set amount to ₹${recognizedAmount}` });
+      }, 2000);
+    }
   };
 
   const handleSubmit = async () => {
@@ -125,7 +261,44 @@ const SalesTracker = () => {
       }
 
     } catch (error) {
-      toast({ variant: "destructive", title: 'Connection Error', description: 'Could not connect to server' });
+      // Offline Fallback
+      if (!navigator.onLine) {
+        const newTxn: Transaction = {
+          id: `offline_${Date.now()}`,
+          type: addType,
+          amount: amtNum,
+          category: selectedCategory,
+          timestamp: new Date(),
+          note: note,
+          isOffline: true
+        };
+
+        // Save to Pending Storage
+        const pending = JSON.parse(localStorage.getItem(STORAGE_KEY_PENDING) || '[]');
+        pending.push(newTxn);
+        localStorage.setItem(STORAGE_KEY_PENDING, JSON.stringify(pending));
+
+        // Optimistic UI Update
+        const updatedTxns = [newTxn, ...transactions];
+        setTransactions(updatedTxns);
+        calculateTodayTotals(updatedTxns);
+
+        // Update Main Cache too so it persists reload
+        localStorage.setItem(STORAGE_KEY_TRANSACTIONS, JSON.stringify(updatedTxns));
+
+        toast({
+          title: '💾 Saved Offline',
+          description: 'Will sync when internet returns',
+        });
+
+        // Reset form
+        setAmount('');
+        setSelectedCategory('');
+        setNote('');
+        setShowAddModal(false);
+      } else {
+        toast({ variant: "destructive", title: 'Connection Error', description: 'Could not connect to server' });
+      }
     }
   };
 
@@ -160,10 +333,23 @@ const SalesTracker = () => {
                 <ArrowLeft className="h-6 w-6" />
               </Button>
               <div>
-                <h1 className="text-2xl font-bold text-primary">
+                <h1 className="text-2xl font-bold text-primary flex items-center gap-2">
                   💰 Sales & Expense Tracker
+                  {isSyncing && <RefreshCw className="h-4 w-4 animate-spin text-muted-foreground" />}
                 </h1>
-                <p className="text-sm text-muted-foreground">Track your daily business 📊</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-muted-foreground">Track your daily business 📊</p>
+                  {!isOnline && (
+                    <Badge variant="outline" className="text-orange-600 border-orange-200 bg-orange-50 gap-1">
+                      <WifiOff className="h-3 w-3" /> Offline Mode
+                    </Badge>
+                  )}
+                  {isOnline && (
+                    <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 gap-1 hidden md:flex">
+                      <Wifi className="h-3 w-3" /> Online
+                    </Badge>
+                  )}
+                </div>
               </div>
             </div>
             <Button variant="outline" size="sm" onClick={handleExport} className="hidden md:flex bg-green-600 hover:bg-green-700 text-white border-green-700">
@@ -281,7 +467,10 @@ const SalesTracker = () => {
                           <div className="flex items-center gap-3">
                             <span className="text-2xl">{catData?.emoji || '💰'}</span>
                             <div>
-                              <p className="font-medium text-card-foreground">{catData?.label || txn.category}</p>
+                              <div className="flex items-center gap-2">
+                                <p className="font-medium text-card-foreground">{catData?.label || txn.category}</p>
+                                {txn.isOffline && <span className="text-[10px] bg-orange-100 text-orange-600 px-1 rounded border border-orange-200">Pending</span>}
+                              </div>
                               <p className="text-xs text-muted-foreground">
                                 {new Date(txn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </p>
@@ -332,16 +521,26 @@ const SalesTracker = () => {
               </div>
 
               {/* Amount Input */}
-              <div className="relative">
-                <IndianRupee className={`absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 ${addType === 'sale' ? 'text-accent' : 'text-destructive'
-                  }`} />
-                <Input
-                  type="number"
-                  placeholder="Enter amount..."
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="h-16 text-2xl pl-12 text-center font-bold rounded-xl bg-muted border-border"
-                />
+              <div className="relative flex gap-2">
+                <div className="relative flex-1">
+                  <IndianRupee className={`absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 ${addType === 'sale' ? 'text-accent' : 'text-destructive'
+                    }`} />
+                  <Input
+                    type="number"
+                    placeholder="Enter amount..."
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="h-16 text-2xl pl-12 text-center font-bold rounded-xl bg-muted border-border"
+                  />
+                </div>
+                <Button
+                  size="icon"
+                  variant={isRecording ? "destructive" : "outline"}
+                  className={`h-16 w-16 rounded-xl border-border ${isRecording ? 'animate-pulse' : ''}`}
+                  onClick={handleVoiceInput}
+                >
+                  <Mic className="h-6 w-6" />
+                </Button>
               </div>
 
               {/* Quick Amounts */}

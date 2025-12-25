@@ -270,5 +270,29 @@
     "category": "upi",
     "note": "",
     "timestamp": "2025-12-20T16:09:59.223Z"
+  },
+  {
+    "id": "1766505235917",
+    "type": "sale",
+    "amount": 100,
+    "category": "cash",
+    "note": "",
+    "timestamp": "2025-12-23T15:53:55.917Z"
+  },
+  {
+    "id": "1766505246689",
+    "type": "expense",
+    "amount": 200,
+    "category": "gas",
+    "note": "",
+    "timestamp": "2025-12-23T15:54:06.689Z"
+  },
+  {
+    "id": "1766651626280",
+    "type": "sale",
+    "amount": 100,
+    "category": "upi",
+    "note": "",
+    "timestamp": "2025-12-25T08:33:46.280Z"
   }
 ]

@@ -206,12 +206,55 @@ const StartupMitra = () => {
   };
 
   const handleVoiceInput = () => {
-    setIsRecording(!isRecording);
-    if (!isRecording) {
-      toast({ title: "Listening...", description: "Speak now in Hindi or English" });
+    if (isRecording) {
+      setIsRecording(false);
+      return;
+    }
+
+    setIsRecording(true);
+    toast({ title: "Listening...", description: "Speak now in Hindi or English" });
+
+    // Check for browser support
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US'; // Can be dynamic based on user language context if needed
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(transcript);
+        toast({ title: "✅ Heard", description: `"${transcript}"` });
+        sendMessage(transcript);
+        setIsRecording(false);
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error("Speech recognition error", event.error);
+        setIsRecording(false);
+        toast({ variant: "destructive", title: "Error", description: "Could not hear you. Try again." });
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+
+      recognition.start();
+    } else {
+      // Fallback Simulation for non-supported browsers
       setTimeout(() => {
         setIsRecording(false);
-        sendMessage("How do I increase my sales?");
+        const randomQuestions = [
+          "How do I save money on vegetables?",
+          "Best location for a tea stall?",
+          "How to get FSSAI license?",
+          "Cheap packaging ideas?"
+        ];
+        const randomQ = randomQuestions[Math.floor(Math.random() * randomQuestions.length)];
+        sendMessage(randomQ);
+        toast({ title: "✅ Simulated Voice", description: `Sent: "${randomQ}"` });
       }, 2000);
     }
   };

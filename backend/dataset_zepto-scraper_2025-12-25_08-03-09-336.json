@@ -1,0 +1,252 @@
+[{
+  "product_id": "a26f3a1a-b8b5-496f-800a-158b0745505f",
+  "name": "Tomato Local",
+  "brand": "Unbranded",
+  "variant": "The tomato is the edible berry of the Tomato plant. Contains vitamin C",
+  "formatted_packsize": "500 g",
+  "category": "Fruits & Vegetables",
+  "price": 47,
+  "mrp": 60,
+  "discount_percent": 21,
+  "inventory_available": 5,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/51f0d9cc-1416-40ae-a035-3923074158d7.jpeg"
+  ]
+},
+{
+  "product_id": "51f40982-1858-4196-9f25-50554b3596d6",
+  "name": "Tomato Hybrid",
+  "brand": "Unbranded",
+  "variant": "Tomatoes are the most abundant source of the antioxidant lycopene, which has been linked to a variety of health advantages, including a lower risk of heart disease and cancer. Tomatoes are low in calories and high in nutrients such as vitamin C and potassium. They're also high in antioxidants, including lycopene, which gives tomatoes their distinctive color and has been linked to a variety of health advantages, including a lower risk of heart disease and certain cancers.",
+  "formatted_packsize": "500 g",
+  "category": "Fruits & Vegetables",
+  "price": 33,
+  "mrp": 62,
+  "discount_percent": 46,
+  "inventory_available": 5,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/7bbe0190-8366-4712-afa4-feb0566bf2e0.jpeg"
+  ]
+},
+{
+  "product_id": "400e65e7-cad9-48a2-89eb-0f453dcaeb1f",
+  "name": "Tomato Local",
+  "brand": "Unbranded",
+  "variant": "Tomato Local",
+  "formatted_packsize": "250 g",
+  "category": "Fruits & Vegetables",
+  "price": 26,
+  "mrp": 34,
+  "discount_percent": 23,
+  "inventory_available": 10,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/29888869-e319-447a-9d6a-15f6884c60d1.jpeg"
+  ]
+},
+{
+  "product_id": "cc57e4a4-68e0-48fc-acf7-a37ee2701ce1",
+  "name": "Organically Grown Tomato Local",
+  "brand": "Unbranded",
+  "variant": "Organically Grown Tomato Country",
+  "formatted_packsize": "500 g",
+  "category": "Fruits & Vegetables",
+  "price": 36,
+  "mrp": 60,
+  "discount_percent": 40,
+  "inventory_available": 6,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/bc32ce39-aa9d-4f9a-8c71-33aedd4da0d0.png"
+  ]
+},
+{
+  "product_id": "cab5dcb3-362f-4ebf-be5b-7ff5ca0bd49b",
+  "name": "Fresh Potato",
+  "brand": "Unbranded",
+  "variant": "Fresh Potato",
+  "formatted_packsize": "1 pack (900 g - 1 kg)",
+  "category": "Fruits & Vegetables",
+  "price": 30,
+  "mrp": 53,
+  "discount_percent": 43,
+  "inventory_available": 6,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/c4286d3c-8773-4dce-8b47-341a5d394978.png"
+  ]
+},
+{
+  "product_id": "e998dea9-c681-4e08-b39d-a6dd8e34e7a9",
+  "name": "Potato",
+  "brand": "Unbranded",
+  "variant": "Potatoes are high in vitamin C",
+  "formatted_packsize": "(450-500 g)",
+  "category": "Fruits & Vegetables",
+  "price": 16,
+  "mrp": 29,
+  "discount_percent": 44,
+  "inventory_available": 6,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/c7628332-447d-4407-a268-8e731ca66fe1.jpg"
+  ]
+},
+{
+  "product_id": "818b56ae-0c01-4cc5-816e-830377b0f632",
+  "name": "Organically Grown Potato",
+  "brand": "Unbranded",
+  "variant": "Organically Grown Potato",
+  "formatted_packsize": "500 g",
+  "category": "Fruits & Vegetables",
+  "price": 22,
+  "mrp": 40,
+  "discount_percent": 44,
+  "inventory_available": 6,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/4d70541e-9299-4497-acc0-e402c64aefbe.png"
+  ]
+},
+{
+  "product_id": "72fd8526-90f1-41e5-a17b-93c36141fdba",
+  "name": "Baby Potato",
+  "brand": "Unbranded",
+  "variant": null,
+  "formatted_packsize": "1 pack (500 g)",
+  "category": "Fruits & Vegetables",
+  "price": 24,
+  "mrp": 35,
+  "discount_percent": 31,
+  "inventory_available": 6,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/49e2ef3f-514e-48ba-bb2a-fa637ddd21f6.jpeg"
+  ]
+},
+{
+  "product_id": "e0a22c60-2b90-42b0-90eb-1f70c4cf1a12",
+  "name": "Sweet Potato",
+  "brand": "Unbranded",
+  "variant": "Sweet potato benefits both your eyes and your immune system",
+  "formatted_packsize": "500 g",
+  "category": "Fruits & Vegetables",
+  "price": 35,
+  "mrp": 51,
+  "discount_percent": 31,
+  "inventory_available": 6,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/99406a47-1d72-4908-b073-06c0e956a717.jpeg"
+  ]
+},
+{
+  "product_id": "0e9e4865-3c17-444f-aeac-d1dad60b3b56",
+  "name": "Sweet Potato",
+  "brand": "Unbranded",
+  "variant": "Sweet Potato",
+  "formatted_packsize": "250 g",
+  "category": "Fruits & Vegetables",
+  "price": 17,
+  "mrp": 31,
+  "discount_percent": 45,
+  "inventory_available": 3,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/d5444f47-22fd-476f-aef6-f4488f59096f.jpeg"
+  ]
+},
+{
+  "product_id": "8bae657b-a727-426b-aaaa-c7e0bfa4632b",
+  "name": "Organically Grown Sweet Potato",
+  "brand": "Unbranded",
+  "variant": "Organically Grown Sweet Potato",
+  "formatted_packsize": "500 g",
+  "category": "Fruits & Vegetables",
+  "price": 36,
+  "mrp": 61,
+  "discount_percent": 40,
+  "inventory_available": 2,
+  "out_of_stock": false,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/d46697bc-9c3d-4baa-bdcc-297c90432e3f.jpeg"
+  ]
+},
+{
+  "product_id": "6c06147a-7f60-4136-8e0d-97cb468dad31",
+  "name": "Plum Indian (Aloo Bukhara)",
+  "brand": "Fruits",
+  "variant": "Indian plum, also known as jujube, is abundant in antioxidants, particularly vitamin c, which protects the body from oxidative stress and lowers the risk of chronic disorders. The high vitamin c content of jujube boosts immunity and aids in the battle against illnesses and infections.",
+  "formatted_packsize": "500 g",
+  "category": "Fruits & Vegetables",
+  "price": 79,
+  "mrp": 100,
+  "discount_percent": 21,
+  "inventory_available": 0,
+  "out_of_stock": true,
+  "eta_in_minutes": null,
+  "rating_value": null,
+  "rating_count": null,
+  "store_id": "b4dc8d65-ed2e-4142-81b6-373982b13500",
+  "city": null,
+  "images": [
+    "cms/product_variant/09be9600-8578-40e7-8ed7-2a032bcaee0b.jpeg"
+  ]
+}]

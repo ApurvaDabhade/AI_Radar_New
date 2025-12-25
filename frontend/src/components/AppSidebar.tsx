@@ -28,6 +28,7 @@ import {
     Video,
     Bell
 } from 'lucide-react';
+import { MobileBottomNav } from './MobileBottomNav';
 
 const mainMenuItems = [
     { title: 'Dashboard', url: '/dashboard', icon: Home },
@@ -39,11 +40,11 @@ const mainMenuItems = [
 const businessMenuItems = [
     { title: 'Startup Mitra', url: '/startup-mitra', icon: Bot },
     { title: 'ChefGuru', url: '/chef-guru', icon: Bot },
-    { title: 'Inventory', url: '/inventory', icon: Package },
+    { title: 'Inventory (Stock)', url: '/inventory', icon: Package },
     { title: 'Reviews', url: '/reviews', icon: MessageSquare },
     { title: 'Community Hub', url: '/community-hub', icon: Users },
     { title: 'Tourism', url: '/tourism', icon: MapPin },
-    { title: 'Reel Creator', url: '/video-reels', icon: Video },
+    { title: 'Reel Maker', url: '/video-reels', icon: Video },
 ];
 
 const settingsMenuItems = [
@@ -143,6 +144,7 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <MobileBottomNav />
         </Sidebar >
     );
 }

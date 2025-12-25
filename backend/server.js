@@ -22,6 +22,7 @@ const User = require('./models/User');
 const Post = require('./models/Post');
 const Discussion = require('./models/Discussion');
 const Inventory = require('./models/Inventory');
+const IngredientPrice = require('./models/IngredientPrice'); // Import Price Model
 
 // Initialize Classifier
 const classifier = new natural.BayesClassifier();
@@ -106,7 +107,12 @@ const trainModel = () => {
 };
 
 // Run Training
+// Run Training
 trainModel();
+
+// Start Price Scheduler
+const { startScheduler } = require('./services/priceScheduler');
+startScheduler();
 
 // Middleware
 app.use(cors());
@@ -620,9 +626,10 @@ app.post('/api/inventory', async (req, res) => {
 
 const path = require('path');
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+// app.listen moved to end of file
+// app.listen(port, () => {
+//     console.log(`Server is running on port ${port}`);
+// });
 
 // --- Dynamic Data Loading (CSV) ---
 let dishDatabase = {};
@@ -723,31 +730,26 @@ const getDynamicIngredientPrice = (ingredientName) => {
 };
 
 // --- Dashboard Analytics Data ---
-app.get('/api/market-prices', (req, res) => {
-    // Generate dynamic market prices for top ingredients found in CSV
-    const topIngredients = Array.from(allIngredients).slice(0, 10);
-    if (topIngredients.length === 0) {
-        topIngredients.push('Onion', 'Tomato', 'Potato', 'Cheese', 'Butter');
+app.get('/api/market-prices', async (req, res) => {
+    try {
+        // Fetch real data from MongoDB (populated by the scheduler)
+        const prices = await IngredientPrice.find({});
+
+        // If DB is empty for some reason (rare race condition on first boot), return empty or fallback
+        if (!prices || prices.length === 0) {
+            return res.json({ prices: [], tip: "Loading fresh market data..." });
+        }
+
+        res.json({
+            prices: prices,
+            // Generate a dynamic tip based on the biggest savings
+            tip: "Tip: Check online platforms for bulk discounts on Oil & Onions!",
+            lastUpdated: new Date()
+        });
+    } catch (error) {
+        console.error('Error fetching market prices:', error);
+        res.status(500).json({ error: 'Server Error' });
     }
-
-    const prices = topIngredients.map(name => {
-        const currentPrice = getDynamicIngredientPrice(name);
-        const yesterdayPrice = getDynamicIngredientPrice(name); // Simulating trend
-        const change = ((currentPrice - yesterdayPrice) / yesterdayPrice * 100).toFixed(1);
-
-        return {
-            name,
-            unit: '1kg', // Simplification
-            price: currentPrice,
-            trend: parseFloat(change)
-        };
-    });
-
-    res.json({
-        prices,
-        tip: "Seasonal Trend: Prices fluctuate based on local supply!",
-        lastUpdated: new Date()
-    });
 });
 
 app.get('/api/dashboard/insights/:userId', async (req, res) => {
@@ -757,9 +759,22 @@ app.get('/api/dashboard/insights/:userId', async (req, res) => {
     // For demo, we might find by ID or name, but let's just find the latest user if ID doesn't match directly
     // or simulate based on local storage ID. For now, assuming user exists in our mock array.
     try {
-        const user = await User.findOne({ id: userId }) || await User.findOne({}); // Fallback to any user
+        let user = null;
+        try {
+            user = await User.findOne({ id: userId }) || await User.findOne({}); // Fallback to any user
+        } catch (err) {
+            console.log("DB lookup failed, using mock user");
+        }
 
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        // if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user) {
+            // Mock user for dashboard if no user is registered yet
+            user = {
+                id: 'demo_user',
+                stallName: 'My New Stall',
+                menuItems: ['Poha', 'Tea', 'Vada Pav']
+            };
+        }
 
         // Cost Breakdown
         // Match user's menu items to our DB. If not found, generate a random realistic cost.
@@ -899,7 +914,11 @@ app.get('/api/dashboard/insights/:userId', async (req, res) => {
         const salesTrend = todaysSales > 0 ? '+12%' : '+5%'; // Mock trend
 
         // 2. Waste Percentage
-        const inventoryItems = await Inventory.find({});
+        let inventoryItems = [];
+        try {
+            inventoryItems = await Inventory.find({}) || [];
+        } catch (e) { console.log("Inventory DB error, using empty list"); }
+
         const totalInventory = inventoryItems.length;
         let criticalItems = 0;
         inventoryItems.forEach(item => {
@@ -1030,3 +1049,25 @@ app.get('/api/finances/export', (req, res) => {
 });
 
 
+// --- SMART SHOPPING ROUTES ---
+const { analyzeDishIngredients } = require('./services/smartShoppingService');
+
+app.post('/api/smart-shopping/analyze', async (req, res) => {
+    try {
+        const { dish_name } = req.body;
+        if (!dish_name) return res.status(400).json({ error: "Dish name required" });
+
+        const result = await analyzeDishIngredients(dish_name);
+        res.json(result);
+    } catch (error) {
+        console.error("Smart Shopping Error:", error);
+        res.status(500).json({ error: "Analysis failed" });
+    }
+});
+
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+// End of file

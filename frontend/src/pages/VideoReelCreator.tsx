@@ -109,6 +109,27 @@ const VideoReelCreator = () => {
         'indian_classical': 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3', // Classical/Eastern
     };
 
+    const quickTemplates = [
+        { id: 'daily_special', label: "Today's Special", icon: "🍛", duration: '15', style: 'upbeat_pop', platform: 'instagram', desc: "Quick & energetic" },
+        { id: 'festival', label: "Festival Mode", icon: "🎉", duration: '20', style: 'indian_classical', platform: 'whatsapp', desc: "Celebratory vibes" },
+        { id: 'behind_scenes', label: "Behind Scenes", icon: "🍳", duration: '30', style: 'lofi_chill', platform: 'instagram', desc: "Slow & satisfying" },
+        { id: 'new_launch', label: "New Launch", icon: "📢", duration: '15', style: 'rock_energy', platform: 'instagram', desc: "High energy hype" },
+    ];
+
+    const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+    const [showAdvanced, setShowAdvanced] = useState(false);
+
+    const handleTemplateSelect = (templateId: string) => {
+        const template = quickTemplates.find(t => t.id === templateId);
+        if (template) {
+            setSelectedTemplate(templateId);
+            setDuration(template.duration);
+            setPlatform(template.platform);
+            // We can't set the file directly, but we set the "intent"
+            toast({ title: `Selected: ${template.label}`, description: `Settings auto-tuned for ${template.desc}` });
+        }
+    };
+
     const handleGenerate = async () => {
         if (!videoFile) {
             toast({
@@ -288,7 +309,7 @@ ${generatedPlan.captions.map((c: string) => `• ${c}`).join('\n')}
                             <div>
                                 <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500 flex items-center gap-2">
                                     <Video className="h-8 w-8 text-pink-500" />
-                                    Video Reel Creator
+                                    Reel Maker
                                 </h1>
                                 <p className="text-muted-foreground">Turn your raw food videos into viral reels instantly.</p>
                             </div>
@@ -299,17 +320,34 @@ ${generatedPlan.captions.map((c: string) => `• ${c}`).join('\n')}
                             {/* Input Section */}
                             <div className="lg:col-span-5 space-y-6">
                                 <Card className="border-border shadow-lg bg-card/50 backdrop-blur-sm">
-                                    <CardHeader>
+                                    <CardHeader className="pb-2">
                                         <CardTitle className="text-lg flex items-center gap-2">
                                             <Wand2 className="h-5 w-5 text-primary" />
-                                            Input Details
+                                            Create Reel
                                         </CardTitle>
-                                        <CardDescription>Tell us about your video</CardDescription>
                                     </CardHeader>
-                                    <CardContent className="space-y-4">
+                                    <CardContent className="space-y-6">
 
-                                        <div className="space-y-4">
-                                            <Label>Upload Video Clip</Label>
+                                        {/* 1. Quick Templates */}
+                                        <div className="space-y-2">
+                                            <Label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Choose Style</Label>
+                                            <div className="grid grid-cols-4 gap-2">
+                                                {quickTemplates.map((t) => (
+                                                    <button
+                                                        key={t.id}
+                                                        onClick={() => handleTemplateSelect(t.id)}
+                                                        className={`flex flex-col items-center justify-center p-2 rounded-xl border transition-all aspect-square ${selectedTemplate === t.id ? 'bg-primary/10 border-primary shadow-sm scale-95' : 'bg-background border-border hover:bg-muted/50 hover:border-primary/30'}`}
+                                                    >
+                                                        <span className="text-3xl mb-1 filter drop-shadow-sm">{t.icon}</span>
+                                                        <span className="text-[10px] font-bold text-center leading-tight">{t.label}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* 2. Upload */}
+                                        <div className="space-y-2">
+                                            <Label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Upload Clip</Label>
 
                                             {!videoFile ? (
                                                 <label
@@ -390,40 +428,53 @@ ${generatedPlan.captions.map((c: string) => `• ${c}`).join('\n')}
                                             )}
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-2">
-                                                <Label>Duration (Sec)</Label>
-                                                <Input
-                                                    type="number"
-                                                    value={duration}
-                                                    onChange={(e) => setDuration(e.target.value)}
-                                                    className="bg-muted/30"
-                                                />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label>Platform</Label>
-                                                <div className="flex bg-muted/30 p-1 rounded-lg">
-                                                    <button
-                                                        onClick={() => setPlatform('instagram')}
-                                                        className={`flex-1 flex justify-center py-2 rounded-md transition-all ${platform === 'instagram' ? 'bg-background shadow-sm text-pink-600' : 'text-muted-foreground hover:text-foreground'}`}
-                                                    >
-                                                        <Instagram className="h-5 w-5" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setPlatform('whatsapp')}
-                                                        className={`flex-1 flex justify-center py-2 rounded-md transition-all ${platform === 'whatsapp' ? 'bg-background shadow-sm text-green-600' : 'text-muted-foreground hover:text-foreground'}`}
-                                                    >
-                                                        <Smartphone className="h-5 w-5" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setPlatform('generic')}
-                                                        className={`flex-1 flex justify-center py-2 rounded-md transition-all ${platform === 'generic' ? 'bg-background shadow-sm text-blue-600' : 'text-muted-foreground hover:text-foreground'}`}
-                                                    >
-                                                        <Video className="h-5 w-5" />
-                                                    </button>
+                                        {/* 3. Advanced Settings (Collapsible) */}
+                                        <div className="pt-2 flex justify-center">
+                                            <button
+                                                onClick={() => setShowAdvanced(!showAdvanced)}
+                                                className="text-xs text-muted-foreground hover:text-primary transition-colors underline decoration-dotted underline-offset-4"
+                                            >
+                                                {showAdvanced ? 'Hide Advanced Options' : 'Custom Options (Duration, Platform)'}
+                                            </button>
+                                        </div>
+
+                                        {showAdvanced && (
+                                            <div className="grid grid-cols-2 gap-4 animate-in slide-in-from-top-1 fade-in duration-200 bg-muted/20 p-4 rounded-lg border border-border/50">
+                                                <div className="space-y-2">
+                                                    <Label>Duration (Sec)</Label>
+                                                    <Input
+                                                        type="number"
+                                                        value={duration}
+                                                        onChange={(e) => setDuration(e.target.value)}
+                                                        className="bg-background"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label>Platform</Label>
+                                                    <div className="flex bg-background p-1 rounded-lg border border-border">
+                                                        <button
+                                                            onClick={() => setPlatform('instagram')}
+                                                            className={`flex-1 flex justify-center py-2 rounded-md transition-all ${platform === 'instagram' ? 'bg-muted shadow-sm text-pink-600' : 'text-muted-foreground hover:text-foreground'}`}
+                                                        >
+                                                            <Instagram className="h-4 w-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setPlatform('whatsapp')}
+                                                            className={`flex-1 flex justify-center py-2 rounded-md transition-all ${platform === 'whatsapp' ? 'bg-muted shadow-sm text-green-600' : 'text-muted-foreground hover:text-foreground'}`}
+                                                        >
+                                                            <Smartphone className="h-4 w-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setPlatform('generic')}
+                                                            className={`flex-1 flex justify-center py-2 rounded-md transition-all ${platform === 'generic' ? 'bg-muted shadow-sm text-blue-600' : 'text-muted-foreground hover:text-foreground'}`}
+                                                        >
+                                                            <Video className="h-4 w-4" />
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        )}
+
 
                                         <Button
                                             className="w-full h-12 text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 shadow-lg shadow-pink-500/20"
@@ -683,8 +734,8 @@ ${generatedPlan.captions.map((c: string) => `• ${c}`).join('\n')}
                         </div>
                     </div>
                 </main>
-            </div>
-        </SidebarProvider>
+            </div >
+        </SidebarProvider >
     );
 };
 

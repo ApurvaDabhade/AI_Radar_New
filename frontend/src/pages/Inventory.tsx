@@ -107,7 +107,7 @@ const Inventory = () => {
                   </Button>
                   <div>
                     <h1 className="text-2xl font-bold text-primary flex items-center gap-2">
-                      📦 भांडार (Inventory)
+                      📦 Stock Inventory (मालसाठा)
                     </h1>
                     <p className="text-sm text-green-600 font-medium italic">"अन्न हे पूर्णब्रह्म" (Food is Divinity)</p>
                   </div>
@@ -117,7 +117,7 @@ const Inventory = () => {
                   <DialogTrigger asChild>
                     <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg rounded-full">
                       <Plus className="h-4 w-4 mr-2" />
-                      नवीन जोडा (Add)
+                      Add New (नवीन जोडा)
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="bg-card text-foreground border-border">
@@ -127,7 +127,7 @@ const Inventory = () => {
                     {/* Simplified Form */}
                     <div className="space-y-4">
                       <div>
-                        <Label>वस्तूचे नाव (Item Name)</Label>
+                        <Label>Item Name (वस्तूचे नाव)</Label>
                         <Input
                           value={newItem.name}
                           onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
@@ -137,7 +137,7 @@ const Inventory = () => {
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label>प्रमाण (Quantity)</Label>
+                          <Label>Quantity (प्रमाण)</Label>
                           <Input
                             type="number"
                             value={newItem.quantity}
@@ -147,7 +147,7 @@ const Inventory = () => {
                           />
                         </div>
                         <div>
-                          <Label>एकक (Unit)</Label>
+                          <Label>Unit (एकक)</Label>
                           <Input
                             value={newItem.unit}
                             onChange={(e) => setNewItem({ ...newItem, unit: e.target.value })}
@@ -157,7 +157,7 @@ const Inventory = () => {
                         </div>
                       </div>
                       <div>
-                        <Label>Expiry Days (Optional)</Label>
+                        <Label>Expiry Days (खराब होण्याची मुदत)</Label>
                         <Input
                           type="number"
                           value={newItem.expiryDays}
@@ -167,18 +167,18 @@ const Inventory = () => {
                         />
                       </div>
                       <div>
-                        <Label>प्रकार (Category)</Label>
+                        <Label>Category (प्रकार)</Label>
                         <select
                           className="w-full p-2 rounded-md border border-border bg-background"
                           value={newItem.category}
                           onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
                         >
-                          <option value="raw">कच्चा माल (Raw Material)</option>
-                          <option value="preserved">टिकवलेले (Preserved)</option>
+                          <option value="raw">Raw Material (कच्चा माल)</option>
+                          <option value="preserved">Dry/Pantry (कोरडा माल)</option>
                         </select>
                       </div>
                       <Button onClick={handleAddItem} className="w-full bg-primary hover:bg-primary/90">
-                        जतन करा (Save)
+                        Save (जतन करा)
                       </Button>
                     </div>
                   </DialogContent>
@@ -205,7 +205,7 @@ const Inventory = () => {
                   <AlertTriangle className="h-6 w-6" />
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground uppercase font-bold">Alerts (Expiring/Low)</p>
+                  <p className="text-xs text-muted-foreground uppercase font-bold">Alerts (Low Stock / Expiring)</p>
                   <p className="text-2xl font-bold text-red-700">{alerts.lowStock.length + alerts.expiringSoon.length}</p>
                 </div>
               </Card>
@@ -214,8 +214,8 @@ const Inventory = () => {
             {/* Main Bifurcation Tabs */}
             <Tabs defaultValue="raw" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-8 h-12">
-                <TabsTrigger value="raw" className="text-lg">🥕 कच्चा माल (Raw)</TabsTrigger>
-                <TabsTrigger value="preserved" className="text-lg">🥫 टिकवण (Pantry)</TabsTrigger>
+                <TabsTrigger value="raw" className="text-lg">🥕 Raw Material (कच्चा माल)</TabsTrigger>
+                <TabsTrigger value="preserved" className="text-lg">🥫 Dry/Pantry (कोरडा माल)</TabsTrigger>
               </TabsList>
 
               <TabsContent value="raw">

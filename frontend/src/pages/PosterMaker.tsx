@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, Download, Image as ImageIcon, Share2, Copy, Sparkles, Play, ExternalLink, Phone, Instagram, Youtube, Lightbulb, Menu as MenuIcon, Film, Users, Tag, Wand2 } from 'lucide-react';
+import { ArrowLeft, Upload, Download, Image as ImageIcon, Share2, Copy, Sparkles, Play, ExternalLink, Phone, Instagram, Youtube, Lightbulb, Menu as MenuIcon, Film, Users, Tag, Wand2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -60,9 +60,50 @@ const localBloggers = [
   { name: 'Vadapav World', platform: 'Instagram', followers: '25K', contact: '+91 88990 01122', handle: '@vadapav_kings' },
   { name: 'Spicy Affair Blog', platform: 'Instagram', followers: '42K', contact: '+91 77665 54433', handle: '@spicyaffair' },
   { name: 'Maharashtrian Zayka', platform: 'YouTube', followers: '95K', contact: '+91 91234 56789', handle: '@mz_official' },
+  { name: 'Maharashtrian Zayka', platform: 'YouTube', followers: '95K', contact: '+91 91234 56789', handle: '@mz_official' },
 ];
 
-// Daily tips
+const newsItems = [
+  {
+    id: 1,
+    title: "FSSAI mandates new 'Hygiene Rating' for all street vendors by 2025",
+    image: "https://images.unsplash.com/photo-1599818821960-91cd26779495?auto=format&fit=crop&q=80",
+    tag: "Breaking",
+    tagColor: "bg-red-600",
+    summary: "In a major move to improve food safety, FSSAI has announced a mandatory 5-star hygiene rating system. Vendors complying early will get free registration renewal benefits...",
+    fullContent: `
+      <p class="mb-4"><strong>New Delhi:</strong> The Food Safety and Standards Authority of India (FSSAI) has announced a revolutionary step to ensure the safety of street food consumption across the country.</p>
+      <p class="mb-4">Starting January 2025, every registered street food vendor will be required to display a "Hygiene Rating Certificate" on their cart. This rating (1 to 5 stars) will be based on:</p>
+      <ul class="list-disc pl-5 mb-4 space-y-2">
+        <li>Cleanliness of cooking water.</li>
+        <li>Use of gloves and caps by cook and servers.</li>
+        <li>Covered dustbins and proper waste disposal.</li>
+        <li>Distance from open drains.</li>
+      </ul>
+      <p class="mb-4"><strong>Benefits for Vendors:</strong> Vendors who voluntarily apply for this rating before December 2024 will receive a 2-year waiver on their registration renewal fees. Additionally, high-rated vendors will be featured on a special "Safe Food" app launched by the government.</p>
+      <p>Experts believe this move will increase customer trust and boost sales for compliant vendors by up to 40%.</p>
+    `
+  },
+  {
+    id: 2,
+    title: "Edible Oil prices expected to drop next month: Market Report",
+    image: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&q=80",
+    tag: "Market",
+    tagColor: "bg-blue-600",
+    summary: "Good news for snack vendors! Due to surplus import of palm oil, wholesale prices are likely to decrease by ₹15/liter. Experts suggest stocking up is not needed...",
+    fullContent: `
+      <p class="mb-4"><strong>Mumbai:</strong> Snacks and fried food vendors can breathe a sigh of relief as wholesale edible oil prices are projected to drop significantly in the coming weeks.</p>
+      <p class="mb-4">According to the latest market report from the Solvent Extractors' Association of India (SEA), a surplus import of Palm and Soyabean oil has created adequate stock in the country.</p>
+      <p class="mb-4"><strong>Key Highlights:</strong></p>
+      <ul class="list-disc pl-5 mb-4 space-y-2">
+        <li><strong>Palm Oil:</strong> Expected to drop by ₹12-15 per liter.</li>
+        <li><strong>Sunflower Oil:</strong> Marginal drop of ₹5-8 per liter.</li>
+        <li><strong>Stock Advice:</strong> Market experts suggest vendors NOT to stock up on expensive oil right now, as prices will be more favorable by the first week of next month.</li>
+      </ul>
+      <p>This reduction in input costs is expected to improve profit margins for Vada Pav, Samosa, and Bhajiya sellers by approx 10-15%.</p>
+    `
+  }
+];
 const dailyTips = [
   "💡 Offer a combo deal during lunch hours (12-2 PM) for more sales",
   "📱 Post food photos at 7 PM - that's when people decide dinner",
@@ -91,6 +132,8 @@ const PosterMaker = () => {
   const [suggestedSlogans, setSuggestedSlogans] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<any[]>([]); // Store fetched menu items
   const [showQR, setShowQR] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [selectedNews, setSelectedNews] = useState<typeof newsItems[0] | null>(null);
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const posterRef = React.useRef<HTMLDivElement>(null);
@@ -267,7 +310,7 @@ const PosterMaker = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold text-primary">
-                  🎨 Merchandise Studio
+                  🎨 Poster Maker
                 </h1>
                 <TooltipProvider>
                   <Tooltip>
@@ -308,7 +351,7 @@ const PosterMaker = () => {
                 🎨 Poster
               </TabsTrigger>
               <TabsTrigger value="platforms" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                🌐 Platforms
+                📚 Resource Hub
               </TabsTrigger>
               <TabsTrigger value="tools" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 🧰 Tools
@@ -415,41 +458,68 @@ const PosterMaker = () => {
                       </div>
 
                       <div className="space-y-1">
-                        <div className="flex justify-between items-center">
-                          <Label className="text-xs">Catchy Offer / Slogan</Label>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={handleGenerateSlogans}
-                            disabled={generatingSlogans}
-                            className="h-6 text-[10px] px-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                          >
-                            {generatingSlogans ? <span className="animate-spin mr-1">⏳</span> : <Sparkles className="h-3 w-3 mr-1" />}
-                            AI Suggest
-                          </Button>
-                        </div>
+                        <Label className="text-xs">Cuisine / Item</Label>
                         <Input
-                          value={tagline}
-                          onChange={(e) => setTagline(e.target.value)}
-                          placeholder="AI can write this for you..."
+                          value={foodType}
+                          onChange={(e) => setFoodType(e.target.value)}
+                          placeholder="e.g. Masala Dosa"
                           className="h-9 bg-muted/50"
                         />
                       </div>
 
-                      {/* Color Picker */}
-                      <div className="pt-2">
-                        <Label className="text-xs mb-2 block">Theme Color</Label>
-                        <div className="flex gap-2 justify-between">
-                          {colorThemes.map((theme) => (
-                            <button
-                              key={theme.id}
-                              onClick={() => setSelectedTheme(theme.id)}
-                              className={`w-8 h-8 rounded-full shadow-sm transition-transform ${selectedTheme === theme.id ? 'scale-125 ring-2 ring-offset-2 ring-foreground' : 'hover:scale-110'}`}
-                              style={{ backgroundColor: theme.color }}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowAdvanced(!showAdvanced)}
+                        className="w-full flex items-center justify-center text-xs text-muted-foreground hover:bg-muted h-8"
+                      >
+                        {showAdvanced ? (
+                          <>Hide Advanced Options <ChevronUp className="h-3 w-3 ml-1" /></>
+                        ) : (
+                          <>Show Advanced Options <ChevronDown className="h-3 w-3 ml-1" /></>
+                        )}
+                      </Button>
+
+                      {showAdvanced && (
+                        <div className="space-y-4 animate-in slide-in-from-top-2 fade-in duration-200">
+                          <div className="space-y-1">
+                            <div className="flex justify-between items-center">
+                              <Label className="text-xs">Catchy Offer / Slogan</Label>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={handleGenerateSlogans}
+                                disabled={generatingSlogans}
+                                className="h-6 text-[10px] px-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                              >
+                                {generatingSlogans ? <span className="animate-spin mr-1">⏳</span> : <Sparkles className="h-3 w-3 mr-1" />}
+                                AI Suggest
+                              </Button>
+                            </div>
+                            <Input
+                              value={tagline}
+                              onChange={(e) => setTagline(e.target.value)}
+                              placeholder="AI can write this for you..."
+                              className="h-9 bg-muted/50"
                             />
-                          ))}
+                          </div>
+
+                          {/* Color Picker */}
+                          <div className="pt-2">
+                            <Label className="text-xs mb-2 block">Theme Color</Label>
+                            <div className="flex gap-2 justify-between">
+                              {colorThemes.map((theme) => (
+                                <button
+                                  key={theme.id}
+                                  onClick={() => setSelectedTheme(theme.id)}
+                                  className={`w-8 h-8 rounded-full shadow-sm transition-transform ${selectedTheme === theme.id ? 'scale-125 ring-2 ring-offset-2 ring-foreground' : 'hover:scale-110'}`}
+                                  style={{ backgroundColor: theme.color }}
+                                />
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       <Button
                         onClick={handleDownload}
@@ -741,8 +811,127 @@ const PosterMaker = () => {
 
             </TabsContent>
 
-            {/* JOIN ONLINE PLATFORMS TAB */}
+            {/* RESOURCE HUB TAB */}
             <TabsContent value="platforms" className="space-y-6">
+
+              {/* Vlogs Section - Vendor Success Stories */}
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-primary">
+                  <span>📺</span> Vendor Success Stories & Guides
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <Card className="overflow-hidden bg-card border-border shadow-md hover:shadow-lg transition-shadow">
+                    <iframe
+                      className="w-full aspect-video"
+                      src="https://www.youtube.com/embed/S2C_Puw_6iI"
+                      title="Vada Pav Success Story"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                    <div className="p-3">
+                      <p className="font-bold text-sm">Mumbai Vada Pav Success Story 🥔</p>
+                      <p className="text-xs text-muted-foreground">Learn how he started small and grew big.</p>
+                    </div>
+                  </Card>
+                  <Card className="overflow-hidden bg-card border-border shadow-md hover:shadow-lg transition-shadow">
+                    <iframe
+                      className="w-full aspect-video"
+                      src="https://www.youtube.com/embed/8XKq0vXggqE"
+                      title="Street Food Hygiene Tips"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                    <div className="p-3">
+                      <p className="font-bold text-sm">Street Food Hygiene Tips 🧼</p>
+                      <p className="text-xs text-muted-foreground">Essential hygiene rules to attract more customers.</p>
+                    </div>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Written News Vlogs - Hygiene & Tips */}
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-primary">
+                  <span>📰</span> Latest Food Industry News
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {newsItems.map((news) => (
+                    <Card
+                      key={news.id}
+                      className="bg-card border-border shadow-md hover:shadow-lg transition-shadow overflow-hidden flex flex-col h-full cursor-pointer hover:scale-[1.02] transform duration-200"
+                      onClick={() => setSelectedNews(news)}
+                    >
+                      <div className="h-40 bg-gray-100 relative">
+                        <img src={news.image} alt={news.title} className="w-full h-full object-cover" />
+                        <div className={`absolute bottom-2 left-2 ${news.tagColor} text-white text-[10px] px-2 py-0.5 rounded uppercase font-bold`}>
+                          {news.tag}
+                        </div>
+                      </div>
+                      <div className="p-4 flex-1">
+                        <h4 className="font-bold text-lg mb-2 leading-tight">{news.title}</h4>
+                        <p className="text-sm text-muted-foreground line-clamp-3">
+                          {news.summary}
+                        </p>
+                        <p className="text-xs text-primary mt-3 font-bold flex items-center gap-1">
+                          Read full article <ArrowLeft className="w-3 h-3 rotate-180" />
+                        </p>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              {/* News Detail Dialog - Full Screen View */}
+              <Dialog open={!!selectedNews} onOpenChange={(open) => !open && setSelectedNews(null)}>
+                <DialogContent className="fixed left-0 top-0 w-[100vw] h-[100vh] max-w-none rounded-none m-0 p-0 transform-none border-none bg-background text-foreground flex flex-col focus:outline-none z-[200]">
+
+                  {/* Sticky Header */}
+                  <div className="sticky top-0 left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border p-4 z-[210] flex items-center gap-3 shadow-sm">
+                    <Button variant="ghost" size="icon" onClick={() => setSelectedNews(null)} className="rounded-full hover:bg-muted">
+                      <ArrowLeft className="w-5 h-5" />
+                    </Button>
+                    <span className="font-semibold text-lg">Back to Resource Hub</span>
+                  </div>
+
+                  {selectedNews && (
+                    <div className="flex-1 overflow-y-auto w-full">
+                      <div className="max-w-3xl mx-auto w-full p-4 md:p-8 pb-32 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className={`inline-block w-fit mb-4 ${selectedNews.tagColor} text-white text-xs px-2.5 py-1 rounded-full uppercase font-bold tracking-wide shadow-sm`}>
+                          {selectedNews.tag}
+                        </div>
+
+                        <h2 className="text-3xl md:text-4xl font-extrabold leading-tight mb-6 text-foreground">
+                          {selectedNews.title}
+                        </h2>
+
+                        <div className="w-full aspect-video rounded-2xl overflow-hidden mb-8 shadow-lg border border-border">
+                          <img src={selectedNews.image} alt={selectedNews.title} className="w-full h-full object-cover" />
+                        </div>
+
+                        <div className="prose prose-lg dark:prose-invert max-w-none">
+                          <div
+                            className="text-base md:text-lg leading-relaxed text-muted-foreground space-y-6"
+                            dangerouslySetInnerHTML={{ __html: selectedNews.fullContent }}
+                          />
+                        </div>
+
+                        <div className="mt-12 pt-8 border-t border-border flex flex-col gap-4 text-center text-muted-foreground text-sm">
+                          <p>Share this news with fellow vendors!</p>
+                          <div className="flex justify-center gap-4">
+                            <Button variant="outline" size="sm" className="gap-2">
+                              <Share2 className="w-4 h-4" /> Whatsapp
+                            </Button>
+                            <Button variant="outline" size="sm" className="gap-2">
+                              <Copy className="w-4 h-4" /> Copy Link
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </DialogContent>
+              </Dialog>
+
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Zomato Card */}
                 <Card className="bg-card border-border shadow-xl overflow-hidden">
@@ -765,11 +954,7 @@ const PosterMaker = () => {
                         Your browser does not support the video tag.
                       </video>
                     </div>
-                    <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                      <p>✅ Step 1: Register with your PAN & FSSAI</p>
-                      <p>✅ Step 2: Upload your menu with photos</p>
-                      <p>✅ Step 3: Start receiving orders!</p>
-                    </div>
+
                     <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Register on Zomato
@@ -798,11 +983,7 @@ const PosterMaker = () => {
                         Your browser does not support the video tag.
                       </video>
                     </div>
-                    <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                      <p>✅ Step 1: Fill the partner form</p>
-                      <p>✅ Step 2: Verify your documents</p>
-                      <p>✅ Step 3: Go live & earn daily!</p>
-                    </div>
+
                     <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Register on Swiggy

@@ -69,13 +69,18 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch Market Prices
-        const pricesRes = await fetch('http://localhost:5001/api/market-prices');
-        if (pricesRes.ok) {
-          const data = await pricesRes.json();
-          setMarketPrices(data.prices);
-          setMarketTip(data.tip);
-        }
+        // Fetch Market Prices (Mocked for Smart Comparison Demo)
+        // const pricesRes = await fetch('http://localhost:5001/api/market-prices');
+        // if (pricesRes.ok) { ... }
+
+        setMarketPrices([
+          { name: 'Onion (कांदा)', unit: '1 kg', marketPrice: 40, bestPrice: 32, platform: 'Blinkit', savings: 20, image: '🧅' },
+          { name: 'Tomato (टोमॅटो)', unit: '1 kg', marketPrice: 35, bestPrice: 28, platform: 'Zepto', savings: 20, image: '🍅' },
+          { name: 'Potato (बटाटा)', unit: '1 kg', marketPrice: 30, bestPrice: 30, platform: 'Market', savings: 0, image: '🥔' },
+          { name: 'Coriander (कोथिंबीर)', unit: '1 bunch', marketPrice: 20, bestPrice: 15, platform: 'JioMart', savings: 25, image: '🌿' },
+          { name: 'Oil (तेल)', unit: '1 Ltr', marketPrice: 110, bestPrice: 98, platform: 'Amazon', savings: 11, image: '🛢️' },
+        ]);
+        setMarketTip("Onion prices dropped on Blinkit due to new stock arrival.");
 
         // Fetch user insights
         // In a real app, we get ID from auth context. Here we check localStorage or use a default '1'
@@ -346,43 +351,57 @@ const Dashboard = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                  {/* Stock ticker style header */}
-                  <div className="grid grid-cols-4 bg-muted/50 px-6 py-3 border-b border-border text-sm font-semibold text-muted-foreground">
-                    <span>Ingredient</span>
-                    <span className="text-center">Unit</span>
-                    <span className="text-right">Price (₹)</span>
-                    <span className="text-center">Trend</span>
+                  {/* Comparison Grid Header */}
+                  <div className="hidden md:grid grid-cols-12 bg-muted/50 px-6 py-3 border-b border-border text-sm font-semibold text-muted-foreground">
+                    <span className="col-span-5">Ingredient</span>
+                    <span className="col-span-3 text-center">Market Rate</span>
+                    <span className="col-span-4 text-center">Best Deal Found</span>
                   </div>
 
                   {/* Price rows */}
                   <div className="divide-y divide-border">
-                    {marketPrices.map((item, index) => ( // Use fetched data
+                    {marketPrices.map((item, index) => (
                       <div
                         key={index}
-                        className="grid grid-cols-4 px-6 py-4 hover:bg-muted/30 transition-colors items-center"
+                        className="grid grid-cols-1 md:grid-cols-12 px-6 py-4 hover:bg-muted/30 transition-colors items-center gap-4"
                       >
-                        <span className="font-semibold text-lg text-foreground">{item.name}</span>
-                        <span className="text-center text-muted-foreground">{item.unit}</span>
-                        <span className="text-right text-xl font-bold text-foreground">₹{item.price.toFixed(0)}</span>
-                        <div className="flex items-center justify-center gap-2">
-                          {item.trend === 'up' && (
-                            <>
-                              <ArrowUp className="h-6 w-6 text-red-500" />
-                              <span className="text-red-500 font-semibold">+{item.change}%</span>
-                            </>
-                          )}
-                          {item.trend === 'down' && (
-                            <>
-                              <ArrowDown className="h-6 w-6 text-green-500" />
-                              <span className="text-green-500 font-semibold">{item.change}%</span>
-                            </>
-                          )}
-                          {item.trend === 'neutral' && (
-                            <>
-                              <Minus className="h-6 w-6 text-muted-foreground" />
-                              <span className="text-muted-foreground">No change</span>
-                            </>
-                          )}
+                        {/* Ingredient Name */}
+                        <div className="col-span-5 flex items-center gap-4">
+                          <span className="text-3xl bg-muted/20 p-2 rounded-lg border border-border/50">{item.image}</span>
+                          <div>
+                            <p className="font-bold text-lg leading-none">{item.name}</p>
+                            <p className="text-sm text-muted-foreground">{item.unit}</p>
+                          </div>
+                        </div>
+
+                        {/* Market Price Ref */}
+                        <div className="col-span-3 text-center flex md:flex-col items-center justify-between md:justify-center gap-2">
+                          <span className="md:hidden text-sm text-muted-foreground">Market:</span>
+                          <div>
+                            <span className={`text-lg font-medium ${item.bestPrice < item.marketPrice ? 'line-through text-muted-foreground/70' : 'text-foreground'}`}>
+                              ₹{item.marketPrice}
+                            </span>
+                            {item.bestPrice < item.marketPrice && (
+                              <span className="block text-xs text-red-400 font-medium">Expensive</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Best Deal */}
+                        <div className="col-span-4 flex items-center justify-between md:justify-center gap-4 bg-green-500/5 p-2 rounded-lg border border-green-500/20">
+                          <div className="text-left">
+                            <p className="text-xs text-muted-foreground uppercase tracking-wide font-bold">Best Price</p>
+                            <p className="text-xl font-bold text-green-700">₹{item.bestPrice}</p>
+                          </div>
+
+                          <div className="text-right">
+                            <Badge variant="outline" className="mb-1 bg-white hover:bg-white border-green-200 text-green-800 text-xs px-2 py-0.5 whitespace-nowrap">
+                              {item.platform}
+                            </Badge>
+                            {item.savings > 0 && (
+                              <p className="text-[10px] text-green-600 font-bold">Save {item.savings}%</p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}
