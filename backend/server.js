@@ -743,12 +743,54 @@ app.get('/api/market-prices', async (req, res) => {
         res.json({
             prices: prices,
             // Generate a dynamic tip based on the biggest savings
-            tip: "Tip: Check online platforms for bulk discounts on Oil & Onions!",
+            tip: "Check online platforms for bulk discounts on Oil & Onions!",
             lastUpdated: new Date()
         });
     } catch (error) {
         console.error('Error fetching market prices:', error);
         res.status(500).json({ error: 'Server Error' });
+    }
+});
+
+// Import the service
+const { analyzeDishIngredients, getIngredientDetails, updateIngredientPriceFromApify } = require('./services/smartShoppingService');
+const { fetchDataset } = require('./services/apifyService'); // Import apify service
+
+// --- Apify Webhook ---
+app.post('/api/webhook/apify', async (req, res) => {
+    try {
+        console.log("[Webhook] Received Apify event:", req.body);
+        const { eventType, resource } = req.body;
+
+        if (eventType === 'ACTOR.RUN.SUCCEEDED' || eventType === 'ACTOR.RUN.FINISHED') {
+            const datasetId = resource.defaultDatasetId;
+            console.log(`[Webhook] Fetching dataset ${datasetId}...`);
+
+            // Fetch items
+            const items = await fetchDataset(datasetId);
+
+            // Process items (Assuming they are blinkit/zepto product structures)
+            if (items && items.length > 0) {
+                await updateIngredientPriceFromApify(items);
+            }
+        }
+        res.status(200).send('OK');
+    } catch (error) {
+        console.error("[Webhook] Error processing:", error);
+        res.status(500).send('Error');
+    }
+});
+
+app.post('/api/market-prices/search', async (req, res) => {
+    try {
+        const { ingredient } = req.body;
+        if (!ingredient) return res.status(400).json({ error: "Ingredient name required" });
+
+        const result = await getIngredientDetails(ingredient);
+        res.json(result);
+    } catch (error) {
+        console.error("Search Error:", error);
+        res.status(500).json({ error: "Search failed" });
     }
 });
 
@@ -945,6 +987,7 @@ app.get('/api/dashboard/insights/:userId', async (req, res) => {
         ];
 
         // Sort logic to find next one
+        events.sort((a, b) => a.date - b.date);
         let nextEvent = events.find(e => e.date > today);
         if (!nextEvent) nextEvent = events[0]; // Fallback loop
 
@@ -1050,7 +1093,7 @@ app.get('/api/finances/export', (req, res) => {
 
 
 // --- SMART SHOPPING ROUTES ---
-const { analyzeDishIngredients } = require('./services/smartShoppingService');
+
 
 app.post('/api/smart-shopping/analyze', async (req, res) => {
     try {

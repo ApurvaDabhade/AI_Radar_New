@@ -196,4 +196,94 @@ const analyzeDishIngredients = async (dishName) => {
     };
 };
 
-module.exports = { analyzeDishIngredients };
+const { triggerScraper } = require('./apifyService');
+
+const getIngredientDetails = async (ingredientName) => {
+    // 1. Fetch Govt Price (Reference)
+    let avgMarketPrice = 40;
+    let govtItem = null;
+    try {
+        govtItem = await IngredientPrice.findOne({ name: { $regex: ingredientName, $options: 'i' } });
+        if (govtItem) avgMarketPrice = govtItem.marketPrice;
+    } catch (e) { console.error("DB lookup error", e); }
+
+    // 2. Search in Scrapers (Cached in Memory)
+    let blinkitItem = findProduct(blinkitData, ingredientName);
+    let zeptoItem = findProduct(zeptoData, ingredientName);
+
+    // 🔬 DYNAMIC TRIGGER: If not found in cache OR older than 24h (mock check), trigger scraper
+    const isCached = blinkitItem || zeptoItem;
+
+    // For Demo: If NOT cached, trigger Apify and return "Pending" status
+    if (!isCached) {
+        console.log(`[SmartShop] Ingredient '${ingredientName}' not found. Triggering Scraper...`);
+        triggerScraper(ingredientName); // Async trigger
+
+        return {
+            name: ingredientName,
+            status: 'pending', // Frontend should handle this
+            unit: "1 kg",
+            marketPrice: avgMarketPrice,
+            bestPrice: avgMarketPrice, // Temporary
+            platform: "Fetching...",
+            savings: 0,
+            image: '⏳'
+        };
+    }
+
+    const blinkitPrice = blinkitItem ? blinkitItem.price : Infinity;
+    const zeptoPrice = zeptoItem ? zeptoItem.price : Infinity;
+
+    // 3. Determine Best
+    let bestPrice = avgMarketPrice;
+    let platform = "Market";
+    let savings = 0;
+
+    if (blinkitItem && blinkitPrice < bestPrice) {
+        bestPrice = blinkitPrice;
+        platform = "Blinkit";
+    }
+    if (zeptoItem && zeptoPrice < bestPrice) {
+        bestPrice = zeptoPrice;
+        platform = "Zepto";
+    }
+
+    if (platform !== "Market") {
+        savings = Math.round(((avgMarketPrice - bestPrice) / avgMarketPrice) * 100);
+    }
+
+    return {
+        name: ingredientName,
+        status: 'available',
+        unit: blinkitItem?.quantity || zeptoItem?.quantity || "1 kg",
+        marketPrice: avgMarketPrice,
+        bestPrice: bestPrice,
+        platform: platform,
+        savings: savings > 0 ? savings : 0,
+        image: '🥘'
+    };
+};
+
+// Function called by Webhook to update DB/Cache
+const updateIngredientPriceFromApify = async (items) => {
+    console.log(`[SmartShop] Processing ${items.length} items from Apify Webhook...`);
+    // Ideally update standard DB. For now, pushing to memory cache for immediate update if server running
+    // In production, would save to MongoDB IngredientPrice
+    items.forEach(item => {
+        // Simplified mapping assuming structure matches our scraper
+        // Assuming item has: name, price, quantity, platform
+        const newItem = {
+            name: item.name || item.title,
+            price: item.price,
+            quantity: item.quantity || item.weight,
+            sub_category: item.category
+        };
+
+        // Push to memory cache for immediate search hits
+        // Just mixing into blinkitData for simplicity in this demo environment
+        blinkitData.push(newItem);
+    });
+    console.log(`[SmartShop] In-memory cache updated.`);
+};
+
+module.exports = { analyzeDishIngredients, getIngredientDetails, updateIngredientPriceFromApify };

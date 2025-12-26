@@ -38,12 +38,36 @@ const Dashboard = () => {
   const [costBreakdown, setCostBreakdown] = useState<any[]>([]);
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [newIngredient, setNewIngredient] = useState('');
+  const [addingIng, setAddingIng] = useState(false);
+
+  const handleAddIngredient = async () => {
+    if (!newIngredient.trim()) return;
+    setAddingIng(true);
+    try {
+      const res = await fetch('http://localhost:5001/api/market-prices/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ingredient: newIngredient })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Prepend new item
+        setMarketPrices(prev => [data, ...prev]);
+        setNewIngredient('');
+      }
+    } catch (e) {
+      console.error("Failed to add ingredient", e);
+    } finally {
+      setAddingIng(false);
+    }
+  };
 
   const [metricsData, setMetricsData] = useState<any>({
-    sales: { value: 'Loading...', change: '...', trend: 'neutral' },
-    waste: { value: '...', change: '...', trend: 'neutral' },
-    topItem: { value: 'Loading...', change: '...', trend: 'neutral' },
-    event: { value: 'Loading...', change: '...', trend: 'neutral' }
+    sales: { value: '-', change: '-', trend: 'neutral' },
+    waste: { value: '-', change: '-', trend: 'neutral' },
+    topItem: { value: '-', change: '-', trend: 'neutral' },
+    event: { value: '-', change: '-', trend: 'neutral' }
   });
 
   const [pendingOrders, setPendingOrders] = useState<any[]>([]);
@@ -69,18 +93,19 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Fetch Market Prices (Mocked for Smart Comparison Demo)
-        // const pricesRes = await fetch('http://localhost:5001/api/market-prices');
-        // if (pricesRes.ok) { ... }
-
-        setMarketPrices([
-          { name: 'Onion (कांदा)', unit: '1 kg', marketPrice: 40, bestPrice: 32, platform: 'Blinkit', savings: 20, image: '🧅' },
-          { name: 'Tomato (टोमॅटो)', unit: '1 kg', marketPrice: 35, bestPrice: 28, platform: 'Zepto', savings: 20, image: '🍅' },
-          { name: 'Potato (बटाटा)', unit: '1 kg', marketPrice: 30, bestPrice: 30, platform: 'Market', savings: 0, image: '🥔' },
-          { name: 'Coriander (कोथिंबीर)', unit: '1 bunch', marketPrice: 20, bestPrice: 15, platform: 'JioMart', savings: 25, image: '🌿' },
-          { name: 'Oil (तेल)', unit: '1 Ltr', marketPrice: 110, bestPrice: 98, platform: 'Amazon', savings: 11, image: '🛢️' },
-        ]);
-        setMarketTip("Onion prices dropped on Blinkit due to new stock arrival.");
+        // Fetch Market Prices from Backend
+        const pricesRes = await fetch('http://localhost:5001/api/market-prices');
+        if (pricesRes.ok) {
+          const data = await pricesRes.json();
+          setMarketPrices(data.prices || []);
+          if (data.tip) setMarketTip(data.tip);
+        } else {
+          // Fallback to mock if API fails
+          setMarketPrices([
+            { name: 'Onion (कांदा)', unit: '1 kg', marketPrice: 40, bestPrice: 32, platform: 'Blinkit', savings: 20, image: '🧅' },
+            { name: 'Tomato (टोमॅटो)', unit: '1 kg', marketPrice: 35, bestPrice: 28, platform: 'Zepto', savings: 20, image: '🍅' },
+          ]);
+        }
 
         // Fetch user insights
         // In a real app, we get ID from auth context. Here we check localStorage or use a default '1'
@@ -96,13 +121,53 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
+        // Set default/safe values on error
+        setMetricsData({
+          sales: { value: '₹0', change: '0%', trend: 'neutral' },
+          waste: { value: '0%', change: '0%', trend: 'neutral' },
+          topItem: { value: 'N/A', change: '', trend: 'neutral' },
+          event: { value: 'None', change: '', trend: 'neutral' }
+        });
       } finally {
         setLoading(false);
       }
     };
 
+
     fetchDashboardData();
   }, [t]);
+
+  // Polling for Pending Scrapes
+  useEffect(() => {
+    const pendingItems = marketPrices.filter(i => i.status === 'pending');
+    if (pendingItems.length === 0) return;
+
+    const interval = setInterval(async () => {
+      const updatedPrices = await Promise.all(marketPrices.map(async (item) => {
+        if (item.status === 'pending') {
+          try {
+            const res = await fetch('http://localhost:5001/api/market-prices/search', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ingredient: item.name }) // Re-search
+            });
+            if (res.ok) {
+              return await res.json();
+            }
+          } catch (e) { console.error("Poll error", e); }
+        }
+        return item;
+      }));
+
+      // Only update if there's a change to avoid re-renders? 
+      // Actually react state diffing handles it, but let's check deep equality or just set it.
+      // If status changed from pending -> available, it will update.
+      setMarketPrices(updatedPrices);
+
+    }, 5000); // Poll every 5s
+
+    return () => clearInterval(interval);
+  }, [marketPrices]);
 
   // Convert metricsData object to array for rendering
   const metrics = [
@@ -185,8 +250,8 @@ const Dashboard = () => {
           <header className="sticky top-0 z-40 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
               <div>
-                <h1 className="text-2xl font-bold text-primary">{t('app.name')}</h1>
-                <p className="text-sm text-muted-foreground">{t('app.subtitle')}</p>
+
+
               </div>
               <div className="flex items-center gap-3">
                 <Button
@@ -225,7 +290,7 @@ const Dashboard = () => {
                 <div>
                   <h2 className="text-3xl font-bold mb-1">Welcome back! 👋</h2>
                   <p className="text-lg text-primary font-serif italic mb-2">"पुन्हा स्वागत आहे!"</p>
-                  <p className="text-muted-foreground">Here's what's happening with your business today</p>
+
                 </div>
                 <div className="hidden md:flex gap-4">
                   <div className="w-20 h-20 rounded-lg overflow-hidden shadow-lg">
@@ -251,9 +316,7 @@ const Dashboard = () => {
                       Live Order Queue
                       <span className="block text-sm font-normal text-orange-600/80 font-serif ml-2">("प्रलंबित ऑर्डर्स")</span>
                     </CardTitle>
-                    <CardDescription>
-                      Orders placed via Digital Menu QR
-                    </CardDescription>
+
                   </div>
                   <Badge variant="destructive" className="text-lg px-3 py-1">
                     {pendingOrders.length} Pending
@@ -268,7 +331,7 @@ const Dashboard = () => {
                   ) : (
                     <div className="divide-y divide-border">
                       {pendingOrders.map((order: any) => (
-                        <div key={order.id} className="p-4 flex flex-col md:flex-row items-start md:items-center justify-between bg-white hover:bg-orange-50/50 transition-colors gap-4">
+                        <div key={order.id} className="p-4 flex flex-col md:flex-row items-start md:items-center justify-between bg-card hover:bg-accent transition-colors gap-4">
                           {/* Order Info */}
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
@@ -345,9 +408,22 @@ const Dashboard = () => {
                         Today's market prices • Updated just now
                       </CardDescription>
                     </div>
-                    <Badge className="bg-primary/20 text-primary text-lg px-4 py-2">
-                      {new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}
-                    </Badge>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Add ingredient..."
+                        value={newIngredient}
+                        onChange={(e) => setNewIngredient(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleAddIngredient()}
+                        className="bg-background border border-input rounded-md px-3 py-1 text-sm w-32 md:w-48"
+                      />
+                      <Button size="sm" onClick={handleAddIngredient} disabled={addingIng}>
+                        {addingIng ? '...' : '+'}
+                      </Button>
+                      <Badge className="bg-primary/20 text-primary text-lg px-4 py-2 hidden md:flex">
+                        {new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}
+                      </Badge>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -363,13 +439,18 @@ const Dashboard = () => {
                     {marketPrices.map((item, index) => (
                       <div
                         key={index}
-                        className="grid grid-cols-1 md:grid-cols-12 px-6 py-4 hover:bg-muted/30 transition-colors items-center gap-4"
+                        className="grid grid-cols-1 md:grid-cols-12 px-6 py-4 hover:bg-muted/30 transition-colors items-center gap-4 animate-in fade-in slide-in-from-top-2"
                       >
                         {/* Ingredient Name */}
                         <div className="col-span-5 flex items-center gap-4">
-                          <span className="text-3xl bg-muted/20 p-2 rounded-lg border border-border/50">{item.image}</span>
+                          <span className={`text-3xl bg-muted/20 p-2 rounded-lg border border-border/50 ${item.status === 'pending' ? 'animate-pulse' : ''}`}>
+                            {item.image}
+                          </span>
                           <div>
-                            <p className="font-bold text-lg leading-none">{item.name}</p>
+                            <p className="font-bold text-lg leading-none flex items-center gap-2">
+                              {item.name}
+                              {item.status === 'pending' && <span className="text-xs text-orange-500 font-normal animate-pulse">(Finding prices...)</span>}
+                            </p>
                             <p className="text-sm text-muted-foreground">{item.unit}</p>
                           </div>
                         </div>
@@ -378,30 +459,40 @@ const Dashboard = () => {
                         <div className="col-span-3 text-center flex md:flex-col items-center justify-between md:justify-center gap-2">
                           <span className="md:hidden text-sm text-muted-foreground">Market:</span>
                           <div>
-                            <span className={`text-lg font-medium ${item.bestPrice < item.marketPrice ? 'line-through text-muted-foreground/70' : 'text-foreground'}`}>
+                            <span className="text-lg font-medium text-foreground">
                               ₹{item.marketPrice}
                             </span>
-                            {item.bestPrice < item.marketPrice && (
-                              <span className="block text-xs text-red-400 font-medium">Expensive</span>
-                            )}
+
                           </div>
                         </div>
 
                         {/* Best Deal */}
-                        <div className="col-span-4 flex items-center justify-between md:justify-center gap-4 bg-green-500/5 p-2 rounded-lg border border-green-500/20">
-                          <div className="text-left">
-                            <p className="text-xs text-muted-foreground uppercase tracking-wide font-bold">Best Price</p>
-                            <p className="text-xl font-bold text-green-700">₹{item.bestPrice}</p>
-                          </div>
+                        <div className={`col-span-4 flex items-center justify-between md:justify-center gap-4 p-2 rounded-lg border ${item.status === 'pending' ? 'bg-orange-50 border-orange-200' : 'bg-green-500/5 border-green-500/20'}`}>
+                          {item.status === 'pending' ? (
+                            <div className="w-full text-center py-1">
+                              <p className="text-sm font-semibold text-orange-600 flex items-center justify-center gap-2">
+                                <span className="animate-spin text-xl">⏳</span>
+                                Scraping Live Prices...
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-1">This may take 10-30s</p>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="text-left">
+                                <p className="text-xs text-muted-foreground uppercase tracking-wide font-bold">Best Price</p>
+                                <p className="text-xl font-bold text-green-600">₹{item.bestPrice}</p>
+                              </div>
 
-                          <div className="text-right">
-                            <Badge variant="outline" className="mb-1 bg-white hover:bg-white border-green-200 text-green-800 text-xs px-2 py-0.5 whitespace-nowrap">
-                              {item.platform}
-                            </Badge>
-                            {item.savings > 0 && (
-                              <p className="text-[10px] text-green-600 font-bold">Save {item.savings}%</p>
-                            )}
-                          </div>
+                              <div className="text-right">
+                                <Badge className="mb-1 bg-secondary hover:bg-secondary/80 text-secondary-foreground border-none text-xs px-2 py-0.5 whitespace-nowrap shadow-sm">
+                                  {item.platform}
+                                </Badge>
+                                {item.savings > 0 && (
+                                  <p className="text-[10px] text-green-600 font-bold">Save {item.savings}%</p>
+                                )}
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -460,7 +551,7 @@ const Dashboard = () => {
                         <p className="text-muted-foreground">Recommended Price: <span className="text-green-600 font-bold">₹{costBreakdown.find(c => c.name === selectedDish)?.recommendedPrice}</span></p>
 
                         {/* Ingredient Details List */}
-                        <div className="mt-4 bg-white rounded-lg border border-border overflow-hidden">
+                        <div className="mt-4 bg-background rounded-lg border border-border overflow-hidden">
                           <div className="grid grid-cols-3 bg-muted px-4 py-2 text-xs font-semibold text-muted-foreground">
                             <span className="text-left">Ingredient</span>
                             <span className="text-center">Qty</span>
