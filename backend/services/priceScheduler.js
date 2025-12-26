@@ -112,17 +112,67 @@ const updatePrices = async () => {
                 marketPrice = getBasePrice(item.apiName);
             }
 
-            // Simulate Online Best Price
-            const bestPrice = Math.floor(marketPrice * 0.85); // 15% cheaper online usually
+            // --- REAL PRICE LOOKUP ---
+            // Load fresh scraper data (Synchronous read for simplicity in scheduler)
+            const fs = require('fs');
+            const path = require('path');
+
+            const blinkitPath = path.join(__dirname, '../dataset_blinkit-product-scraper_2025-12-25_07-58-49-634.json');
+            const zeptoPath = path.join(__dirname, '../dataset_zepto-scraper_2025-12-25_08-03-09-336.json');
+
+            let blinkitPrice = Infinity;
+            let zeptoPrice = Infinity;
+
+            const findCheapestInFile = (filePath, query) => {
+                try {
+                    if (fs.existsSync(filePath)) {
+                        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+                        const matches = data.filter(d => (d.name || '').toLowerCase().includes(query.toLowerCase()));
+                        if (matches.length > 0) {
+                            // Sort by price ascending
+                            matches.sort((a, b) => a.price - b.price);
+                            return matches[0].price;
+                        }
+                    }
+                } catch (e) { /* ignore */ }
+                return Infinity;
+            };
+
+            blinkitPrice = findCheapestInFile(blinkitPath, item.apiName);
+            zeptoPrice = findCheapestInFile(zeptoPath, item.apiName);
+
+            // Determine Best Online Price
+            let bestPrice = marketPrice;
+            let platform = 'Market';
+
+            // Compare Blinkit
+            if (blinkitPrice < bestPrice) {
+                bestPrice = blinkitPrice;
+                platform = 'Blinkit';
+            }
+
+            // Compare Zepto
+            if (zeptoPrice < bestPrice) {
+                bestPrice = zeptoPrice;
+                platform = 'Zepto';
+            }
+
+            // Fallback Simulation if no online data found (Prevents empty table if scrape fails)
+            if (platform === 'Market') {
+                // Try to simulate ONLY if we really found nothing, to keep UI populated
+                // But user asked for REAL comparison. 
+                // If real comparison fails, bestPrice = marketPrice is honest.
+                // let's stick to honest.
+            }
+
             const savings = Math.max(0, Math.round(((marketPrice - bestPrice) / marketPrice) * 100));
-            const platforms = ['Blinkit', 'Zepto', 'JioMart', 'Amazon Fresh', 'BigBasket'];
 
             freshData.push({
                 name: item.dbName,
                 unit: '1 kg',
                 marketPrice,
                 bestPrice,
-                platform: platforms[Math.floor(Math.random() * platforms.length)],
+                platform: platform,
                 savings,
                 image: item.image,
                 date: new Date(),
@@ -130,7 +180,7 @@ const updatePrices = async () => {
             });
         });
 
-        // Add Oil manual override as it's likely not in raw mandi
+        // Add Oil manual override
         freshData.push({
             name: 'Oil (तेल)', base: 140, image: '🛢️', unit: '1 Ltr',
             marketPrice: 140, bestPrice: 125, platform: 'JioMart', savings: 10, date: new Date(), source: 'System AI'
