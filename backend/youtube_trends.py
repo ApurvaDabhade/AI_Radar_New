@@ -5,41 +5,53 @@ import pandas as pd
 from rapidfuzz import process
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import nltk
-import dotenv
-from dotenv import load_dotenv
 import os
+from datetime import datetime
+from dotenv import load_dotenv
 
-# Make sure to download vader lexicon once if not done
+# Setup
 nltk.download("vader_lexicon")
 load_dotenv()
 
 API_KEY = os.getenv("YOUTUBE_API_KEY")
 SEARCH_QUERY = "Indian street food"
 MAX_RESULTS = 500
+DISHES_CSV = "indian_dishes_200.csv"
+OUTPUT_CSV = "output.csv"
+LAST_RUN_FILE = "last_run_date.txt"
 
 YOUTUBE_SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
 YOUTUBE_VIDEO_URL = "https://www.googleapis.com/youtube/v3/videos"
 YOUTUBE_COMMENTS_URL = "https://www.googleapis.com/youtube/v3/commentThreads"
 
-DISHES_CSV = "indian_dishes_200.csv"
-OUTPUT_CSV = "output.csv"
 
-# Load dish names
-with open(DISHES_CSV, "r", encoding="utf-8") as f:
-    dish_list = [row.strip().lower() for row in f.readlines()]
+# ------------------ Helpers ------------------
+def should_run_this_month():
+    current_month = datetime.now().strftime("%Y-%m")
+    if not os.path.exists(LAST_RUN_FILE):
+        return True
+    with open(LAST_RUN_FILE, "r") as f:
+        last_run_month = f.read().strip()
+    return current_month != last_run_month
 
-# Helper: clean text for matching
+
+def update_last_run_date():
+    current_month = datetime.now().strftime("%Y-%m")
+    with open(LAST_RUN_FILE, "w") as f:
+        f.write(current_month)
+
+
 def clean_text(text):
     text = text.lower()
     text = re.sub(r"[^a-z0-9 ]", " ", text)
     return text
 
-# Fuzzy dish match
+
 def get_best_dish_match(text, dish_list, threshold=70):
     match, score, _ = process.extractOne(text, dish_list)
     return match if score >= threshold else None
 
-# Fetch videos
+
 def get_videos(query, max_results=50):
     params = {
         "part": "snippet",
@@ -52,7 +64,7 @@ def get_videos(query, max_results=50):
     response = requests.get(YOUTUBE_SEARCH_URL, params=params).json()
     return response.get("items", [])
 
-# Fetch video stats
+
 def get_video_stats(video_id):
     params = {
         "part": "statistics,snippet",
@@ -72,7 +84,7 @@ def get_video_stats(video_id):
         }
     return None
 
-# Fetch top comments
+
 def get_top_comments(video_id, max_comments=7):
     params = {
         "part": "snippet",
@@ -92,8 +104,9 @@ def get_top_comments(video_id, max_comments=7):
         comments.append("-")
     return comments[:max_comments]
 
-# Sentiment analyzer init
+
 sid = SentimentIntensityAnalyzer()
+
 
 def get_sentiment_scores(comments):
     pos, neg, neu = 0, 0, 0
@@ -108,16 +121,22 @@ def get_sentiment_scores(comments):
         count += 1
     if count > 0:
         return pos/count, neg/count, neu/count
-    else:
-        return 0, 0, 0
+    return 0, 0, 0
 
-def main():
+
+def run_trend_pipeline():
+    """Runs the full trend analysis pipeline."""
+    if os.path.exists(OUTPUT_CSV):
+        os.remove(OUTPUT_CSV)
+
+    with open(DISHES_CSV, "r", encoding="utf-8") as f:
+        dish_list = [row.strip().lower() for row in f.readlines()]
+
     collected_rows = []
     videos = get_videos(SEARCH_QUERY, max_results=MAX_RESULTS)
 
     for v in videos:
         video_id = v["id"]["videoId"]
-        # Fetch video details & stats
         stats = get_video_stats(video_id)
         if not stats:
             continue
@@ -128,10 +147,7 @@ def main():
         if not dish_match:
             continue
 
-        # Fetch comments
         comments = get_top_comments(video_id)
-
-        # Sentiment scores per video
         pos, neg, neu = get_sentiment_scores(comments)
 
         collected_rows.append({
@@ -144,10 +160,10 @@ def main():
             "neutral": neu
         })
 
-    # Aggregate by dish, summing reach but keeping sentiments from first occurrence
     df = pd.DataFrame(collected_rows)
     if df.empty:
-        print("No data collected.")
+        print("⚠️ No data collected.")
+        df.to_csv(OUTPUT_CSV, index=False)
         return
 
     agg_df = df.groupby("dish_name").agg({
@@ -159,16 +175,22 @@ def main():
         "neutral": "first"
     }).reset_index()
 
-    # Calculate popularity score
-    agg_df["popularity_score"] = (agg_df["positive"] * 100) + (agg_df["negative"] * -100) + (agg_df["neutral"] * 50)
-    agg_df["popularity_score"] = agg_df["popularity_score"].round(2)
+    agg_df["popularity_score"] = (
+        agg_df["positive"] * 100
+        + agg_df["negative"] * -100
+        + agg_df["neutral"] * 50
+    ).round(2)
 
-    # Sort descending by popularity score
     agg_df = agg_df.sort_values(by="popularity_score", ascending=False)
-
-    # Save full table
     agg_df.to_csv(OUTPUT_CSV, index=False)
-    print(f"✅ All data saved to {OUTPUT_CSV}")
+    update_last_run_date()
+    print("✅ Monthly YouTube trends updated successfully.")
 
-if __name__ == "__main__":
-    main()
+
+def monthly_trends_manager(force_refresh=False):
+    """Run once per month unless forced."""
+    if force_refresh or should_run_this_month():
+        print("🗓 Running monthly update for YouTube trends...")
+        run_trend_pipeline()
+    else:
+        print("⚙️ This month's trends already up-to-date. Skipping regeneration.")

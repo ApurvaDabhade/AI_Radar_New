@@ -21,6 +21,7 @@ from gap_analysis import perform_gap_analysis
 import pandas as pd
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from youtube_trends import monthly_trends_manager
 
 # =====================================================
 # App Configuration
@@ -40,7 +41,7 @@ inventory_collection = db["items"]
 
 # =====================================================
 # Blueprints
-# =====================================================
+# ===================================================== 
 app.register_blueprint(chat_routes, url_prefix="/api")
 app.register_blueprint(tourism_routes, url_prefix="/api")
 app.register_blueprint(insight_routes, url_prefix="/api")
@@ -186,9 +187,17 @@ def gap_analysis_route():
 @app.route("/api/food-trends", methods=["GET"])
 def food_trends():
     try:
+        refresh = request.args.get("refresh", "false").lower() == "true"
+        monthly_trends_manager(force_refresh=refresh)
+
         df = pd.read_csv(OUTPUT_CSV)
         data = df.to_dict(orient="records")
-        return jsonify({"status": "success", "data": data})
+
+        return jsonify({
+            "status": "success",
+            "data": data,
+            "message": "Data fetched successfully" if not refresh else "Fresh trends generated successfully"
+        })
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
