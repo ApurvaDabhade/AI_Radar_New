@@ -1,0 +1,6 @@
+pandas
+torch
+transformers
+google-api-python-client
+google-auth
+python-dotenv

@@ -24,7 +24,7 @@ import {
   Clock
 } from 'lucide-react';
 import foodStallBg from '@/assets/food-stall-bg.jpg';
-import indianThali from '@/assets/indian-thali.png';
+import indianThali from '@/assets/indian-thali.jpg';
 
 const Dashboard = () => {
   const navigate = useNavigate();

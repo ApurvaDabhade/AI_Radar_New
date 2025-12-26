@@ -238,7 +238,7 @@ app.post('/api/poster-assistant', async (req, res) => {
 // --- Video Reel Generator ---
 app.post('/api/reel-generator', upload.single('video'), async (req, res) => {
     try {
-        const { platform, video_duration_seconds } = req.body;
+        const { platform, video_duration_seconds, style_preference } = req.body;
         const videoFile = req.file;
 
         if (!videoFile) {
@@ -270,10 +270,11 @@ app.post('/api/reel-generator', upload.single('video'), async (req, res) => {
         INPUT:
         Duration Setting: ${video_duration_seconds} seconds
         Platform: ${platform}
+        Requested Style/Theme: ${style_preference || 'General/Auto-Detect'}
 
         YOUR RESPONSIBILITIES:
         1. Identify the food category (Street food, Dessert, Beverage, Snack, Other) from the video visual.
-        2. Decide the promotional tone based on the visual appeal.
+        2. Decide the promotional tone based on the visual appeal AND the Requested Style (e.g. if Festival, make it festive).
         3. Select background music characteristics (Style, Tempo, Energy).
         4. Generate 2-3 short promotional captions based on what is shown.
 
@@ -798,15 +799,12 @@ app.get('/api/dashboard/insights/:userId', async (req, res) => {
     const { userId } = req.params;
     // For demo, we might find by ID or name, but let's just find the latest user if ID doesn't match directly
     // or simulate based on local storage ID. For now, assuming user exists in our mock array.
-    // For demo, we might find by ID or name, but let's just find the latest user if ID doesn't match directly
-    // or simulate based on local storage ID. For now, assuming user exists in our mock array.
     try {
         let user = null;
         try {
-            user = await User.findOne({ id: userId }) || await User.findOne({}); // Fallback to any user
-        } catch (err) {
-            console.log("DB lookup failed, using mock user");
-        }
+            // Try fetching from DB, fallback to any user
+            user = await User.findOne({ id: userId }) || await User.findOne({});
+        } catch (e) { console.log("User lookup failed, using mock"); }
 
         // if (!user) return res.status(404).json({ error: 'User not found' });
         if (!user) {
@@ -1015,6 +1013,14 @@ app.get('/api/dashboard/insights/:userId', async (req, res) => {
 const financesFile = path.join(__dirname, 'data', 'finances.json');
 let finances = [];
 
+const saveFinances = () => {
+    try {
+        fs.writeFileSync(financesFile, JSON.stringify(finances, null, 2));
+    } catch (error) {
+        console.error('Error saving finances:', error);
+    }
+};
+
 const loadFinances = () => {
     try {
         if (fs.existsSync(financesFile)) {
@@ -1036,14 +1042,6 @@ const loadFinances = () => {
         console.log(`Loaded ${finances.length} transactions.`);
     } catch (error) {
         console.error('Error loading finances:', error);
-    }
-};
-
-const saveFinances = () => {
-    try {
-        fs.writeFileSync(financesFile, JSON.stringify(finances, null, 2));
-    } catch (error) {
-        console.error('Error saving finances:', error);
     }
 };
 
@@ -1091,9 +1089,7 @@ app.get('/api/finances/export', (req, res) => {
     res.send(header + rows);
 });
 
-
 // --- SMART SHOPPING ROUTES ---
-
 
 app.post('/api/smart-shopping/analyze', async (req, res) => {
     try {
@@ -1108,9 +1104,35 @@ app.post('/api/smart-shopping/analyze', async (req, res) => {
     }
 });
 
+// --- ADMIN: Deduplicate Ingredients Endpoint ---
+app.post('/api/admin/deduplicate', async (req, res) => {
+    try {
+        console.log("Checking for duplicates via Admin API...");
+        const allDocs = await IngredientPrice.find({}).sort({ date: -1 });
+        const seen = new Set();
+        const duplicates = [];
+
+        for (const doc of allDocs) {
+            const name = doc.name;
+            if (seen.has(name)) {
+                duplicates.push(doc._id);
+            } else {
+                seen.add(name);
+            }
+        }
+
+        if (duplicates.length > 0) {
+            await IngredientPrice.deleteMany({ _id: { $in: duplicates } });
+            res.json({ success: true, message: `Removed ${duplicates.length} duplicates.` });
+        } else {
+            res.json({ success: true, message: "No duplicates found." });
+        }
+    } catch (error) {
+        console.error("Deduplication error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
-// End of file

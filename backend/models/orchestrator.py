@@ -1,198 +1,277 @@
+# models/orchestrator.py
+
+from dotenv import load_dotenv
+load_dotenv()  # ✅ load .env ONCE
+
 import os
 import json
 import re
+import ast
 import pandas as pd
 from datetime import datetime
+
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+
 from sklearn.preprocessing import OneHotEncoder, MultiLabelBinarizer
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_classic.memory import ConversationBufferMemory
-from langchain_classic.chains import ConversationChain
 
-# ============================
-# 1️⃣ Configuration
-# ============================
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# Navigate up one level from models/ to backend/, then into data/
-BACKEND_DIR = os.path.dirname(BASE_DIR)
-SERVICE_ACCOUNT_FILE = os.path.join(BACKEND_DIR, "data", "calender.json")
-ORDERS_CSV = os.path.join(BACKEND_DIR, "data", "order.csv")
-MENU_CSV = os.path.join(BACKEND_DIR, "data", "menu.csv")
-os.environ["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY", "YOUR_GEMINI_KEY")
 
-# ============================
-# 2️⃣ Season & festival helper
-# ============================
+# =====================================================
+# 1️⃣ ENV VALIDATION (STRICT)
+# =====================================================
+GEMINI_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_KEY:
+    raise RuntimeError("❌ GEMINI_API_KEY missing in .env")
+
+# 🔐 Bind ONCE (no override later)
+os.environ["GOOGLE_API_KEY"] = GEMINI_KEY
+
+
+# =====================================================
+# 2️⃣ PATH CONFIG
+# =====================================================
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, "data", "calender.json")
+ORDERS_CSV = os.path.join(BASE_DIR, "data", "order.csv")
+MENU_CSV = os.path.join(BASE_DIR, "data", "menu.csv")
+
+
+# =====================================================
+# 3️⃣ SEASON HELPER
+# =====================================================
 def month_to_season(month: int) -> str:
     if month in [3, 4, 5, 6]:
-        return 'Summer'
+        return "Summer"
     elif month in [7, 8, 9, 10]:
-        return 'Monsoon'
-    else:
-        return 'Winter'
+        return "Monsoon"
+    return "Winter"
 
-def fetch_festivals(service, calendar_id, start_date='2025-01-01', end_date='2025-12-31'):
-    events_result = service.events().list(
-        calendarId=calendar_id,
-        timeMin=start_date + 'T00:00:00Z',
-        timeMax=end_date + 'T23:59:59Z',
-        singleEvents=True,
-        orderBy='startTime'
-    ).execute()
-    events = events_result.get('items', [])
-    data = [{'date': e['start']['date'], 'festival': e.get('summary', '')}
-            for e in events if 'date' in e['start']]
-    df = pd.DataFrame(data)
-    if not df.empty:
-        df['date'] = pd.to_datetime(df['date'])
-        df['season'] = df['date'].dt.month.apply(month_to_season)
-    else:
-        df = pd.DataFrame(columns=['date','festival','season'])
-    return df
 
-# ============================
-# 3️⃣ Initialize data
-# ============================
-calendar_id = 'en.indian#holiday@group.v.calendar.google.com'
-try:
-    credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/calendar.readonly']
-    )
-    service = build('calendar', 'v3', credentials=credentials)
-    festivals_df = fetch_festivals(service, calendar_id)
-except Exception as e:
-    print("⚠️ Google Calendar fetch failed:", e)
-    festivals_df = pd.DataFrame(columns=['date','festival','season'])
+# =====================================================
+# 4️⃣ GOOGLE CALENDAR (OPTIONAL & SAFE)
+# =====================================================
+def fetch_festivals():
+    if not os.path.exists(SERVICE_ACCOUNT_FILE):
+        return pd.DataFrame(columns=["date", "festival"])
 
+    try:
+        credentials = service_account.Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_FILE,
+            scopes=["https://www.googleapis.com/auth/calendar.readonly"]
+        )
+        service = build("calendar", "v3", credentials=credentials)
+
+        events = service.events().list(
+            calendarId="en.indian#holiday@group.v.calendar.google.com",
+            singleEvents=True,
+            orderBy="startTime"
+        ).execute().get("items", [])
+
+        rows = []
+        for e in events:
+            d = e["start"].get("date")
+            if d:
+                rows.append({"date": d, "festival": e.get("summary", "")})
+
+        df = pd.DataFrame(rows)
+        if not df.empty:
+            df["date"] = pd.to_datetime(df["date"])
+        return df
+
+    except Exception:
+        return pd.DataFrame(columns=["date", "festival"])
+
+
+# =====================================================
+# 5️⃣ LOAD DATA
+# =====================================================
 orders_df = pd.read_csv(ORDERS_CSV)
-orders_df['order_date'] = pd.to_datetime(orders_df['order_date'])
+orders_df["order_date"] = pd.to_datetime(orders_df["order_date"])
+orders_df["season"] = orders_df["order_date"].dt.month.apply(month_to_season)
+orders_df["festival"] = "None"
 
-menu_df = pd.read_csv(MENU_CSV)
-menu_df['available_toppings'] = menu_df['available_toppings'].apply(
-    lambda x: [s.strip() for s in str(x).split(',')] if pd.notna(x) else [])
-menu_df['available_addons'] = menu_df['available_addons'].apply(
-    lambda x: [s.strip() for s in str(x).split(',')] if pd.notna(x) else [])
+orders_df["toppings_list"] = orders_df["toppings_selected"].apply(
+    lambda x: ast.literal_eval(x) if isinstance(x, str) else []
+)
+orders_df["addons_list"] = orders_df["addons_selected"].apply(
+    lambda x: ast.literal_eval(x) if isinstance(x, str) else []
+)
 
-# Merge season/festival info
-orders_df = orders_df.merge(
-    festivals_df[['date', 'festival']],
-    left_on='order_date',
-    right_on='date',
-    how='left'
-).drop(columns=['date'])
-orders_df['festival'] = orders_df['festival'].fillna('None')
-orders_df['season'] = orders_df['order_date'].dt.month.apply(month_to_season)
-orders_df['toppings_list'] = orders_df['toppings_selected'].apply(
-    lambda x: eval(x) if isinstance(x, str) and x.startswith('[') else [])
-orders_df['addons_list'] = orders_df['addons_selected'].apply(
-    lambda x: eval(x) if isinstance(x, str) and x.startswith('[') else [])
+try:
+    menu_df = pd.read_csv(MENU_CSV)
+except Exception:
+    menu_df = pd.DataFrame()
 
-# ============================
-# 4️⃣ Train models
-# ============================
-X = orders_df[['dish_name', 'season', 'festival']]
-encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
+
+# =====================================================
+# 6️⃣ TRAIN ML MODELS
+# =====================================================
+X = orders_df[["dish_name", "season", "festival"]]
+
+encoder = OneHotEncoder(sparse_output=False, handle_unknown="ignore")
 X_encoded = encoder.fit_transform(X)
 
 mlb_toppings = MultiLabelBinarizer()
 mlb_addons = MultiLabelBinarizer()
-y_toppings = mlb_toppings.fit_transform(orders_df['toppings_list'])
-y_addons = mlb_addons.fit_transform(orders_df['addons_list'])
 
-X_train, X_test, y_train_t, y_test_t = train_test_split(X_encoded, y_toppings, test_size=0.2, random_state=42)
-_, _, y_train_a, y_test_a = train_test_split(X_encoded, y_addons, test_size=0.2, random_state=42)
+y_toppings = mlb_toppings.fit_transform(orders_df["toppings_list"])
+y_addons = mlb_addons.fit_transform(orders_df["addons_list"])
 
-topping_model = MultiOutputClassifier(RandomForestClassifier(n_estimators=100, random_state=42)).fit(X_train, y_train_t)
-addon_model = MultiOutputClassifier(RandomForestClassifier(n_estimators=100, random_state=42)).fit(X_train, y_train_a)
+X_train, _, y_train_t, _ = train_test_split(X_encoded, y_toppings, test_size=0.2)
+_, _, y_train_a, _ = train_test_split(X_encoded, y_addons, test_size=0.2)
 
-# ============================
-# 5️⃣ LangChain / Gemini setup
-# ============================
-chat_model = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7)
-memory = ConversationBufferMemory(memory_key="history", return_messages=True)
-conv_chain = ConversationChain(llm=chat_model, memory=memory, verbose=True)
+topping_model = MultiOutputClassifier(RandomForestClassifier()).fit(X_train, y_train_t)
+addon_model = MultiOutputClassifier(RandomForestClassifier()).fit(X_train, y_train_a)
 
-# ============================
-# 6️⃣ Tools
-# ============================
-def clean_list_items(items):
-    """Flatten any Marathi objects into strings"""
-    clean = []
-    for i in items:
-        if isinstance(i, dict):
-            clean.extend(list(i.values()))
-        else:
-            clean.append(i)
-    return clean
 
-def generate_dish_advisory_tool_fn(payload: str) -> str:
+# =====================================================
+# 7️⃣ GEMINI MODELS
+# =====================================================
+def get_chat_model(model_name="gemini-1.5-flash"):
     try:
-        data = json.loads(payload)
-        dish = data['dish_name']
-        season = data['season']
-        lang = data['language']
-        option = data.get('option', 'both')
+        return ChatGoogleGenerativeAI(
+            model=model_name,
+            temperature=0.4,
+            timeout=30
+        )
+    except Exception:
+        return None
 
-        if option == "topping":
-            prompt = f"Suggest 3–5 toppings for {dish} in {season} season."
-        elif option == "addon":
-            prompt = f"Suggest 3–5 add-ons for {dish} in {season} season."
-        else:
-            prompt = f"Suggest 3–5 toppings and 3–5 add-ons for {dish} in {season} season."
+# =====================================================
+# 8️⃣ GEMINI TOOL
+# =====================================================
+def generate_dish_advisory(dish, season, festival="None", dish_details="", language="English", option="both"):
+    
+    context_part = ""
+    if dish_details:
+        context_part += f"The dish contains {dish_details}. "
+    if festival and festival != "None":
+        context_part += f"It is the occasion of {festival}, so suggest festive options. "
 
-        if lang.lower() == "marathi":
-            prompt += " Translate all suggestions into Marathi."
+    if option == "topping":
+        prompt = f"{context_part}Suggest 3–5 toppings for {dish} in {season} season."
+    elif option == "addon":
+        prompt = f"{context_part}Suggest 3–5 add-ons for {dish} in {season} season."
+    else:
+        prompt = f"{context_part}Suggest 3–5 toppings and 3–5 add-ons for {dish} in {season} season."
 
-        system_msg = SystemMessage(content="Return only JSON in this format: {\"toppings\":[],\"addons\":[]}")
-        user_msg = HumanMessage(content=prompt)
-        response = chat_model.invoke([system_msg, user_msg])
-        raw = response.content.strip()
-        match = re.search(r"\{.*\}", raw, re.DOTALL)
-        result = json.loads(match.group(0)) if match else {}
+    if language.lower() == "marathi":
+        prompt += " Translate everything into Marathi."
 
-        # Flatten objects
-        result["toppings"] = clean_list_items(result.get("toppings", []))
-        result["addons"] = clean_list_items(result.get("addons", []))
-        return json.dumps(result)
+    # List of models to try in order
+    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-flash-001", "gemini-pro"]
+    
+    response_content = None
+    
+    for model_name in models_to_try:
+        try:
+            chat_model = get_chat_model(model_name)
+            if not chat_model:
+                continue
+                
+            response = chat_model.invoke([
+                SystemMessage(content="Return ONLY JSON: {\"toppings\":[],\"addons\":[]}"),
+                HumanMessage(content=prompt)
+            ])
+            response_content = response.content
+            if response_content:
+                break
+        except Exception as e:
+            print(f"⚠️ Model {model_name} failed: {e}")
+            continue
 
+    if not response_content:
+        print("❌ All AI models failed.")
+        return {"toppings": ["Crispy Noodles", "Fried Onions"], "addons": ["Extra Sauce", "Pickle"]} # Fallback defaults
+
+    try:
+        match = re.search(r"\{.*\}", response_content, re.DOTALL)
+        if match:
+             return json.loads(match.group(0))
+    except json.JSONDecodeError:
+        print("❌ JSON Decode Error from AI response")
     except Exception as e:
-        return json.dumps({"error": "llm_failed", "message": str(e)})
+        print(f"❌ Error parsing AI response: {e}")
 
-# ============================
-# 7️⃣ Orchestrator
-# ============================
-def suggest_items_orchestrator(order_date: str, dish_name: str, language: str = "English", option: str = "both"):
-    date_str = pd.to_datetime(order_date).strftime("%Y-%m-%d")
-    season = month_to_season(datetime.now().month)
+    return {"toppings": [], "addons": []}
+
+
+# =====================================================
+# 9️⃣ ORCHESTRATOR
+# =====================================================
+def suggest_items_orchestrator(order_date, dish_name, language="English", option="both"):
+    order_dt = pd.to_datetime(order_date)
+    season = month_to_season(order_dt.month)
+    
+    # 1. Look up Festival
     festival = "None"
+    try:
+        festivals_df = fetch_festivals()
+        if not festivals_df.empty:
+            # Check if this date has a festival
+            mask = festivals_df["date"] == order_dt
+            if mask.any():
+                festival = festivals_df.loc[mask, "festival"].values[0]
+    except Exception as e:
+        print(f"⚠️ Festival lookup failed: {e}")
+
+    # 2. Look up Dish Details from Menu
+    dish_details = ""
+    try:
+        if not menu_df.empty:
+            # menu.csv columns: dish_id, dish_name, category, base_price, available_toppings, available_addons
+            
+            # Normalize column names just in case
+            menu_df.columns = [c.strip() for c in menu_df.columns]
+            
+            # Find the row (Case-insensitive search)
+            row = menu_df[menu_df["dish_name"].str.lower() == dish_name.lower()]
+            if not row.empty:
+                category = row.iloc[0].get("category", "")
+                base_price = row.iloc[0].get("base_price", "")
+                
+                details_parts = []
+                if category:
+                    details_parts.append(f"category: {category}")
+                if base_price:
+                    details_parts.append(f"base price: {base_price}")
+                
+                dish_details = ", ".join(details_parts)
+    except Exception as e:
+        print(f"⚠️ Menu lookup failed: {e}")
+
 
     toppings, addons = [], []
 
-    llm_out = json.loads(generate_dish_advisory_tool_fn(json.dumps({
-        "dish_name": dish_name,
-        "season": season,
-        "language": language,
-        "option": option
-    })))
+    try:
+        X_input = encoder.transform(
+            pd.DataFrame([[dish_name, season, festival]],
+            columns=["dish_name", "season", "festival"])
+        )
+        toppings = list(mlb_toppings.inverse_transform(
+            topping_model.predict(X_input))[0])
+        addons = list(mlb_addons.inverse_transform(
+            addon_model.predict(X_input))[0])
+    except Exception:
+        pass
 
-    toppings = clean_list_items(llm_out.get("toppings", []))
-    addons = clean_list_items(llm_out.get("addons", []))
-
-    if not toppings:
-        toppings = ["No suggestions"]
-    if not addons:
-        addons = ["No suggestions"]
+    if not toppings or not addons:
+        llm_out = generate_dish_advisory(dish_name, season, festival, dish_details, language, option)
+        toppings = llm_out.get("toppings", [])
+        addons = llm_out.get("addons", [])
 
     return {
         "dish_name": dish_name,
-        "date": date_str,
+        "date": order_dt.strftime("%Y-%m-%d"),
         "season": season,
         "festival": festival,
-        "toppings": toppings,
-        "addons": addons
+        "toppings": toppings or ["No suggestions"],
+        "addons": addons or ["No suggestions"]
     }

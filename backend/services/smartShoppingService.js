@@ -5,11 +5,12 @@ const IngredientPrice = require('../models/IngredientPrice');
 // Load JSON Datasets (Cached in memory for performance, or reload on request)
 const blinkitPath = path.join(__dirname, '../dataset_blinkit-product-scraper_2025-12-25_07-58-49-634.json');
 const zeptoPath = path.join(__dirname, '../dataset_zepto-scraper_2025-12-25_08-03-09-336.json');
-const menuPath = path.join(__dirname, '../data/menu.csv');
+const indianMenuPath = path.join(__dirname, '../data/200_indian_menu_main_ingredients.csv');
 
 let blinkitData = [];
 let zeptoData = [];
 let menuData = [];
+let indianMenuData = [];
 
 // Helper to load data
 const loadData = () => {
@@ -22,15 +23,14 @@ const loadData = () => {
         }
         if (fs.existsSync(menuPath)) {
             const lines = fs.readFileSync(menuPath, 'utf8').split('\n');
-            const headers = lines[0].split(',');
-            menuData = lines.slice(1).map(line => {
-                const values = line.split(','); // Simple CSV split, might break on quoted commas but sufficient for now as per view_file output
-                // Better CSV parsing for quoted fields:
-                // Actually the view_file showed quoted arrays like "['Cheese', 'Tomato']" which contain commas.
-                // Simple split won't work perfectly. Let's do a basic regex match or logic.
-                // For MVP, since we search by dish name, we can try to find the line that starts with our dish.
-                return line;
-            });
+            menuData = lines.slice(1);
+        }
+        if (fs.existsSync(indianMenuPath)) {
+            // Handle potential CSV quoting issues with a smarter split if needed, 
+            // but for line-by-line search, raw lines are fine.
+            const lines = fs.readFileSync(indianMenuPath, 'utf8').split('\n');
+            // Skip header: Menu,Main Ingredients
+            indianMenuData = lines.slice(1);
         }
     } catch (e) {
         console.error("Error loading datasets:", e);
@@ -61,50 +61,68 @@ const findProduct = (data, query) => {
     return matches[0]; // Return cheapest match
 };
 
-// Improved Regex/Parsing Helper
+// Improved Regex/Parsing Helper (for menu.csv bracket format)
 const extractIngredients = (line) => {
     // Strategy: Look for array-like structures [...]
     // The CSV structure uses strings like "['A', 'B']" or ['A', 'B']
     const arrayMatches = line.match(/\[.*?\]/g);
 
-    // We expect at least one array. Usually the first one is toppings/ingredients.
-    // If multiple, we might want to merge them or pick the largest? 
-    // For now, let's pick the first one found, as it maps to 'available_toppings' which has veggies.
     if (arrayMatches && arrayMatches.length > 0) {
-        // Use the first match
         let raw = arrayMatches[0];
-        // Clean: remove brackets, both single/double quotes
         return raw.replace(/[\[\]'"]/g, '').split(',').map(s => s.trim()).filter(s => s);
     }
     return [];
 };
 
+// Helper for 200_indian_menu format (Dish,"ing1, ing2")
+const extractIngredientsSimple = (line) => {
+    // Format: Dish Name,"ing1, ing2, ing3" OR Dish Name,ing1,ing2
+    // We split by first comma to separate Dish Name
+    const firstCommaIndex = line.indexOf(',');
+    if (firstCommaIndex === -1) return [];
+
+    const ingredientsPart = line.substring(firstCommaIndex + 1).trim();
+    // Remove quotes if present
+    const cleanIngredients = ingredientsPart.replace(/^"|"$/g, '');
+
+    return cleanIngredients.split(',').map(s => s.trim()).filter(s => s);
+};
+
 // Main Service Function
 const analyzeDishIngredients = async (dishName) => {
     // 1. Identify Ingredients
-    let ingredients = [];
+    let ingredientsSet = new Set();
+    const normalizedDishName = dishName.toLowerCase().trim();
 
-    // Find ALL matching lines in Menu CSV
-    const matchingLines = menuData.filter(line => {
+    // A. Search in menu.csv (Existing)
+    const matchingMenuLines = menuData.filter(line => {
         const parts = line.split(',');
-        return (parts[1] && parts[1].toLowerCase().trim() === dishName.toLowerCase().trim()) ||
-            line.toLowerCase().includes(dishName.toLowerCase());
+        // parts[1] is typically Dish Name in menu.csv based on previous usage
+        // But let's be safe and check if the line contains the dish name prominently
+        return (parts[1] && parts[1].toLowerCase().trim() === normalizedDishName) ||
+            line.toLowerCase().includes(normalizedDishName);
     });
 
-    if (matchingLines.length > 0) {
-        // Parse ingredients for all matches and pick the longest list
-        let bestList = [];
-        matchingLines.forEach(line => {
-            const list = extractIngredients(line);
-            if (list.length > bestList.length) {
-                bestList = list;
-            }
-        });
-        ingredients = bestList;
-    }
+    matchingMenuLines.forEach(line => {
+        const list = extractIngredients(line);
+        list.forEach(item => ingredientsSet.add(item));
+    });
 
-    // Fuzzy fallback not needed as we did a broad include check above
+    // B. Search in 200_indian_menu_main_ingredients.csv (New)
+    const matchingIndianMenuLines = indianMenuData.filter(line => {
+        // Format: Dish Name, Ingredients...
+        // Check if line starts with Dish Name (case insensitive)
+        const lineLower = line.toLowerCase();
+        return lineLower.startsWith(normalizedDishName + ',') || lineLower.startsWith('"' + normalizedDishName + '"');
+    });
 
+    matchingIndianMenuLines.forEach(line => {
+        const list = extractIngredientsSimple(line);
+        list.forEach(item => ingredientsSet.add(item));
+    });
+
+    // Convert Set to Array
+    let ingredients = Array.from(ingredientsSet);
 
     // Default Fallback ingredients if still empty
     if (ingredients.length === 0) {

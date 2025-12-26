@@ -3,6 +3,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv  # ✅ Updated
 import os
+import pandas as pd
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 # Load environment variables
 load_dotenv()
@@ -18,10 +21,6 @@ from insight_routes import insight_routes
 from routes.review_routes import review_routes
 from sheet_analyzer import fetch_all_google_sheet_data
 from gap_analysis import perform_gap_analysis
-import pandas as pd
-from pymongo import MongoClient
-from bson.objectid import ObjectId
-from youtube_trends import monthly_youtube_trends, POPULARITY_FILE
 
 # =====================================================
 # App Configuration
@@ -41,7 +40,7 @@ inventory_collection = db["items"]
 
 # =====================================================
 # Blueprints
-# ===================================================== 
+# =====================================================
 app.register_blueprint(chat_routes, url_prefix="/api")
 app.register_blueprint(tourism_routes, url_prefix="/api")
 app.register_blueprint(insight_routes, url_prefix="/api")
@@ -50,7 +49,7 @@ app.register_blueprint(review_routes, url_prefix="/api")  # ✅ Reviews backend
 # =====================================================
 # Constants
 # =====================================================
-
+OUTPUT_CSV = "output.csv"  # For food trends
 
 # =====================================================
 # Root Route
@@ -176,7 +175,8 @@ def google_reviews():
 @app.route("/gap_analysis", methods=["GET"])
 def gap_analysis_route():
     try:
-        result = perform_gap_analysis()
+        vendor_id = request.args.get("vendorId", "vendor_01")
+        result = perform_gap_analysis(vendor_id)
         return jsonify({"status": "success", "data": result})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
@@ -187,23 +187,12 @@ def gap_analysis_route():
 @app.route("/api/food-trends", methods=["GET"])
 def food_trends():
     try:
-        refresh = request.args.get("refresh", "false").lower() == "true"
-        df = monthly_youtube_trends(force_refresh=refresh)
-        
-        if not df.empty:
-            data = df.to_dict(orient="records")
-            return jsonify({
-                "status": "success",
-                "data": data,
-                "count": len(data)
-            })
-        else:
-            return jsonify({"status": "error", "message": "No data generated"}), 500
-            
+        df = pd.read_csv(OUTPUT_CSV)
+        data = df.to_dict(orient="records")
+        return jsonify({"status": "success", "data": data})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-    
-    
+
 # =====================================================
 # Run Flask App
 # =====================================================

@@ -117,6 +117,7 @@ const VideoReelCreator = () => {
     ];
 
     const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+    const [selectedStylePreference, setSelectedStylePreference] = useState<string>(''); // Store the style preference (e.g., upbeat_pop)
     const [showAdvanced, setShowAdvanced] = useState(false);
 
     const handleTemplateSelect = (templateId: string) => {
@@ -125,7 +126,8 @@ const VideoReelCreator = () => {
             setSelectedTemplate(templateId);
             setDuration(template.duration);
             setPlatform(template.platform);
-            // We can't set the file directly, but we set the "intent"
+            setSelectedStylePreference(template.label); // Send the Label (e.g. "Festival Mode") as the style hint
+
             toast({ title: `Selected: ${template.label}`, description: `Settings auto-tuned for ${template.desc}` });
         }
     };
@@ -152,6 +154,10 @@ const VideoReelCreator = () => {
             formData.append('video', videoFile);
             formData.append('video_duration_seconds', duration);
             formData.append('platform', platform);
+            // Send the selected style preference if available
+            if (selectedStylePreference) {
+                formData.append('style_preference', selectedStylePreference);
+            }
 
             const response = await fetch('http://localhost:5001/api/reel-generator', {
                 method: 'POST',

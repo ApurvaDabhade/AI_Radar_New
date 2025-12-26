@@ -8,7 +8,15 @@ from config import GEMINI_MODEL, GOOGLE_API_KEY
 os.environ["GOOGLE_API_KEY"] = GOOGLE_API_KEY
 
 # Initialize Chat Model
-chat_model = ChatGoogleGenerativeAI(model=GEMINI_MODEL, temperature=0.7)
+
+# List of models to try
+MODELS_TO_TRY = ["gemini-2.5-flash", "gemini-2.0-flash-exp", GEMINI_MODEL, "gemini-1.5-flash", "gemini-pro"]
+
+def get_chat_model(model_name):
+    try:
+        return ChatGoogleGenerativeAI(model=model_name, temperature=0.7)
+    except Exception:
+        return None
 
 def clean_ai_output(text: str) -> str:
     """
@@ -22,7 +30,7 @@ def clean_ai_output(text: str) -> str:
 
 def generate_vendor_insights(insights_dict: dict) -> str:
     """
-    Generate enhanced tourism & vendor insights for a city and return cleaned text.
+    Generate enhanced tourism & vendor insights using AI with fallback models.
     """
     top_places_text = ", ".join([p["Name Place"] for p in insights_dict["Top_Tourist_Spots"][:3]])
     
@@ -49,7 +57,35 @@ Notes:
 - Use emojis naturally to highlight key points.
 """
     )
+
+    # Limit models to avoid long timeouts if quota is dead
+    FAST_MODELS = ["gemini-1.5-flash", "gemini-pro"]
     
-    response = chat_model([system_msg, user_msg])
-    clean_text = clean_ai_output(response.content)
-    return clean_text
+    for model_name in FAST_MODELS:
+        try:
+            # Check for API key before trying
+            if not os.environ.get("GOOGLE_API_KEY"):
+                return "AI Insights unavailable (Missing API Key)."
+
+            chat_model = get_chat_model(model_name)
+            if not chat_model:
+                continue
+            
+            # Reduce timeout to fail fast if model is unresponsive
+            # Add timeout to invoke if possible, otherwise rely on fast failure
+            try:
+                response = chat_model.invoke([system_msg, user_msg])
+                if response and response.content:
+                    return clean_ai_output(response.content)
+            except Exception as inner_e:
+                print(f"⚠️ Model invoke failed for {model_name}: {inner_e}")
+                if "RESOURCE_EXHAUSTED" in str(inner_e):
+                    return "AI Insights temporarily unavailable (Quota Limit Reached)."
+                continue
+
+        except Exception as e:
+            print(f"⚠️ Model {model_name} failed: {e}")
+            continue
+
+    return "AI Insights unavailable at the moment. Please consult local guides."
+

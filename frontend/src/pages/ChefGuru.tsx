@@ -21,7 +21,7 @@ interface Message {
 interface ChatFlowData {
   dishName?: string;
   date?: string;
-  optionType?: 'topping' | 'addon';
+  optionType?: 'topping' | 'addon' | 'both';
   language?: 'english' | 'marathi';
   step: number;
 }
@@ -29,6 +29,7 @@ interface ChatFlowData {
 const ChefGuru = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const [viewMode, setViewMode] = useState<'selection' | 'chat' | 'trends'>('selection');
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -39,11 +40,9 @@ const ChefGuru = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isRecording, setIsRecording] = useState(false);
-  const [activeTab, setActiveTab] = useState('chat');
   const [chatFlowData, setChatFlowData] = useState<ChatFlowData>({ step: 1 });
 
   // Popularity data state fetching from backend
-  // Mock popularity data (replaced backend fetch)
   const [popularityData, setPopularityData] = useState<
     Array<{
       dish_name: string;
@@ -52,46 +51,36 @@ const ChefGuru = () => {
       comments_count: number;
       popularity_score: number;
     }>
-  >([
-    {
-      dish_name: "Masala Dosa",
-      views: 12000,
-      likes: 8500,
-      comments_count: 450,
-      popularity_score: 92
-    },
-    {
-      dish_name: "Paneer Tikka",
-      views: 10500,
-      likes: 7200,
-      comments_count: 380,
-      popularity_score: 88
-    },
-    {
-      dish_name: "Butter Chicken",
-      views: 9800,
-      likes: 6500,
-      comments_count: 320,
-      popularity_score: 85
-    },
-    {
-      dish_name: "Pav Bhaji",
-      views: 8900,
-      likes: 5800,
-      comments_count: 290,
-      popularity_score: 82
-    },
-    {
-      dish_name: "Biryani",
-      views: 15000,
-      likes: 11000,
-      comments_count: 600,
-      popularity_score: 95
-    }
-  ]);
+  >([]);
+
+  // Fetch Trends from Python Backend
+  useEffect(() => {
+    const fetchTrends = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/food-trends');
+        const result = await response.json();
+        if (result.status === 'success') {
+          // Map backend data to frontend structure
+          const mappedData = result.data.map((item: any) => ({
+            dish_name: item.dish_name,
+            views: item.views,
+            likes: item.likes,
+            comments_count: Math.round(item.views * 0.005),
+            popularity_score: item.popularity_score
+          }));
+          setPopularityData(mappedData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch trends:", error);
+      }
+    };
+
+    fetchTrends();
+  }, []);
 
   // Festival and seasonal add-ons with Marathi options
   const festivalAddOns = {
+    // ... (Keep existing data structures if used, though they were static constants in previous file)
     diwali: ['Gulab Jamun', 'Rasgulla', 'Kaju Katli', 'Besan Ladoo', 'Anar Dana Chutney', 'Sweet Tamarind Chutney'],
     holi: ['Thandai', 'Gujiya', 'Bhang Pakora', 'Puran Poli', 'Mango Chutney', 'Mint Chutney'],
     eid: ['Sheer Khurma', 'Biryani', 'Kebabs', 'Phirni', 'Date Chutney', 'Yogurt Dip'],
@@ -102,23 +91,6 @@ const ChefGuru = () => {
     winter: ['Gajar Halwa', 'Hot Chocolate', 'Ginger Tea', 'Garlic Chutney', 'Red Chutney', 'Onion Chutney'],
   };
 
-  // Toppings suggestions based on season and festival
-  const toppingSuggestions = {
-    monsoon: [
-      'कांद्याच्या भजीचा कुरकुरीत चुरा',
-      'तिखट पुदीना-कोथिंबीर चटणी आणि डाळिंबाचे दाणे',
-      'आले-लसूण-मिरची तेल आणि भाजलेले शेंगदाणे',
-      'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता',
-    ],
-    'naraka chaturdasi': [
-      'कांद्याच्या भजीचा कुरकुरीत चुरा',
-      'तिखट पुदीना-कोथिंबीर चटणी आणि डाळिंबाचे दाणे',
-      'आले-लसूण-मिरची तेल आणि भाजलेले शेंगदाणे',
-      'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता',
-    ],
-    default: ['Extra Cheese', 'Spicy Level', 'Extra Onions', 'Fresh Herbs', 'Crispy Toppings'],
-  };
-
   const quickActions = [
     { icon: TrendingUp, label: 'Upselling Suggestions', color: 'from-green-600 to-green-800' },
     { icon: Calendar, label: 'Festival Mode', color: 'from-orange-600 to-orange-800' },
@@ -126,7 +98,23 @@ const ChefGuru = () => {
     { icon: BarChart3, label: 'Trend Analysis', color: 'from-purple-600 to-purple-800' },
   ];
 
-  const handleChatFlow = (userInput: string, buttonValue?: string) => {
+  // ---------------- HELPER FOR DATES ----------------
+  const getFormattedDate = (offset: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() + offset);
+    return d.toISOString().split('T')[0];
+  };
+
+  const getNextWeekend = () => {
+    const d = new Date();
+    const day = d.getDay(); // 0 is Sunday, 6 is Saturday
+    const diff = 6 - day; // Days until Saturday
+    const daysToAdd = diff <= 0 ? diff + 7 : diff;
+    d.setDate(d.getDate() + daysToAdd);
+    return d.toISOString().split('T')[0];
+  };
+
+  const handleChatFlow = async (userInput: string, buttonValue?: string) => {
     const currentStep = chatFlowData.step;
     const input = buttonValue || userInput;
 
@@ -134,14 +122,29 @@ const ChefGuru = () => {
       case 1: // Step 1 - Dish Name
         setChatFlowData((prev) => ({ ...prev, dishName: input, step: 2 }));
         return {
-          content: 'Enter the date (YYYY-MM-DD).',
-          buttons: undefined,
+          content: 'When is this order for?',
+          buttons: [
+            { label: 'Today', value: 'today', icon: '📅' },
+            { label: 'Tomorrow', value: 'tomorrow', icon: '☀️' },
+            { label: 'This Weekend', value: 'weekend', icon: '🎉' },
+          ],
         };
 
       case 2: // Step 2 - Date Input
-        setChatFlowData((prev) => ({ ...prev, date: input, step: 3 }));
+        let selectedDate = input;
+
+        // SmartDate Handling
+        if (input.toLowerCase() === 'today') {
+          selectedDate = getFormattedDate(0);
+        } else if (input.toLowerCase() === 'tomorrow') {
+          selectedDate = getFormattedDate(1);
+        } else if (input.toLowerCase() === 'weekend') {
+          selectedDate = getNextWeekend();
+        }
+
+        setChatFlowData((prev) => ({ ...prev, date: selectedDate, step: 3 }));
         return {
-          content: 'Choose option type:',
+          content: `Date set to ${selectedDate}. Choose option type:`,
           buttons: [
             { label: 'Topping', value: 'topping', icon: '👨‍🍳' },
             { label: 'Add-on', value: 'addon', icon: '📦' },
@@ -168,10 +171,11 @@ const ChefGuru = () => {
       case 5: // Step 5 - Predict
         if (input === 'predict') {
           setChatFlowData((prev) => ({ ...prev, step: 6 }));
-          return {
-            content: generatePrediction(),
-            buttons: undefined,
-          };
+          try {
+            return await fetchPrediction();
+          } catch (error) {
+            return { content: "Sorry, I couldn't fetch the suggestions. Please try again.", buttons: undefined };
+          }
         }
         break;
 
@@ -181,42 +185,56 @@ const ChefGuru = () => {
           buttons: undefined,
         };
     }
+    return { content: "I didn't understand that.", buttons: undefined };
   };
 
-  const generatePrediction = () => {
+  const fetchPrediction = async () => {
     const { dishName, date, optionType, language } = chatFlowData;
+    const validDate = date || new Date().toISOString().split('T')[0];
 
-    // Mock prediction based on the data
-    const season = 'Monsoon';
-    const festival = 'Naraka Chaturdasi';
+    try {
+      const response = await fetch('http://localhost:8000/api/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dish_name: dishName,
+          order_date: validDate,
+          option: optionType || 'both',
+          language: language || 'English'
+        })
+      });
 
-    let suggestions: string[] = [];
+      const data = await response.json();
 
-    if (optionType === 'topping') {
-      suggestions =
-        language === 'marathi'
-          ? [
-            'कांद्याच्या भजीचा कुरकुरीत चुरा',
-            'तिखट पुदीना-कोथिंबीर चटणी आणि डाळिंबाचे दाणे',
-            'आले-लसूण-मिरची तेल आणि भाजलेले शेंगदाणे',
-            'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता',
-          ]
-          : [
-            'Crispy onion fritter crumbs',
-            'Spicy mint-coriander chutney and pomegranate seeds',
-            'Ginger-garlic-chilli oil and roasted peanuts',
-            'Smoky paprika yogurt and crispy curry leaves',
-          ];
-    } else {
-      suggestions =
-        language === 'marathi'
-          ? ['आले-लसूण चटणी', 'तिखट हिरवी चटणी', 'बारीक चिरलेला कांदा', 'शेव', 'ताजी कोथिंबीर']
-          : ['Ginger-Garlic Chutney', 'Spicy Green Chutney', 'Finely chopped onion', 'Crispy Sev', 'Fresh coriander'];
+      if (data.error) {
+        return { content: `Error: ${data.error}`, buttons: undefined };
+      }
+
+      const season = data.season || 'Unknown';
+      const festival = data.festival !== 'None' ? data.festival : 'No specific festival';
+      const toppings = data.toppings || [];
+      const addons = data.addons || [];
+
+      let resultText = `🍽️ **Prediction Results for ${dishName}**\n\n📅 **Date:** ${validDate}\n🌧️ **Season:** ${season}\n🎉 **Festival:** ${festival}\n\n`;
+
+      if (optionType === 'topping' || optionType === 'both') {
+        resultText += `🧂 **Suggested Toppings:**\n${toppings.map((t: string) => `• ${t}`).join('\n')}\n\n`;
+      }
+
+      if (optionType === 'addon' || optionType === 'both') {
+        resultText += `📦 **Suggested Add-ons:**\n${addons.map((a: string) => `• ${a}`).join('\n')}\n\n`;
+      }
+
+      resultText += `💡 *Based on AI analysis of trends and seasonality*`;
+
+      return { content: resultText, buttons: undefined };
+
+    } catch (error) {
+      console.error("Prediction API Error:", error);
+      return { content: "Failed to connect to the Chef Intelligence System.", buttons: undefined };
     }
-
-    return `🍽️ **Prediction Results for ${dishName}**\n\n📅 **Date:** ${date}\n🌧️ **Season:** ${season}\n🎉 **Festival:** ${festival}\n\n🎯 **Predicted ${optionType === 'topping' ? 'toppings' : 'add-ons'
-      }:**\n${suggestions.map((item) => `• ${item}`).join('\n')}\n\n💡 *Based on seasonal trends and festival preferences*`;
   };
+
 
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
@@ -232,8 +250,8 @@ const ChefGuru = () => {
     const currentInput = inputValue;
     setInputValue('');
 
-    setTimeout(() => {
-      const response = handleChatFlow(currentInput);
+    setTimeout(async () => {
+      const response = await handleChatFlow(currentInput);
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: 'bot',
@@ -257,8 +275,8 @@ const ChefGuru = () => {
 
     setMessages((prev) => [...prev, userMessage]);
 
-    setTimeout(() => {
-      const response = handleChatFlow('', buttonValue);
+    setTimeout(async () => {
+      const response = await handleChatFlow('', buttonValue);
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: 'bot',
@@ -284,13 +302,21 @@ const ChefGuru = () => {
     }
   };
 
+  const handleBack = () => {
+    if (viewMode === 'selection') {
+      navigate('/dashboard');
+    } else {
+      setViewMode('selection');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} className="text-foreground hover:bg-primary/10">
+            <Button variant="ghost" size="icon" onClick={handleBack} className="text-foreground hover:bg-primary/10">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-3">
@@ -304,97 +330,76 @@ const ChefGuru = () => {
         </div>
       </header>
 
-      {/* Hero Section with Image */}
-      <div className="relative h-64 overflow-hidden">
-        <img src={chufGuruBg} alt="ChefGuru Assistant" className="w-full h-full object-cover opacity-70" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold mb-2 text-foreground">💡 Smart Kitchen Intelligence</h2>
-            <p className="text-lg text-primary font-bold font-serif italic mb-2">"सुगरण म्हणजे अन्नाची जादूगर"</p>
-            <p className="text-muted-foreground">Real-time insights for your business growth</p>
-          </div>
-        </div>
-      </div>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-6 flex-1 flex flex-col">
 
-      {/* Food Images Section */}
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="relative h-32 bg-gradient-to-br from-primary/20 to-background border border-primary/30 rounded-lg overflow-hidden group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-6xl opacity-60 group-hover:opacity-80 transition-opacity">🍛</div>
+        {/* SELECTION VIEW */}
+        {viewMode === 'selection' && (
+          <div className="flex flex-col items-center justify-center h-full flex-1 gap-8 mt-10">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                How can I help you today?
+              </h2>
+              <p className="text-muted-foreground mt-2">Select an option to get started</p>
             </div>
-            <div className="absolute bottom-2 left-2 right-2">
-              <div className="text-xs font-medium text-foreground bg-card/80 rounded px-2 py-1 text-center">Pav Bhaji</div>
-            </div>
-          </div>
 
-          <div className="relative h-32 bg-gradient-to-br from-accent/20 to-background border border-accent/30 rounded-lg overflow-hidden group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-6xl opacity-60 group-hover:opacity-80 transition-opacity">🥗</div>
-            </div>
-            <div className="absolute bottom-2 left-2 right-2">
-              <div className="text-xs font-medium text-foreground bg-card/80 rounded px-2 py-1 text-center">Paneer Tikka</div>
-            </div>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+              <Card
+                className="group cursor-pointer hover:shadow-2xl transition-all duration-300 border-primary/20 hover:border-primary/50 bg-gradient-to-br from-card to-background"
+                onClick={() => setViewMode('chat')}
+              >
+                <CardContent className="flex flex-col items-center justify-center p-10 h-64 text-center">
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <StartChatIcon className="w-10 h-10 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-primary mb-2">Chat Assistant</h3>
+                  <p className="text-muted-foreground">
+                    Get AI suggestions for toppings, add-ons, and seasonal specials for your prospective menu.
+                  </p>
+                </CardContent>
+              </Card>
 
-          <div className="relative h-32 bg-gradient-to-br from-destructive/20 to-background border border-destructive/30 rounded-lg overflow-hidden group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-6xl opacity-60 group-hover:opacity-80 transition-opacity">🍕</div>
-            </div>
-            <div className="absolute bottom-2 left-2 right-2">
-              <div className="text-xs font-medium text-foreground bg-card/80 rounded px-2 py-1 text-center">Chicken Curry</div>
-            </div>
-          </div>
-
-          <div className="relative h-32 bg-gradient-to-br from-secondary/20 to-background border border-secondary/30 rounded-lg overflow-hidden group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-6xl opacity-60 group-hover:opacity-80 transition-opacity">🍜</div>
-            </div>
-            <div className="absolute bottom-2 left-2 right-2">
-              <div className="text-xs font-medium text-foreground bg-card/80 rounded px-2 py-1 text-center">Masala Dosa</div>
+              <Card
+                className="group cursor-pointer hover:shadow-2xl transition-all duration-300 border-secondary/20 hover:border-secondary/50 bg-gradient-to-br from-card to-background"
+                onClick={() => setViewMode('trends')}
+              >
+                <CardContent className="flex flex-col items-center justify-center p-10 h-64 text-center">
+                  <div className="w-20 h-20 rounded-full bg-secondary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <TrendingUp className="w-10 h-10 text-secondary" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-secondary mb-2">Trend Analysis</h3>
+                  <p className="text-muted-foreground">
+                    Deep dive into data insights, performing dishes, and customer engagement metrics.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
-        </div>
-      </div>
+        )}
 
-      {/* Main Content with Tabs */}
-      <div className="container mx-auto px-4 pb-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 bg-muted border-border">
-            <TabsTrigger value="chat" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              💬 Chat Assistant
-            </TabsTrigger>
-            <TabsTrigger value="trends" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-              📊 Trend Analysis
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Chat Tab */}
-          <TabsContent value="chat" className="space-y-6">
+        {/* CHAT VIEW */}
+        {viewMode === 'chat' && (
+          <div className="flex flex-col h-full flex-1 animate-in fade-in zoom-in-95 duration-300">
             {/* Chat Area */}
-            <ScrollArea className="h-96">
+            <ScrollArea className="flex-1 min-h-[400px] mb-4 border rounded-xl bg-card/50 p-4">
               <div className="space-y-4">
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <Card
-                      className={`max-w-[80%] p-4 ${message.type === 'user'
-                        ? 'bg-gradient-to-r from-primary to-primary/80 border-primary/50'
-                        : 'bg-card border-border'
+                      className={`max-w-[80%] p-4 shadow-md ${message.type === 'user'
+                        ? 'bg-gradient-to-r from-primary to-purple-600 text-white border-none'
+                        : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700'
                         }`}
                     >
-                      <p className={`whitespace-pre-line ${message.type === 'user' ? 'text-primary-foreground' : 'text-card-foreground'}`}>{message.content}</p>
+                      <p className={`whitespace-pre-line text-sm ${message.type === 'user' ? 'text-white' : 'text-zinc-800 dark:text-zinc-200'}`}>{message.content}</p>
                       {message.buttons && (
                         <div className="flex flex-wrap gap-2 mt-3">
                           {message.buttons.map((button, index) => (
                             <Button
                               key={index}
                               size="sm"
-                              variant="outline"
-                              className="border-primary text-primary hover:bg-primary/10 cursor-pointer"
+                              variant="secondary"
+                              className="bg-zinc-100 hover:bg-zinc-200 text-zinc-900 border border-zinc-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-100 dark:border-zinc-600"
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -407,60 +412,57 @@ const ChefGuru = () => {
                           ))}
                         </div>
                       )}
-                      <p className="text-xs text-muted-foreground mt-2">
-                        {message.timestamp.toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </p>
+
                     </Card>
                   </div>
                 ))}
               </div>
             </ScrollArea>
 
-            {/* Example Questions */}
-            <div className="border-t border-border pt-4">
-              <p className="text-sm text-muted-foreground mb-2">Start the flow by typing a dish name:</p>
-              <div className="flex flex-wrap gap-2">
+            {/* Quick Prompts */}
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+              {['Masala Puri', 'Pav Bhaji', 'Paneer Tikka', 'Masala Dosa'].map((dish) => (
                 <Button
+                  key={dish}
                   size="sm"
                   variant="outline"
-                  className="border-primary text-primary text-xs hover:bg-primary/10"
-                  onClick={() => handleQuickAction('Masala Puri')}
+                  className="whitespace-nowrap rounded-full border-primary/50 text-primary hover:bg-primary/10"
+                  onClick={() => handleQuickAction(dish)}
                 >
-                  Masala Puri
+                  {dish}
                 </Button>
+              ))}
+            </div>
+
+            {/* Input Area */}
+            <div className="sticky bottom-0 bg-background pt-2">
+              <div className="flex gap-3">
                 <Button
-                  size="sm"
+                  size="icon"
                   variant="outline"
-                  className="border-primary text-primary text-xs hover:bg-primary/10"
-                  onClick={() => handleQuickAction('Pav Bhaji')}
+                  className={`border-primary ${isRecording ? 'bg-destructive text-destructive-foreground' : 'text-primary'}`}
+                  onClick={handleVoiceInput}
                 >
-                  Pav Bhaji
+                  <Mic className="h-5 w-5" />
                 </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-primary text-primary text-xs hover:bg-primary/10"
-                  onClick={() => handleQuickAction('Paneer Tikka')}
-                >
-                  Paneer Tikka
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-primary text-primary text-xs hover:bg-primary/10"
-                  onClick={() => handleQuickAction('Masala Dosa')}
-                >
-                  Masala Dosa
+                <Input
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Ask ChefGuru anything..."
+                  className="flex-1 bg-muted border-primary/20 focus-visible:ring-primary"
+                />
+                <Button size="icon" className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleSendMessage}>
+                  <Send className="h-5 w-5" />
                 </Button>
               </div>
             </div>
-          </TabsContent>
+          </div>
+        )}
 
-          {/* Trend Analysis Tab */}
-          <TabsContent value="trends" className="space-y-6">
+        {/* TRENDS VIEW */}
+        {viewMode === 'trends' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Top Performing Dishes */}
               <Card className="bg-card border-primary/30 shadow-lg">
@@ -469,25 +471,29 @@ const ChefGuru = () => {
                   <CardDescription className="text-muted-foreground">Based on popularity data analysis</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {popularityData.slice(0, 15).map((dish, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                        <div className="flex items-center">
-                          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center mr-3">
-                            <span className="text-primary-foreground font-bold text-sm">{index + 1}</span>
+                  <ScrollArea className="h-[400px] pr-4">
+                    <div className="space-y-4">
+                      {popularityData.slice(0, 15).map((dish, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg border border-border/50 hover:border-primary/50 transition-colors">
+                          <div className="flex items-center">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${index < 3 ? 'bg-yellow-500 text-white' : 'bg-primary/20 text-primary'}`}>
+                              <span className="font-bold text-sm">{index + 1}</span>
+                            </div>
+                            <div>
+                              <div className="text-card-foreground font-medium">{dish.dish_name}</div>
+                              <div className="text-xs text-muted-foreground">Score: {dish.popularity_score}</div>
+                            </div>
                           </div>
-                          <div>
-                            <div className="text-card-foreground font-medium">{dish.dish_name}</div>
-                            <div className="text-xs text-muted-foreground">Score: {dish.popularity_score}</div>
+                          <div className="text-right">
+                            <div className="text-sm text-card-foreground">{dish.views.toLocaleString()} views</div>
+                            <div className="text-xs text-muted-foreground flex items-center justify-end gap-1">
+                              <Heart className="w-3 h-3 text-red-500" /> {dish.likes.toLocaleString()}
+                            </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-sm text-card-foreground">{dish.views.toLocaleString()} views</div>
-                          <div className="text-xs text-muted-foreground">{dish.likes.toLocaleString()} likes</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
                 </CardContent>
               </Card>
 
@@ -498,211 +504,41 @@ const ChefGuru = () => {
                   <CardDescription className="text-muted-foreground">Views, likes, and comments breakdown</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-6">
-                    {/* Circular Chart for Top 4 Dishes */}
-                    <div className="grid grid-cols-2 gap-4">
-                      {popularityData.slice(0, 10).map((dish, index) => {
-                        const totalEngagement = dish.views + dish.likes + dish.comments_count;
-                        const maxEngagement = Math.max(
-                          ...popularityData.map((d) => d.views + d.likes + d.comments_count)
-                        );
-                        const percentage = maxEngagement ? (totalEngagement / maxEngagement) * 100 : 0;
-                        const radius = 30;
-                        const circumference = 2 * Math.PI * radius;
-                        const strokeDasharray = circumference;
-                        const strokeDashoffset = circumference - (percentage / 100) * circumference;
-
-                        return (
-                          <div key={index} className="flex flex-col items-center p-3 bg-muted rounded-lg">
-                            <div className="relative w-20 h-20 mb-2">
-                              <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 80 80">
-                                <circle
-                                  cx="40"
-                                  cy="40"
-                                  r={radius}
-                                  stroke="currentColor"
-                                  strokeWidth="6"
-                                  fill="none"
-                                  className="text-muted-foreground/20"
-                                />
-                                <circle
-                                  cx="40"
-                                  cy="40"
-                                  r={radius}
-                                  stroke="currentColor"
-                                  strokeWidth="6"
-                                  fill="none"
-                                  strokeDasharray={strokeDasharray}
-                                  strokeDashoffset={strokeDashoffset}
-                                  className="text-primary transition-all duration-1000 ease-in-out"
-                                  strokeLinecap="round"
-                                />
-                              </svg>
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="text-xs font-bold text-foreground">{Math.round(percentage)}%</span>
-                              </div>
-                            </div>
-                            <div className="text-center">
-                              <div className="text-xs font-medium text-card-foreground truncate max-w-20">{dish.dish_name}</div>
-                              <div className="text-xs text-muted-foreground">{dish.popularity_score}</div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Bar Chart for Engagement Metrics */}
-                    <div className="space-y-4">
-                      <h4 className="text-sm font-semibold text-card-foreground">Engagement Metrics Comparison</h4>
-                      <div className="space-y-3">
-                        {popularityData.slice(0, 15).map((dish, index) => {
-                          const maxViews = popularityData.length ? Math.max(...popularityData.map((d) => d.views)) : 1;
-                          const maxLikes = popularityData.length ? Math.max(...popularityData.map((d) => d.likes)) : 1;
-                          const maxComments = popularityData.length ? Math.max(...popularityData.map((d) => d.comments_count)) : 1;
-
-                          return (
-                            <div key={index} className="space-y-2">
-                              <div className="flex justify-between items-center">
-                                <span className="text-sm font-medium text-card-foreground">{dish.dish_name}</span>
-                                <span className="text-xs text-muted-foreground">{dish.popularity_score} score</span>
-                              </div>
-                              <div className="space-y-1">
-                                {/* Views Bar */}
-                                <div className="flex items-center">
-                                  <Eye className="h-3 w-3 text-primary mr-2" />
-                                  <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
-                                    <div
-                                      className="bg-gradient-to-r from-primary to-primary/70 h-full transition-all duration-1000 ease-out"
-                                      style={{ width: `${(dish.views / maxViews) * 100}%` }}
-                                    ></div>
-                                  </div>
-                                  <span className="text-xs text-muted-foreground ml-2 w-12 text-right">{Math.round(dish.views / 1000000)}M</span>
+                  <ScrollArea className="h-[400px]">
+                    <div className="space-y-6">
+                      {/* Bar Chart for Engagement Metrics */}
+                      <div className="space-y-4">
+                        <div className="space-y-3">
+                          {popularityData.slice(0, 10).map((dish, index) => {
+                            const maxViews = popularityData.length ? Math.max(...popularityData.map((d) => d.views)) : 1;
+                            return (
+                              <div key={index} className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-sm font-medium text-card-foreground">{dish.dish_name}</span>
+                                  <span className="text-xs text-muted-foreground">{dish.popularity_score} score</span>
                                 </div>
-                                {/* Likes Bar */}
-                                <div className="flex items-center">
-                                  <Heart className="h-3 w-3 text-destructive mr-2" />
-                                  <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
-                                    <div
-                                      className="bg-gradient-to-r from-destructive to-destructive/70 h-full transition-all duration-1000 ease-out"
-                                      style={{ width: `${(dish.likes / maxLikes) * 100}%` }}
-                                    ></div>
+                                <div className="space-y-1">
+                                  {/* Views Bar */}
+                                  <div className="flex items-center">
+                                    <Eye className="h-3 w-3 text-primary mr-2" />
+                                    <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
+                                      <div
+                                        className="bg-gradient-to-r from-primary to-primary/70 h-full transition-all duration-1000 ease-out"
+                                        style={{ width: `${(dish.views / maxViews) * 100}%` }}
+                                      ></div>
+                                    </div>
                                   </div>
-                                  <span className="text-xs text-muted-foreground ml-2 w-12 text-right">{Math.round(dish.likes / 1000)}K</span>
-                                </div>
-                                {/* Comments Bar */}
-                                <div className="flex items-center">
-                                  <MessageCircle className="h-3 w-3 text-accent mr-2" />
-                                  <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
-                                    <div
-                                      className="bg-gradient-to-r from-accent to-accent/70 h-full transition-all duration-1000 ease-out"
-                                      style={{ width: `${(dish.comments_count / maxComments) * 100}%` }}
-                                    ></div>
-                                  </div>
-                                  <span className="text-xs text-muted-foreground ml-2 w-12 text-right">{dish.comments_count}</span>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Engagement Ratio Pie Chart */}
-                    <div className="mt-6">
-                      <h4 className="text-sm font-semibold text-card-foreground mb-3">Overall Engagement Distribution</h4>
-                      <div className="flex items-center justify-center">
-                        <div className="relative w-32 h-32">
-                          <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
-                            {/* Total Views */}
-                            <circle
-                              cx="60"
-                              cy="60"
-                              r="40"
-                              stroke="currentColor"
-                              strokeWidth="8"
-                              fill="none"
-                              strokeDasharray={`${(popularityData.reduce((sum, d) => sum + d.views, 0) /
-                                (popularityData.reduce((sum, d) => sum + d.views, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.likes, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
-                                251.2
-                                } 251.2`}
-                              className="text-primary"
-                            />
-                            {/* Total Likes */}
-                            <circle
-                              cx="60"
-                              cy="60"
-                              r="40"
-                              stroke="currentColor"
-                              strokeWidth="8"
-                              fill="none"
-                              strokeDasharray={`${(popularityData.reduce((sum, d) => sum + d.likes, 0) /
-                                (popularityData.reduce((sum, d) => sum + d.views, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.likes, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
-                                251.2
-                                } 251.2`}
-                              strokeDashoffset={`-${(popularityData.reduce((sum, d) => sum + d.views, 0) /
-                                (popularityData.reduce((sum, d) => sum + d.views, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.likes, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
-                                251.2
-                                }`}
-                              className="text-destructive"
-                            />
-                            {/* Total Comments */}
-                            <circle
-                              cx="60"
-                              cy="60"
-                              r="40"
-                              stroke="currentColor"
-                              strokeWidth="8"
-                              fill="none"
-                              strokeDasharray={`${(popularityData.reduce((sum, d) => sum + d.comments_count, 0) /
-                                (popularityData.reduce((sum, d) => sum + d.views, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.likes, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
-                                251.2
-                                } 251.2`}
-                              strokeDashoffset={`-${((popularityData.reduce((sum, d) => sum + d.views, 0) +
-                                popularityData.reduce((sum, d) => sum + d.likes, 0)) /
-                                (popularityData.reduce((sum, d) => sum + d.views, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.likes, 0) +
-                                  popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
-                                251.2
-                                }`}
-                              className="text-accent"
-                            />
-                          </svg>
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="text-lg font-bold text-card-foreground">Engagement</div>
-                              <div className="text-xs text-muted-foreground">Distribution</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-center space-x-6 mt-4">
-                        <div className="flex items-center">
-                          <div className="w-3 h-3 bg-primary rounded-full mr-2"></div>
-                          <span className="text-xs text-muted-foreground">Views</span>
-                        </div>
-                        <div className="flex items-center">
-                          <div className="w-3 h-3 bg-destructive rounded-full mr-2"></div>
-                          <span className="text-xs text-muted-foreground">Likes</span>
-                        </div>
-                        <div className="flex items-center">
-                          <div className="w-3 h-3 bg-accent rounded-full mr-2"></div>
-                          <span className="text-xs text-muted-foreground">Comments</span>
+                            );
+                          })}
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </ScrollArea>
                 </CardContent>
               </Card>
             </div>
-
             {/* Gap Analysis */}
             <Card className="bg-card border-primary/30 shadow-lg">
               <CardHeader>
@@ -722,10 +558,6 @@ const ChefGuru = () => {
                         <div className="text-accent font-medium">High Potential</div>
                         <div className="text-sm text-muted-foreground">Paneer Tikka: Strong performance, consider expanding</div>
                       </div>
-                      <div className="p-3 bg-primary/10 border border-primary/30 rounded-lg">
-                        <div className="text-primary font-medium">Seasonal Opportunity</div>
-                        <div className="text-sm text-muted-foreground">Winter items showing increased demand</div>
-                      </div>
                     </div>
                   </div>
                   <div>
@@ -739,44 +571,38 @@ const ChefGuru = () => {
                         <div className="text-card-foreground font-medium">2. Add Seasonal Items</div>
                         <div className="text-sm text-muted-foreground">Introduce winter specials and festival items</div>
                       </div>
-                      <div className="p-3 bg-muted rounded-lg">
-                        <div className="text-card-foreground font-medium">3. Engagement Boost</div>
-                        <div className="text-sm text-muted-foreground">Improve presentation of low-engagement items</div>
-                      </div>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+          </div>
+        )}
 
-      {/* Input Area */}
-      <div className="sticky bottom-0 bg-gradient-to-t from-background via-background to-transparent border-t border-border p-4">
-        <div className="container mx-auto max-w-4xl flex gap-3">
-          <Button
-            size="icon"
-            variant="outline"
-            className={`border-primary ${isRecording ? 'bg-destructive text-destructive-foreground' : 'text-primary'}`}
-            onClick={handleVoiceInput}
-          >
-            <Mic className="h-5 w-5" />
-          </Button>
-          <Input
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder="Ask ChefGuru anything..."
-            className="flex-1 bg-muted border-border text-foreground"
-          />
-          <Button size="icon" className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleSendMessage}>
-            <Send className="h-5 w-5" />
-          </Button>
-        </div>
       </div>
     </div>
   );
 };
+
+// Helper Icon Component
+function StartChatIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z" />
+      <path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1" />
+    </svg>
+  )
+}
 
 export default ChefGuru;

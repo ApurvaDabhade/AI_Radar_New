@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const IngredientPrice = require('../models/IngredientPrice');
 
 // --- SMART FALLBACK LOGIC ---
@@ -54,6 +55,10 @@ const generateFallbackPrices = () => {
 
 
 const updatePrices = async () => {
+    if (mongoose.connection.readyState !== 1) {
+        console.log("Creation of prices deferred - Database buffering...");
+        return;
+    }
     console.log('🔄 Price Scheduler: Fetching latest market prices...');
     const API_KEY = process.env.COMMODITY_API_KEY;
     const STATE = 'Maharashtra';
@@ -187,11 +192,21 @@ const updatePrices = async () => {
         });
 
 
-        // --- STEP 3: UPDATE DATABASE ---
-        await IngredientPrice.deleteMany({});
-        await IngredientPrice.insertMany(freshData);
+        // --- STEP 3: UPDATE DATABASE (Robust Upsert) ---
+        // Use bulkWrite to upsert items by name, preventing duplicates if multiple servers run
+        const ops = freshData.map(item => ({
+            updateOne: {
+                filter: { name: item.name },
+                update: { $set: item },
+                upsert: true
+            }
+        }));
 
-        console.log('✅ Price Scheduler: Database updated with REAL Mandi prices.');
+        if (ops.length > 0) {
+            await IngredientPrice.bulkWrite(ops);
+        }
+
+        console.log('✅ Price Scheduler: Database updated with REAL Mandi prices (Upserted).');
 
     } catch (error) {
         // --- STEP 2: SMART FALLBACK ---
@@ -201,10 +216,19 @@ const updatePrices = async () => {
         // Add "source" to fallback data
         const fallbackWithSource = fallbackData.map(d => ({ ...d, source: 'System AI (Fallback)' }));
 
-        await IngredientPrice.deleteMany({});
-        await IngredientPrice.insertMany(fallbackWithSource);
+        const ops = fallbackWithSource.map(item => ({
+            updateOne: {
+                filter: { name: item.name },
+                update: { $set: item },
+                upsert: true
+            }
+        }));
 
-        console.log('✅ Price Scheduler: Database updated with FALLBACK prices.');
+        if (ops.length > 0) {
+            await IngredientPrice.bulkWrite(ops);
+        }
+
+        console.log('✅ Price Scheduler: Database updated with FALLBACK prices (Upserted).');
     }
 };
 
@@ -214,10 +238,17 @@ const getBasePrice = (name) => {
 };
 
 const startScheduler = () => {
-    // Run immediately on server start
-    updatePrices();
+    // Run immediately on startup (Wait for DB if needed)
+    if (mongoose.connection.readyState === 1) {
+        updatePrices();
+    } else {
+        mongoose.connection.once('open', () => {
+            console.log("✅ Database Connected. Starting Initial Price Update...");
+            updatePrices();
+        });
+    }
 
-    // Run every hour (simplest cron-like behavior)
+    // Then run every hour
     setInterval(updatePrices, 1000 * 60 * 60);
 };
 

@@ -157,8 +157,7 @@ const StartupMitra = () => {
           const user = JSON.parse(userStr);
           const businessInfo = [];
           if (user.businessType) businessInfo.push(`Business Type: ${user.businessType}`);
-          if (user.stallName || user.businessName) businessInfo.push(`Name: ${user.stallName || user.businessName}`);
-          if (user.location) businessInfo.push(`Location: ${user.location}`);
+          // User requested to remove Name and Location from context
 
           if (businessInfo.length > 0) {
             const contextStr = `\n[Context: The user is a registered vendor. ${businessInfo.join(', ')}.]`;
@@ -169,7 +168,7 @@ const StartupMitra = () => {
         }
       }
 
-      const response = await fetch('http://localhost:5001/api/chat', {
+      const response = await fetch('http://localhost:8000/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

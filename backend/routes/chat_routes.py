@@ -1,69 +1,109 @@
-# routes/chat_routes.py
-
 from flask import Blueprint, request, jsonify
-from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
 import os
 import re
-from memory.memory_handler import add_message, get_memory_messages
+
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import SystemMessage, HumanMessage
 
 load_dotenv()
-chat_routes = Blueprint('chat_routes', __name__)
 
-# Initialize Gemini model
-model = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    api_key=os.getenv("GOOGLE_API_KEY")
-)
+chat_routes = Blueprint("chat_routes", __name__)
 
-def clean_response(text: str) -> str:
-    """Remove markdown-style bullets, symbols, and extra whitespace."""
-    text = re.sub(r"[-*•#>]+", "", text)  # ✅ no regex error now
-    text = re.sub(r"\s+", " ", text).strip()  # remove multiple spaces/newlines
-    return text
+# --------------------------------------------------
+# 🔑 API KEY FIX (MOST IMPORTANT)
+# --------------------------------------------------
+if os.environ.get("GEMINI_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
+    os.environ["GOOGLE_API_KEY"] = os.environ["GEMINI_API_KEY"]
 
+if not os.environ.get("GOOGLE_API_KEY"):
+    raise RuntimeError("❌ GOOGLE_API_KEY not found")
 
+# --------------------------------------------------
+# 🤖 Gemini Model
+# --------------------------------------------------
+# --------------------------------------------------
+# 🤖 Gemini Model Helpers
+# --------------------------------------------------
+def get_chat_model(model_name="gemini-1.5-flash"):
+    try:
+        return ChatGoogleGenerativeAI(
+            model=model_name,
+            temperature=0.5,
+            timeout=10  # ⚡ Fail fast (10s) to try next model
+        )
+    except Exception:
+        return None
+
+def clean_text(text: str) -> str:
+    text = re.sub(r"[*#>-]+", "", text)
+    return text.strip()
+
+# --------------------------------------------------
+# 📡 CHAT ENDPOINT
+# --------------------------------------------------
 @chat_routes.route("/chat", methods=["POST"])
 def chat():
     try:
         data = request.get_json()
-        user_input = data.get("message", "").strip()
+        user_message = data.get("message", "").strip()
 
-        if not user_input:
-            return jsonify({"reply": "Please type something to ask!"})
+        if not user_message:
+            return jsonify({
+                "text": "Please ask something 🙂",
+                "suggestions": ["Start Business", "License Help"]
+            })
 
-        # 1️⃣ Add user message to memory
-        add_message("user", user_input)
-
-        # 2️⃣ Retrieve recent messages for context
-        memory_messages = get_memory_messages()
-        conversation_context = ""
-        for msg in memory_messages[-6:]:  # Limit to last few messages
-            role = "User" if msg.type == "human" else "Assistant"
-            conversation_context += f"{role}: {msg.content}\n"
-
-        # 3️⃣ Create context-aware system prompt
-        prompt = (
-            "You are Startup Mitra, a friendly Indian business advisor. "
-            "Use the conversation history below to provide contextual advice. "
-            "You help users with 1) Menu suggestions, 2) Location advice, 3) Supplier connections, "
-            "and 4) Business basics. "
-            "Always answer in a simple and concise way — no markdown, bullets, or formatting.\n\n"
-            f"{conversation_context}\nAssistant:"
+        system_msg = SystemMessage(
+            content=(
+                "You are Startup Mitra, an expert Indian food business consultant. "
+                "Provide helpful, detailed, and practical advice. "
+                "Explain concepts clearly in simple language. "
+                "Use bullet points if needed for clarity. "
+                "Focus on actionable steps for a small business owner."
+            )
         )
 
-        # 4️⃣ Get AI-generated reply
-        response = model.invoke(prompt)
-        bot_reply = getattr(response, "content", str(response))
+        user_msg = HumanMessage(content=user_message)
 
-        # 5️⃣ Clean and simplify AI reply
-        clean_reply = clean_response(bot_reply)
+        # ✅ ROBUST MODEL INVOCATION
+        models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-flash-001", "gemini-pro"]
+        response_content = None
 
-        # 6️⃣ Store bot message in memory
-        add_message("bot", clean_reply)
+        for model_name in models_to_try:
+            try:
+                model = get_chat_model(model_name)
+                if not model:
+                    continue
+                response = model.invoke([system_msg, user_msg])
+                if response and response.content:
+                    response_content = response.content
+                    break
+            except Exception as e:
+                print(f"⚠️ Chat Request failed with {model_name}: {e}")
+                continue
+        
+        if not response_content:
+             return jsonify({
+                "text": "Sorry, I’m having trouble thinking right now. Please try again.",
+                "suggestions": ["Try Again"]
+            }), 500
 
-        return jsonify({"reply": clean_reply})
+        reply = clean_text(response_content)
+
+        return jsonify({
+            "text": reply,
+            "suggestions": [
+                "Increase Sales",
+                "Fix Menu Prices",
+                "Best Location",
+                "License Help"
+            ]
+        })
 
     except Exception as e:
-        print("❌ Error in /chat:", e)
-        return jsonify({"reply": "Sorry, something went wrong while processing your request."})
+        print("❌ Gemini Error:", e)
+        return jsonify({
+            "text": "Sorry, I’m having trouble right now. Please try again.",
+            "suggestions": ["Try Again"]
+        }), 500
