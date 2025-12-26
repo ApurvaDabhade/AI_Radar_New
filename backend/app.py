@@ -21,7 +21,7 @@ from gap_analysis import perform_gap_analysis
 import pandas as pd
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from youtube_trends import monthly_trends_manager
+from youtube_trends import monthly_youtube_trends, POPULARITY_FILE
 
 # =====================================================
 # App Configuration
@@ -50,7 +50,7 @@ app.register_blueprint(review_routes, url_prefix="/api")  # ✅ Reviews backend
 # =====================================================
 # Constants
 # =====================================================
-OUTPUT_CSV = "output.csv"  # For food trends
+
 
 # =====================================================
 # Root Route
@@ -188,19 +188,22 @@ def gap_analysis_route():
 def food_trends():
     try:
         refresh = request.args.get("refresh", "false").lower() == "true"
-        monthly_trends_manager(force_refresh=refresh)
-
-        df = pd.read_csv(OUTPUT_CSV)
-        data = df.to_dict(orient="records")
-
-        return jsonify({
-            "status": "success",
-            "data": data,
-            "message": "Data fetched successfully" if not refresh else "Fresh trends generated successfully"
-        })
+        df = monthly_youtube_trends(force_refresh=refresh)
+        
+        if not df.empty:
+            data = df.to_dict(orient="records")
+            return jsonify({
+                "status": "success",
+                "data": data,
+                "count": len(data)
+            })
+        else:
+            return jsonify({"status": "error", "message": "No data generated"}), 500
+            
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-
+    
+    
 # =====================================================
 # Run Flask App
 # =====================================================
